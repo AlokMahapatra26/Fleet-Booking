@@ -855,3 +855,19 @@ select.form-control {
   from { opacity: 0; transform: translateY(-4px); }
   to { opacity: 1; transform: translateY(0); }
 }
+
+/* Subtle iOS style scrollbar & iframe embedding mode */
+body.is-iframe-preview {
+  padding-bottom: 20px;
+}
+
+body.is-iframe-preview::-webkit-scrollbar,
+html::-webkit-scrollbar {
+  width: 0px;
+  background: transparent;
+}
+
+body.is-iframe-preview {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}

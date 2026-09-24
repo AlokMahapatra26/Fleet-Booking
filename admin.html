@@ -149,17 +149,17 @@
     /* Main Grid Layout */
     .dashboard-container {
       flex: 1;
-      max-width: 1400px;
+      max-width: 1480px;
       width: 100%;
       margin: 0 auto;
-      padding: 28px 32px 48px;
+      padding: 24px 32px 64px;
       display: grid;
-      grid-template-columns: 1.1fr 0.9fr;
-      gap: 32px;
+      grid-template-columns: minmax(0, 1fr) 420px;
+      gap: 36px;
       align-items: start;
     }
 
-    @media (max-width: 1080px) {
+    @media (max-width: 1120px) {
       .dashboard-container {
         grid-template-columns: 1fr;
         padding: 20px 16px;
@@ -455,35 +455,155 @@
       text-overflow: ellipsis;
     }
 
-    /* Clean Phone Frame Mockup */
+    /* Ultra-Premium iPhone 16 Pro Mockup Frame */
     .device-preview-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
+      width: 100%;
       padding: 0 4px;
     }
 
-    .device-title {
-      font-size: 0.85rem;
-      font-weight: 700;
-      color: var(--text-main);
+    .device-info {
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
 
-    .preview-frame-container {
-      background: #FFFFFF;
+    .device-name {
+      font-size: 0.84rem;
+      font-weight: 700;
+      color: var(--text-main);
+      letter-spacing: -0.01em;
+    }
+
+    .sync-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: #15803D;
+      background: #F0FDF4;
+      border: 1px solid #DCFCE7;
+      padding: 2px 8px;
+      border-radius: 999px;
+    }
+
+    .pulse-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #10B981;
+      box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.25);
+      animation: pulseSync 2s infinite ease-in-out;
+    }
+
+    @keyframes pulseSync {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(1.3); }
+    }
+
+    .device-actions {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .icon-tool-btn {
+      width: 28px;
+      height: 28px;
+      border-radius: 6px;
       border: 1px solid var(--card-border);
-      border-radius: 36px;
-      padding: 10px;
-      box-shadow: 0 12px 36px -4px rgba(0, 0, 0, 0.06);
-      height: 640px;
+      background: #FFFFFF;
+      color: var(--text-muted);
+      display: grid;
+      place-items: center;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.15s ease;
+      box-shadow: var(--shadow-subtle);
+    }
+
+    .icon-tool-btn:hover {
+      color: var(--text-main);
+      border-color: #D4D4D8;
+      background: #F8F8FA;
+    }
+
+    /* iPhone 16 Pro Chassis */
+    .phone-mockup-wrapper {
+      position: relative;
+      width: 410px;
+      max-width: 100%;
+      height: 840px;
+      background: #090A0C;
+      border-radius: 54px;
+      border: 12px solid #1C1E22;
+      box-shadow:
+        0 0 0 1px rgba(255, 255, 255, 0.14),
+        0 30px 80px -15px rgba(0, 0, 0, 0.28),
+        0 18px 36px -18px rgba(0, 0, 0, 0.15);
+      overflow: hidden;
       display: flex;
       flex-direction: column;
+      margin: 0 auto;
+    }
+
+    /* Dynamic Island Pill */
+    .dynamic-island {
+      position: absolute;
+      top: 11px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 114px;
+      height: 28px;
+      background: #000000;
+      border-radius: 20px;
+      z-index: 50;
+      pointer-events: none;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 11px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.5);
+    }
+
+    .camera-lens {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #111420;
+      border: 1px solid #1C2333;
+      box-shadow: inset 0 0 3px rgba(60, 100, 255, 0.5);
+    }
+
+    .speaker-sensor {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: #090B10;
+    }
+
+    /* Home Indicator */
+    .home-indicator {
+      position: absolute;
+      bottom: 8px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 132px;
+      height: 4.5px;
+      background: #000000;
+      opacity: 0.35;
+      border-radius: 999px;
+      z-index: 50;
+      pointer-events: none;
     }
 
     .phone-screen {
       flex: 1;
-      border: 1px solid #E8E8ED;
-      border-radius: 28px;
+      border: none;
+      border-radius: 42px;
       overflow: hidden;
       width: 100%;
       height: 100%;
@@ -752,12 +872,29 @@
       </div>
 
       <div class="device-preview-header">
-        <span class="device-title">Live Smartphone Preview</span>
-        <span class="form-hint">Synchronized live with form</span>
+        <div class="device-info">
+          <span class="device-name">iPhone 16 Pro</span>
+          <span class="sync-badge"><span class="pulse-dot"></span> Live Sync</span>
+        </div>
+        <div class="device-actions">
+          <button type="button" id="btnReloadPreview" class="icon-tool-btn" title="Reload Preview">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M23 4v6h-6"></path><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path></svg>
+          </button>
+          <a id="btnExternalPreview" href="index.html" target="_blank" class="icon-tool-btn" title="Open in New Window">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+          </a>
+        </div>
       </div>
 
-      <div class="preview-frame-container">
+      <div class="phone-mockup-wrapper">
+        <!-- Authentic Dynamic Island -->
+        <div class="dynamic-island">
+          <span class="camera-lens"></span>
+          <span class="speaker-sensor"></span>
+        </div>
         <iframe id="previewIframe" class="phone-screen" src="index.html"></iframe>
+        <!-- iOS Home Indicator -->
+        <div class="home-indicator"></div>
       </div>
 
     </aside>
@@ -1128,6 +1265,14 @@
         listSection.style.display = 'block';
         loadClientsList();
       });
+
+      // Reload preview button
+      const btnReloadPreview = document.getElementById('btnReloadPreview');
+      if (btnReloadPreview) {
+        btnReloadPreview.addEventListener('click', () => {
+          previewIframe.src = previewIframe.src;
+        });
+      }
 
       loadClientsList();
     })();

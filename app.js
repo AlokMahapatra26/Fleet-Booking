@@ -564,6 +564,13 @@
     });
   });
 
+  // If embedded inside an iframe (like Admin preview), hide demo bar for clean look
+  if (window.self !== window.top) {
+    document.body.classList.add('is-iframe-preview');
+    const demoBar = document.getElementById('demoSwitcherBar');
+    if (demoBar) demoBar.style.display = 'none';
+  }
+
   // Expose applyConfig for live admin iframe preview
   window.applyConfigPreview = applyConfig;
 
