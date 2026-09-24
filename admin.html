@@ -749,6 +749,7 @@
       <div class="nav-tabs">
         <button type="button" class="tab-link active" id="tabCreate">Create New Client</button>
         <button type="button" class="tab-link" id="tabList">Saved Clients (<span id="clientsCount">0</span>)</button>
+        <button type="button" id="btnCancelEdit" class="btn btn-secondary btn-sm" style="display:none; margin-left:auto; margin-bottom:8px;">+ New Client</button>
       </div>
 
       <!-- CREATE FORM -->
@@ -1376,14 +1377,157 @@
                 </td>
                 <td style="color:#52525B;">${c.city}</td>
                 <td style="color:#52525B;">${c.phone}</td>
-                <td>
-                  <a href="${c.url}" target="_blank" class="btn btn-secondary" style="padding:4px 10px; font-size:0.75rem;">Open ↗</a>
+                <td style="white-space:nowrap;">
+                  <button type="button" class="btn btn-secondary btn-sm btn-edit-client" data-slug="${c.slug}" style="padding:4px 10px; font-size:0.75rem; margin-right:4px;">✏️ Edit</button>
+                  <a href="${c.url}" target="_blank" class="btn btn-secondary btn-sm" style="padding:4px 10px; font-size:0.75rem; margin-right:4px;">Open ↗</a>
+                  <button type="button" class="btn-text-muted btn-delete-client" data-slug="${c.slug}" data-name="${c.name}" style="padding:4px 6px; font-size:0.75rem;">Delete</button>
                 </td>
               `;
               clientsTableBody.appendChild(tr);
             });
           }
         } catch {}
+      }
+
+      // Edit Client Function
+      async function editClient(slug) {
+        try {
+          const res = await fetch(`./configs/${slug}.json?t=${Date.now()}`);
+          if (!res.ok) throw new Error('Could not load client config');
+          const data = await res.json();
+
+          // Populate Form fields
+          inputBusinessName.value = data.brand?.name || '';
+          inputSlug.value = slug;
+          slugHint.textContent = slug;
+          inputTagline.value = data.brand?.tagline || '';
+          inputCity.value = data.brand?.locationText || '';
+          inputBadge.value = data.brand?.badge || '';
+          inputWhatsapp.value = data.contact?.whatsappPhone || '';
+          inputPhone.value = data.contact?.displayPhone || data.contact?.primaryPhone || '';
+          inputAltPhone.value = data.contact?.secondaryDisplayPhone || data.contact?.secondaryPhone || '';
+          inputMaps.value = data.contact?.googleMapsUrl || '';
+
+          // Theme
+          const primaryColor = data.brand?.theme?.primary || '#FFD900';
+          let matchedTheme = 'taxi';
+          for (const key of Object.keys(THEMES)) {
+            if (THEMES[key].primary.toLowerCase() === primaryColor.toLowerCase()) {
+              matchedTheme = key;
+              break;
+            }
+          }
+          currentThemeKey = matchedTheme;
+          themeOptions.forEach(opt => {
+            opt.classList.toggle('active', opt.dataset.preset === matchedTheme);
+          });
+
+          // Logo
+          if (data.brand?.logoUrl) {
+            logoPreviewImg.src = data.brand.logoUrl;
+            if (data.brand.logoUrl.includes('assets/logos/') || data.brand.logoUrl.startsWith('data:')) {
+              btnResetLogo.style.display = 'inline-block';
+              customLogoDataUrl = data.brand.logoUrl;
+            } else {
+              btnResetLogo.style.display = 'none';
+              customLogoDataUrl = null;
+            }
+          }
+
+          // Vehicles
+          const vehicleIds = (data.vehicles || []).map(v => v.id);
+          document.querySelectorAll('#vehiclesSelector input[type="checkbox"]').forEach(cb => {
+            cb.checked = vehicleIds.includes(cb.value);
+          });
+
+          // Social links
+          const reviewLink = (data.socialLinks || []).find(s => s.type === 'review')?.url || '';
+          const instaLink = (data.socialLinks || []).find(s => s.type === 'instagram')?.url || '';
+          const webLink = (data.socialLinks || []).find(s => s.type === 'website')?.url || '';
+          inputGoogleReview.value = reviewLink;
+          inputInstagram.value = instaLink;
+          inputWebsite.value = webLink;
+
+          // Switch UI to Edit Mode
+          tabCreate.textContent = `✏️ Edit: ${data.brand?.name || slug}`;
+          btnCancelEdit.style.display = 'inline-flex';
+          btnSaveClient.innerHTML = `
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
+            <span>Update Client (${slug})</span>
+          `;
+
+          // Switch tab to editor
+          tabCreate.click();
+
+          // Sync Preview frame
+          previewIframe.src = `/?client=${slug}`;
+        } catch (err) {
+          alert('Failed to load client details for editing: ' + err.message);
+        }
+      }
+
+      // Reset Form to New Client Mode
+      function resetFormToNew() {
+        tabCreate.textContent = 'Create New Client';
+        btnCancelEdit.style.display = 'none';
+        clientForm.reset();
+        customLogoDataUrl = null;
+        currentThemeKey = 'taxi';
+        themeOptions.forEach(opt => opt.classList.toggle('active', opt.dataset.preset === 'taxi'));
+        logoPreviewImg.src = THEMES.taxi.logo;
+        btnResetLogo.style.display = 'none';
+        btnSaveClient.innerHTML = `
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
+          <span>Save & Generate Client JSON</span>
+        `;
+        slugHint.textContent = 'client-slug';
+        previewIframe.src = 'index.html';
+      }
+
+      // Delete Client Function
+      async function deleteClient(slug, name) {
+        if (!confirm(`Are you sure you want to delete "${name}" (${slug})? This will delete configs/${slug}.json.`)) {
+          return;
+        }
+
+        try {
+          const res = await fetch(`/api/delete-client?slug=${slug}`, { method: 'DELETE' });
+          const result = await res.json();
+          if (result.success) {
+            loadClientsList();
+            if (inputSlug.value === slug) {
+              resetFormToNew();
+            }
+          } else {
+            alert('Error deleting client: ' + (result.error || 'Server error'));
+          }
+        } catch (err) {
+          alert('Failed to delete client: ' + err.message);
+        }
+      }
+
+      // Table Action Click Delegation (Edit & Delete)
+      clientsTableBody.addEventListener('click', (e) => {
+        const editBtn = e.target.closest('.btn-edit-client');
+        if (editBtn) {
+          editClient(editBtn.dataset.slug);
+          return;
+        }
+
+        const deleteBtn = e.target.closest('.btn-delete-client');
+        if (deleteBtn) {
+          deleteClient(deleteBtn.dataset.slug, deleteBtn.dataset.name);
+          return;
+        }
+      });
+
+      // Cancel Edit button
+      const btnCancelEdit = document.getElementById('btnCancelEdit');
+      if (btnCancelEdit) {
+        btnCancelEdit.addEventListener('click', () => {
+          resetFormToNew();
+          tabCreate.click();
+        });
       }
 
       // Tabs
