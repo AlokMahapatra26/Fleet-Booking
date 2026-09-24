@@ -564,6 +564,9 @@
     });
   });
 
+  // Expose applyConfig for live admin iframe preview
+  window.applyConfigPreview = applyConfig;
+
   // Initialize Application
   loadConfiguration();
 

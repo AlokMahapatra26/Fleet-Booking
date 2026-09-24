@@ -18,33 +18,47 @@ Built specifically for a **white-label business model**: you can customize and s
 
 ---
 
-## 🚀 Quick Start (Local Development)
+## 🚀 Quick Start (Local Development & Admin Dashboard)
 
-To run and preview the project locally:
+To start the local server with the **Automated Admin Dashboard**:
 
 ```bash
 # Inside the project directory
-python3 -m http.server 8080
+node server.js
 ```
 
-Open [http://localhost:8080](http://localhost:8080) in your mobile or desktop browser.
+1. **Customer Booking Portal**: [http://localhost:8080](http://localhost:8080)
+2. **Agency Admin Dashboard**: [http://localhost:8080/admin.html](http://localhost:8080/admin.html)
 
 ---
 
-## 🎨 How White-Labeling Works
+## 🎨 Zero-Code Client Creation (Admin Dashboard)
 
-### Option 1: Single Client Deployment
-Simply modify [`config.json`](file:///home/alok/Dev/travel/config.json) with your client's details:
-1. Replace `assets/logo-taxi.svg` (or set a URL in `config.brand.logoUrl`).
-2. Update the phone numbers and WhatsApp number in `config.contact`.
-3. Set their brand primary and background colors in `config.brand.theme`.
-4. Deploy the folder to Cloudflare Pages or Vercel under their custom domain.
+You **never need to open or write JSON files manually**.
 
-### Option 2: Multi-Tenant Switching
-You can host a single master deployment and serve multiple clients using URL query parameters:
+1. Open **[http://localhost:8080/admin.html](http://localhost:8080/admin.html)**.
+2. Fill out the visual form:
+   * Business Name (e.g. `Raj Travels`)
+   * WhatsApp & Phone Numbers
+   * City & Location
+   * Select a Color Theme (Taxi Yellow, Royal Gold, Eco Green, Ocean Blue, Ruby Red)
+   * Choose Vehicle Fleet (Sedan, Ertiga, Innova, Crysta, etc.)
+   * Add Google Review link
+3. Watch the **Live Smartphone Preview** update in real-time.
+4. Click **"🚀 Save & Automatically Create JSON"**:
+   * It **instantly creates `configs/raj-travels.json` on disk**!
+   * Gives you their live link: `http://localhost:8080/?client=raj-travels`
+   * Gives you a 1-click **Copy Link** button.
+
+---
+
+## 🌐 Multi-Tenant Client URLs
+
+Every client created gets their own dedicated link:
 * `https://your-domain.com/?client=esskay` (loads `configs/esskay.json`)
 * `https://your-domain.com/?client=royal` (loads `configs/royal.json`)
 * `https://your-domain.com/?client=ecogreen` (loads `configs/ecogreen.json`)
+* `https://your-domain.com/?client=raj-travels` (loads `configs/raj-travels.json`)
 
 ---
 

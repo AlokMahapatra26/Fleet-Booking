@@ -1,0 +1,968 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Agency Admin Portal | Auto-Generate Taxi Clients</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap">
+  <style>
+    :root {
+      --bg: #0B0F19;
+      --card-bg: #141B2D;
+      --card-subtle: #1C253B;
+      --text: #F3F4F6;
+      --muted: #9CA3AF;
+      --primary: #FFD900;
+      --primary-hover: #E5C300;
+      --accent: #22C55E;
+      --border: rgba(255, 255, 255, 0.1);
+      --font-heading: 'Outfit', sans-serif;
+      --font-body: 'Plus Jakarta Sans', sans-serif;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: var(--font-body);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    header {
+      background: rgba(20, 27, 45, 0.85);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      padding: 14px 28px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .brand-logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: var(--text);
+    }
+
+    .brand-logo img {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+    }
+
+    .brand-logo h1 {
+      font-family: var(--font-heading);
+      font-size: 1.25rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+    }
+
+    .brand-logo span {
+      font-size: 0.72rem;
+      background: var(--primary);
+      color: #000;
+      font-weight: 800;
+      padding: 2px 8px;
+      border-radius: 999px;
+      text-transform: uppercase;
+    }
+
+    .header-links {
+      display: flex;
+      gap: 12px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 18px;
+      border-radius: 12px;
+      font-family: inherit;
+      font-size: 0.88rem;
+      font-weight: 700;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.2s ease;
+      border: 1px solid transparent;
+    }
+
+    .btn-secondary {
+      background: var(--card-subtle);
+      color: var(--text);
+      border-color: var(--border);
+    }
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.15);
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: #0A0A0A;
+    }
+    .btn-primary:hover {
+      background: var(--primary-hover);
+      transform: translateY(-1px);
+    }
+
+    .main-layout {
+      flex: 1;
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 24px;
+      max-width: 1440px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 24px;
+    }
+
+    @media (max-width: 1024px) {
+      .main-layout {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Tabs & Form */
+    .form-panel {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 24px;
+    }
+
+    .panel-tabs {
+      display: flex;
+      gap: 8px;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 16px;
+      margin-bottom: 20px;
+    }
+
+    .tab-btn {
+      padding: 8px 16px;
+      border-radius: 10px;
+      background: transparent;
+      border: none;
+      color: var(--muted);
+      font-size: 0.9rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .tab-btn.active {
+      background: var(--card-subtle);
+      color: var(--primary);
+    }
+
+    .section-title {
+      font-family: var(--font-heading);
+      font-size: 1.05rem;
+      font-weight: 800;
+      margin: 20px 0 12px;
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    @media (max-width: 640px) {
+      .form-grid { grid-template-columns: 1fr; }
+    }
+
+    .full-width { grid-column: 1 / -1; }
+
+    .field-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .field-group label {
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .field-group input, .field-group select {
+      background: var(--card-subtle);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 10px 14px;
+      color: var(--text);
+      font-family: inherit;
+      font-size: 0.9rem;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .field-group input:focus, .field-group select:focus {
+      border-color: var(--primary);
+    }
+
+    .hint {
+      font-size: 0.74rem;
+      color: var(--muted);
+    }
+
+    /* Preset Themes Grid */
+    .theme-presets {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+      gap: 10px;
+      margin-top: 6px;
+    }
+
+    .theme-preset-btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      padding: 10px;
+      border-radius: 12px;
+      background: var(--card-subtle);
+      border: 2px solid transparent;
+      cursor: pointer;
+      color: var(--text);
+      font-size: 0.78rem;
+      font-weight: 700;
+      transition: all 0.2s ease;
+    }
+
+    .theme-preset-btn:hover {
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .theme-preset-btn.active {
+      border-color: var(--primary);
+    }
+
+    .color-swatch {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      border: 2px solid #FFF;
+    }
+
+    /* Vehicle Checkbox Cards */
+    .vehicles-selector {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+      gap: 10px;
+      margin-top: 6px;
+    }
+
+    .vehicle-card {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      background: var(--card-subtle);
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      cursor: pointer;
+      font-size: 0.82rem;
+      font-weight: 600;
+    }
+
+    .vehicle-card input {
+      accent-color: var(--primary);
+      width: 16px;
+      height: 16px;
+    }
+
+    /* Action Buttons Row */
+    .form-actions {
+      display: flex;
+      gap: 12px;
+      margin-top: 24px;
+      padding-top: 18px;
+      border-top: 1px solid var(--border);
+    }
+
+    /* Right Preview Column */
+    .preview-panel {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .preview-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .preview-header h2 {
+      font-family: var(--font-heading);
+      font-size: 1.1rem;
+      font-weight: 800;
+    }
+
+    .phone-mockup {
+      width: 100%;
+      height: 680px;
+      background: #000;
+      border-radius: 36px;
+      padding: 12px;
+      border: 4px solid #2B344B;
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .phone-notch {
+      width: 120px;
+      height: 18px;
+      background: #111;
+      border-radius: 0 0 14px 14px;
+      margin: 0 auto 6px;
+      z-index: 10;
+    }
+
+    .phone-screen {
+      flex: 1;
+      border-radius: 26px;
+      overflow: hidden;
+      border: none;
+      width: 100%;
+      background: #FFF;
+    }
+
+    /* Success / Result Banner */
+    .result-box {
+      background: rgba(34, 197, 94, 0.12);
+      border: 1px solid rgba(34, 197, 94, 0.35);
+      border-radius: 14px;
+      padding: 16px;
+      display: none;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .result-box.show {
+      display: block;
+    }
+
+    .result-title {
+      font-size: 0.95rem;
+      font-weight: 800;
+      color: var(--accent);
+      margin-bottom: 8px;
+    }
+
+    .result-link-wrap {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      background: rgba(0, 0, 0, 0.35);
+      padding: 8px 12px;
+      border-radius: 8px;
+      font-family: monospace;
+      font-size: 0.85rem;
+      word-break: break-all;
+    }
+
+    /* Clients List Table */
+    .clients-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 14px;
+    }
+
+    .clients-table th, .clients-table td {
+      padding: 12px 14px;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.88rem;
+    }
+
+    .clients-table th {
+      color: var(--muted);
+      font-weight: 700;
+    }
+
+    .action-icon-btn {
+      background: transparent;
+      border: none;
+      color: var(--primary);
+      cursor: pointer;
+      font-weight: 700;
+      text-decoration: underline;
+      padding: 2px 4px;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <a href="index.html" class="brand-logo">
+      <img src="assets/logo-taxi.svg" alt="Logo">
+      <h1>Agency Admin Portal</h1>
+      <span>Multi-Tenant</span>
+    </a>
+    <div class="header-links">
+      <a href="index.html" target="_blank" class="btn btn-secondary">👁️ View Customer Portal</a>
+    </div>
+  </header>
+
+  <main class="main-layout">
+    
+    <!-- Left Column: Form Panel -->
+    <section class="form-panel">
+      <div class="panel-tabs">
+        <button type="button" class="tab-btn active" id="tabNewClient">➕ Create New Client</button>
+        <button type="button" class="tab-btn" id="tabAllClients">📋 All Saved Clients (<span id="clientsCount">0</span>)</button>
+      </div>
+
+      <!-- CREATE CLIENT FORM -->
+      <div id="createClientSection">
+        <form id="clientForm" onsubmit="return false;">
+          
+          <div class="section-title">1. Business Identity</div>
+          <div class="form-grid">
+            <div class="field-group">
+              <label for="inputBusinessName">Business Name *</label>
+              <input type="text" id="inputBusinessName" placeholder="e.g. Raj Travels" required>
+            </div>
+
+            <div class="field-group">
+              <label for="inputSlug">Client Slug (URL Identifier) *</label>
+              <input type="text" id="inputSlug" placeholder="e.g. raj-travels" required>
+              <span class="hint">Will generate: /?client=<strong id="slugPreview">raj-travels</strong></span>
+            </div>
+
+            <div class="field-group full-width">
+              <label for="inputTagline">Tagline / Pitch</label>
+              <input type="text" id="inputTagline" value="Reliable rides for local, airport and outstation travel.">
+            </div>
+
+            <div class="field-group">
+              <label for="inputCity">City & State *</label>
+              <input type="text" id="inputCity" placeholder="e.g. Ahmedabad, Gujarat" required>
+            </div>
+
+            <div class="field-group">
+              <label for="inputBadge">Status Pill Badge</label>
+              <input type="text" id="inputBadge" value="24/7 Verified Taxi Partner">
+            </div>
+          </div>
+
+          <div class="section-title">2. Contact Numbers & Dispatch</div>
+          <div class="form-grid">
+            <div class="field-group">
+              <label for="inputWhatsapp">WhatsApp Number (For Bookings) *</label>
+              <input type="text" id="inputWhatsapp" placeholder="e.g. 919876543210 (with country code)" required>
+              <span class="hint">Bookings will be sent directly to this WhatsApp number</span>
+            </div>
+
+            <div class="field-group">
+              <label for="inputPhone">Calling Phone Number *</label>
+              <input type="text" id="inputPhone" placeholder="e.g. +91 987 654 3210" required>
+            </div>
+
+            <div class="field-group">
+              <label for="inputAltPhone">Alternate Phone Number</label>
+              <input type="text" id="inputAltPhone" placeholder="Optional secondary phone">
+            </div>
+
+            <div class="field-group">
+              <label for="inputMaps">Google Maps Location Link</label>
+              <input type="text" id="inputMaps" placeholder="e.g. https://maps.app.goo.gl/...">
+            </div>
+          </div>
+
+          <div class="section-title">3. Theme & Aesthetics</div>
+          <div class="field-group full-width">
+            <label>Select Preset Brand Theme:</label>
+            <div class="theme-presets">
+              <div class="theme-preset-btn active" data-preset="taxi">
+                <span class="color-swatch" style="background:#FFD900;"></span>
+                <span>Taxi Yellow</span>
+              </div>
+              <div class="theme-preset-btn" data-preset="royal">
+                <span class="color-swatch" style="background:#E2B755;"></span>
+                <span>Royal Gold</span>
+              </div>
+              <div class="theme-preset-btn" data-preset="eco">
+                <span class="color-swatch" style="background:#10B981;"></span>
+                <span>Eco Green</span>
+              </div>
+              <div class="theme-preset-btn" data-preset="blue">
+                <span class="color-swatch" style="background:#3B82F6;"></span>
+                <span>Ocean Blue</span>
+              </div>
+              <div class="theme-preset-btn" data-preset="red">
+                <span class="color-swatch" style="background:#EF4444;"></span>
+                <span>Ruby Red</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="section-title">4. Vehicle Fleet Offered</div>
+          <div class="field-group full-width">
+            <div class="vehicles-selector" id="vehiclesSelector">
+              <label class="vehicle-card"><input type="checkbox" value="sedan" checked> Sedan (Dzire)</label>
+              <label class="vehicle-card"><input type="checkbox" value="ertiga" checked> Ertiga (6 Seater)</label>
+              <label class="vehicle-card"><input type="checkbox" value="innova" checked> Innova (7 Seater)</label>
+              <label class="vehicle-card"><input type="checkbox" value="crysta" checked> Innova Crysta</label>
+              <label class="vehicle-card"><input type="checkbox" value="urbania"> Force Urbania</label>
+              <label class="vehicle-card"><input type="checkbox" value="tempo"> Tempo Traveller</label>
+            </div>
+          </div>
+
+          <div class="section-title">5. Social & Review Links</div>
+          <div class="form-grid">
+            <div class="field-group full-width">
+              <label for="inputGoogleReview">Google Review Link</label>
+              <input type="text" id="inputGoogleReview" placeholder="Google Maps review URL">
+            </div>
+            <div class="field-group">
+              <label for="inputInstagram">Instagram Handle / URL</label>
+              <input type="text" id="inputInstagram" placeholder="e.g. https://instagram.com/rajtravels">
+            </div>
+            <div class="field-group">
+              <label for="inputWebsite">Existing Website (Optional)</label>
+              <input type="text" id="inputWebsite" placeholder="https://rajtravels.com">
+            </div>
+          </div>
+
+          <div class="form-actions">
+            <button type="button" id="btnSaveClient" class="btn btn-primary">
+              🚀 Save & Automatically Create JSON
+            </button>
+            <button type="button" id="btnDownloadJson" class="btn btn-secondary">
+              📥 Download .JSON File
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <!-- ALL CLIENTS LIST SECTION (Initially Hidden) -->
+      <div id="allClientsSection" style="display:none;">
+        <table class="clients-table">
+          <thead>
+            <tr>
+              <th>Client Name</th>
+              <th>City</th>
+              <th>Phone</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="clientsTableBody"></tbody>
+        </table>
+      </div>
+
+    </section>
+
+    <!-- Right Column: Live Mobile Preview & Result Box -->
+    <section class="preview-panel">
+      <!-- Result Banner -->
+      <div id="resultBox" class="result-box">
+        <div class="result-title">✅ Client Portal Config Generated!</div>
+        <p style="font-size:0.85rem; margin-bottom:8px; color:var(--text);">File created on disk: <code id="createdFilePath">configs/raj-travels.json</code></p>
+        <div class="result-link-wrap">
+          <span id="createdClientUrl" style="flex:1;">/?client=raj-travels</span>
+          <button type="button" id="btnCopyLink" class="btn btn-primary" style="padding:4px 10px; font-size:0.75rem;">Copy Link</button>
+          <a id="btnOpenClient" href="#" target="_blank" class="btn btn-secondary" style="padding:4px 10px; font-size:0.75rem;">Open ↗</a>
+        </div>
+      </div>
+
+      <div class="preview-header">
+        <h2>📱 Live Mobile Preview</h2>
+        <span class="hint">Updates live as you type</span>
+      </div>
+
+      <div class="phone-mockup">
+        <div class="phone-notch"></div>
+        <iframe id="previewIframe" class="phone-screen" src="index.html"></iframe>
+      </div>
+    </section>
+
+  </main>
+
+  <script>
+    (function() {
+      // Elements
+      const inputBusinessName = document.getElementById('inputBusinessName');
+      const inputSlug = document.getElementById('inputSlug');
+      const slugPreview = document.getElementById('slugPreview');
+      const inputTagline = document.getElementById('inputTagline');
+      const inputCity = document.getElementById('inputCity');
+      const inputBadge = document.getElementById('inputBadge');
+      const inputWhatsapp = document.getElementById('inputWhatsapp');
+      const inputPhone = document.getElementById('inputPhone');
+      const inputAltPhone = document.getElementById('inputAltPhone');
+      const inputMaps = document.getElementById('inputMaps');
+      const inputGoogleReview = document.getElementById('inputGoogleReview');
+      const inputInstagram = document.getElementById('inputInstagram');
+      const inputWebsite = document.getElementById('inputWebsite');
+      const btnSaveClient = document.getElementById('btnSaveClient');
+      const btnDownloadJson = document.getElementById('btnDownloadJson');
+      const resultBox = document.getElementById('resultBox');
+      const createdFilePath = document.getElementById('createdFilePath');
+      const createdClientUrl = document.getElementById('createdClientUrl');
+      const btnCopyLink = document.getElementById('btnCopyLink');
+      const btnOpenClient = document.getElementById('btnOpenClient');
+      const previewIframe = document.getElementById('previewIframe');
+      const tabNewClient = document.getElementById('tabNewClient');
+      const tabAllClients = document.getElementById('tabAllClients');
+      const createClientSection = document.getElementById('createClientSection');
+      const allClientsSection = document.getElementById('allClientsSection');
+      const clientsTableBody = document.getElementById('clientsTableBody');
+      const clientsCount = document.getElementById('clientsCount');
+      const themePresetBtns = document.querySelectorAll('.theme-preset-btn');
+
+      // Theme definitions
+      const THEMES = {
+        taxi: {
+          primary: '#FFD900',
+          primaryHover: '#E6C200',
+          primaryContrast: '#0A0A0A',
+          background: '#F7F4E8',
+          cardBg: '#FFFFFF',
+          text: '#111111',
+          muted: '#747168',
+          border: 'rgba(17, 17, 17, 0.08)',
+          accent: '#22C55E',
+          pattern: 'taxi-stripes',
+          logo: 'assets/logo-taxi.svg'
+        },
+        royal: {
+          primary: '#E2B755',
+          primaryHover: '#CA9F3B',
+          primaryContrast: '#0B0F19',
+          background: '#0B0E14',
+          cardBg: '#131822',
+          text: '#F3F4F6',
+          muted: '#9CA3AF',
+          border: 'rgba(226, 183, 85, 0.22)',
+          accent: '#E2B755',
+          pattern: 'luxury-gold',
+          logo: 'assets/logo-luxury.svg'
+        },
+        eco: {
+          primary: '#10B981',
+          primaryHover: '#059669',
+          primaryContrast: '#FFFFFF',
+          background: '#0F172A',
+          cardBg: '#1E293B',
+          text: '#F8FAFC',
+          muted: '#94A3B8',
+          border: 'rgba(16, 185, 129, 0.25)',
+          accent: '#38BDF8',
+          pattern: 'eco-gradient',
+          logo: 'assets/logo-eco.svg'
+        },
+        blue: {
+          primary: '#3B82F6',
+          primaryHover: '#2563EB',
+          primaryContrast: '#FFFFFF',
+          background: '#F0F9FF',
+          cardBg: '#FFFFFF',
+          text: '#0F172A',
+          muted: '#64748B',
+          border: 'rgba(59, 130, 246, 0.15)',
+          accent: '#10B981',
+          pattern: 'luxury-gold',
+          logo: 'assets/logo-taxi.svg'
+        },
+        red: {
+          primary: '#EF4444',
+          primaryHover: '#DC2626',
+          primaryContrast: '#FFFFFF',
+          background: '#181111',
+          cardBg: '#241818',
+          text: '#FEE2E2',
+          muted: '#9CA3AF',
+          border: 'rgba(239, 68, 68, 0.2)',
+          accent: '#F59E0B',
+          pattern: 'luxury-gold',
+          logo: 'assets/logo-luxury.svg'
+        }
+      };
+
+      let selectedThemeKey = 'taxi';
+
+      // Theme Preset Click
+      themePresetBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          themePresetBtns.forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          selectedThemeKey = btn.dataset.preset;
+          triggerPreviewUpdate();
+        });
+      });
+
+      // Auto Slug Generation from Name
+      inputBusinessName.addEventListener('input', () => {
+        const val = inputBusinessName.value.trim().toLowerCase()
+          .replace(/[^a-z0-9]+/g, '-')
+          .replace(/^-+|-+$/g, '');
+        inputSlug.value = val;
+        slugPreview.textContent = val || 'client-slug';
+        triggerPreviewUpdate();
+      });
+
+      inputSlug.addEventListener('input', () => {
+        slugPreview.textContent = inputSlug.value || 'client-slug';
+      });
+
+      // Build JSON Object
+      function buildConfigObject() {
+        const name = inputBusinessName.value.trim() || 'My Taxi Service';
+        const city = inputCity.value.trim() || 'Surat, Gujarat';
+        const phone = inputPhone.value.trim() || '+91 910 910 5155';
+        const cleanWhatsapp = (inputWhatsapp.value.trim() || '919109105155').replace(/[^0-9]/g, '');
+        const theme = THEMES[selectedThemeKey] || THEMES.taxi;
+
+        // Collect vehicles
+        const vehicleMap = {
+          sedan: { id: "sedan", name: "Sedan (Dzire / Etios)", capacity: "4 Seater", default: true },
+          ertiga: { id: "ertiga", name: "Maruti Ertiga", capacity: "6 Seater" },
+          innova: { id: "innova", name: "Toyota Innova", capacity: "7 Seater" },
+          crysta: { id: "crysta", name: "Innova Crysta", capacity: "7 Seater" },
+          urbania: { id: "urbania", name: "Force Urbania", capacity: "12-17 Seater" },
+          tempo: { id: "tempo", name: "Tempo Traveller", capacity: "12-20 Seater" }
+        };
+
+        const selectedVehicles = [];
+        document.querySelectorAll('#vehiclesSelector input[type="checkbox"]:checked').forEach(cb => {
+          if (vehicleMap[cb.value]) selectedVehicles.push(vehicleMap[cb.value]);
+        });
+
+        if (selectedVehicles.length === 0) {
+          selectedVehicles.push(vehicleMap.sedan);
+        }
+
+        // Social links
+        const socialLinks = [];
+        if (inputGoogleReview.value.trim()) {
+          socialLinks.push({
+            type: "review",
+            label: "Write a Google Review",
+            subtitle: "5.0 ★★★★★ Verified Reviews",
+            url: inputGoogleReview.value.trim()
+          });
+        }
+        if (inputInstagram.value.trim()) {
+          socialLinks.push({
+            type: "instagram",
+            label: "Instagram",
+            subtitle: "Follow our updates",
+            url: inputInstagram.value.trim()
+          });
+        }
+        if (inputWebsite.value.trim()) {
+          socialLinks.push({
+            type: "website",
+            label: "Official Website",
+            subtitle: "Visit main website",
+            url: inputWebsite.value.trim()
+          });
+        }
+
+        return {
+          brand: {
+            name: name,
+            shortName: name.split(' ')[0] + ' Taxi',
+            tagline: inputTagline.value.trim() || 'Reliable rides for local, airport and outstation travel.',
+            locationText: city,
+            badge: inputBadge.value.trim() || '24/7 Verified Taxi Partner',
+            logoUrl: theme.logo,
+            theme: {
+              primary: theme.primary,
+              primaryHover: theme.primaryHover,
+              primaryContrast: theme.primaryContrast,
+              background: theme.background,
+              cardBg: theme.cardBg,
+              text: theme.text,
+              muted: theme.muted,
+              border: theme.border,
+              accent: theme.accent,
+              pattern: theme.pattern
+            }
+          },
+          contact: {
+            primaryPhone: phone.replace(/\s+/g, ''),
+            displayPhone: phone,
+            whatsappPhone: cleanWhatsapp,
+            secondaryPhone: inputAltPhone.value.trim() || '',
+            secondaryDisplayPhone: inputAltPhone.value.trim() || '',
+            googleMapsUrl: inputMaps.value.trim() || 'https://maps.google.com'
+          },
+          rides: [
+            { id: "local", label: "Local Taxi", default: true },
+            { id: "airport", label: "Airport" },
+            { id: "outstation", label: "Outstation" },
+            { id: "oneway", label: "One Way" },
+            { id: "roundtrip", label: "Round Trip" },
+            { id: "hourly", label: "Hourly", hasHourlyPackages: true }
+          ],
+          hourlyPackages: [
+            { id: "4h40k", hours: "4 Hours", km: "Up to 40 KM", default: true },
+            { id: "8h80k", hours: "8 Hours", km: "Up to 80 KM" },
+            { id: "12h120k", hours: "12 Hours", km: "Up to 120 KM" }
+          ],
+          vehicles: selectedVehicles,
+          socialLinks: socialLinks,
+          vcard: {
+            fn: name,
+            org: name,
+            title: "Taxi Service",
+            note: `${name} in ${city}. Reliable taxi bookings.`
+          },
+          agencyBranding: {
+            showPoweredBy: true,
+            agencyName: "Scan Era",
+            agencyLink: "https://scanera.in"
+          }
+        };
+      }
+
+      // Live update iframe preview
+      function triggerPreviewUpdate() {
+        const configObj = buildConfigObject();
+        try {
+          if (previewIframe.contentWindow && previewIframe.contentWindow.applyConfigPreview) {
+            previewIframe.contentWindow.applyConfigPreview(configObj);
+          }
+        } catch {}
+      }
+
+      // Save to server API (Auto creates configs/[slug].json)
+      btnSaveClient.addEventListener('click', async () => {
+        if (!inputBusinessName.value.trim()) {
+          alert('Please enter a Business Name');
+          inputBusinessName.focus();
+          return;
+        }
+
+        const slug = inputSlug.value.trim() || 'client';
+        const configData = buildConfigObject();
+
+        btnSaveClient.disabled = true;
+        btnSaveClient.textContent = 'Saving & Writing JSON...';
+
+        try {
+          const res = await fetch('/api/save-client', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ slug, data: configData })
+          });
+
+          const result = await res.json();
+          if (result.success) {
+            createdFilePath.textContent = result.filePath;
+            createdClientUrl.textContent = window.location.origin + result.clientUrl;
+            btnOpenClient.href = result.clientUrl;
+            resultBox.classList.add('show');
+            resultBox.scrollIntoView({ behavior: 'smooth' });
+
+            // Reload iframe with new client
+            previewIframe.src = result.clientUrl;
+            loadAllClients();
+          } else {
+            alert('Error creating client JSON: ' + (result.error || 'Server error'));
+          }
+        } catch (err) {
+          console.error(err);
+          alert('Could not connect to server API. Downloading JSON file instead...');
+          downloadJsonFile(slug, configData);
+        } finally {
+          btnSaveClient.disabled = false;
+          btnSaveClient.textContent = '🚀 Save & Automatically Create JSON';
+        }
+      });
+
+      // Download fallback
+      btnDownloadJson.addEventListener('click', () => {
+        const slug = inputSlug.value.trim() || 'client';
+        downloadJsonFile(slug, buildConfigObject());
+      });
+
+      function downloadJsonFile(slug, data) {
+        const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `${slug}.json`;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        setTimeout(() => URL.revokeObjectURL(url), 1000);
+      }
+
+      // Copy link
+      btnCopyLink.addEventListener('click', () => {
+        navigator.clipboard.writeText(createdClientUrl.textContent).then(() => {
+          btnCopyLink.textContent = '✓ Copied!';
+          setTimeout(() => btnCopyLink.textContent = 'Copy Link', 2000);
+        });
+      });
+
+      // Load all clients list
+      async function loadAllClients() {
+        try {
+          const res = await fetch('/api/clients');
+          const data = await res.json();
+          if (data.success && data.clients) {
+            clientsCount.textContent = data.clients.length;
+            clientsTableBody.innerHTML = '';
+            data.clients.forEach(c => {
+              const tr = document.createElement('tr');
+              tr.innerHTML = `
+                <td><strong>${c.name}</strong><br><span style="font-size:0.75rem; color:var(--muted);">${c.slug}</span></td>
+                <td>${c.city}</td>
+                <td>${c.phone}</td>
+                <td>
+                  <a href="${c.url}" target="_blank" class="action-icon-btn">Open Portal ↗</a>
+                </td>
+              `;
+              clientsTableBody.appendChild(tr);
+            });
+          }
+        } catch {}
+      }
+
+      // Tab switcher
+      tabNewClient.addEventListener('click', () => {
+        tabNewClient.classList.add('active');
+        tabAllClients.classList.remove('active');
+        createClientSection.style.display = 'block';
+        allClientsSection.style.display = 'none';
+      });
+
+      tabAllClients.addEventListener('click', () => {
+        tabAllClients.classList.add('active');
+        tabNewClient.classList.remove('active');
+        createClientSection.style.display = 'none';
+        allClientsSection.style.display = 'block';
+        loadAllClients();
+      });
+
+      loadAllClients();
+    })();
+  </script>
+</body>
+</html>
