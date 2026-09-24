@@ -3,39 +3,53 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Agency Admin Portal | Auto-Generate Taxi Clients</title>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap">
+  <title>Admin Dashboard — Taxi Portal Studio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap">
   <style>
     :root {
-      --bg: #0B0F19;
-      --card-bg: #141B2D;
-      --card-subtle: #1C253B;
-      --text: #F3F4F6;
-      --muted: #9CA3AF;
-      --primary: #FFD900;
-      --primary-hover: #E5C300;
-      --accent: #22C55E;
-      --border: rgba(255, 255, 255, 0.1);
-      --font-heading: 'Outfit', sans-serif;
-      --font-body: 'Plus Jakarta Sans', sans-serif;
+      --bg: #FAFAFB;
+      --card-bg: #FFFFFF;
+      --card-border: #E8E8ED;
+      --border-subtle: #F0F0F3;
+      --text-main: #09090B;
+      --text-muted: #64748B;
+      --text-soft: #94A3B8;
+      --primary: #09090B;
+      --primary-hover: #27272A;
+      --primary-text: #FFFFFF;
+      --accent-green: #10B981;
+      --accent-yellow: #FFD900;
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 18px;
+      --shadow-subtle: 0 1px 3px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.02);
+      --shadow-card: 0 4px 20px -2px rgba(0, 0, 0, 0.05);
+      --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
     body {
       background-color: var(--bg);
-      color: var(--text);
-      font-family: var(--font-body);
+      color: var(--text-main);
+      font-family: var(--font-sans);
       min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
       display: flex;
       flex-direction: column;
     }
 
+    /* Minimalist Top Navigation */
     header {
-      background: rgba(20, 27, 45, 0.85);
-      backdrop-filter: blur(12px);
-      border-bottom: 1px solid var(--border);
-      padding: 14px 28px;
+      background: #FFFFFF;
+      border-bottom: 1px solid var(--card-border);
+      padding: 14px 32px;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -44,569 +58,718 @@
       z-index: 100;
     }
 
-    .brand-logo {
+    .brand-wrap {
       display: flex;
       align-items: center;
       gap: 12px;
       text-decoration: none;
-      color: var(--text);
+      color: var(--text-main);
     }
 
-    .brand-logo img {
-      width: 36px;
-      height: 36px;
-      border-radius: 50%;
-    }
-
-    .brand-logo h1 {
-      font-family: var(--font-heading);
-      font-size: 1.25rem;
+    .brand-mark {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      background: #09090B;
+      color: #FFFFFF;
+      display: grid;
+      place-items: center;
       font-weight: 800;
+      font-size: 0.88rem;
+    }
+
+    .brand-title {
+      font-size: 0.95rem;
+      font-weight: 700;
       letter-spacing: -0.02em;
     }
 
-    .brand-logo span {
-      font-size: 0.72rem;
-      background: var(--primary);
-      color: #000;
-      font-weight: 800;
-      padding: 2px 8px;
+    .brand-tag {
+      font-size: 0.7rem;
+      font-weight: 600;
+      padding: 3px 8px;
+      background: #F4F4F5;
+      color: #52525B;
       border-radius: 999px;
+      border: 1px solid #E4E4E7;
       text-transform: uppercase;
+      letter-spacing: 0.04em;
     }
 
-    .header-links {
+    .header-actions {
       display: flex;
-      gap: 12px;
+      align-items: center;
+      gap: 10px;
     }
 
     .btn {
       display: inline-flex;
       align-items: center;
-      gap: 8px;
-      padding: 10px 18px;
-      border-radius: 12px;
+      justify-content: center;
+      gap: 7px;
+      padding: 8px 16px;
+      border-radius: var(--radius-sm);
       font-family: inherit;
-      font-size: 0.88rem;
-      font-weight: 700;
+      font-size: 0.84rem;
+      font-weight: 600;
       cursor: pointer;
       text-decoration: none;
-      transition: all 0.2s ease;
+      transition: all 0.15s ease;
       border: 1px solid transparent;
+      outline: none;
     }
 
     .btn-secondary {
-      background: var(--card-subtle);
-      color: var(--text);
-      border-color: var(--border);
+      background: #FFFFFF;
+      color: var(--text-main);
+      border-color: var(--card-border);
+      box-shadow: var(--shadow-subtle);
     }
+
     .btn-secondary:hover {
-      background: rgba(255, 255, 255, 0.15);
+      background: #F8F8FA;
+      border-color: #D4D4D8;
     }
 
     .btn-primary {
       background: var(--primary);
-      color: #0A0A0A;
+      color: var(--primary-text);
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
     }
+
     .btn-primary:hover {
       background: var(--primary-hover);
-      transform: translateY(-1px);
+      transform: translateY(-0.5px);
     }
 
-    .main-layout {
+    .btn-primary:active {
+      transform: translateY(0);
+    }
+
+    /* Main Grid Layout */
+    .dashboard-container {
       flex: 1;
-      display: grid;
-      grid-template-columns: 1.15fr 0.85fr;
-      gap: 24px;
-      max-width: 1440px;
+      max-width: 1400px;
       width: 100%;
       margin: 0 auto;
-      padding: 24px;
+      padding: 28px 32px 48px;
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 32px;
+      align-items: start;
     }
 
-    @media (max-width: 1024px) {
-      .main-layout {
+    @media (max-width: 1080px) {
+      .dashboard-container {
         grid-template-columns: 1fr;
+        padding: 20px 16px;
       }
     }
 
-    /* Tabs & Form */
-    .form-panel {
-      background: var(--card-bg);
-      border: 1px solid var(--border);
-      border-radius: 20px;
-      padding: 24px;
+    /* Form Panel Card */
+    .editor-card {
+      background: #FFFFFF;
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-card);
+      overflow: hidden;
     }
 
-    .panel-tabs {
+    /* Segmented Tabs */
+    .nav-tabs {
       display: flex;
-      gap: 8px;
-      border-bottom: 1px solid var(--border);
-      padding-bottom: 16px;
-      margin-bottom: 20px;
+      padding: 16px 24px 0;
+      border-bottom: 1px solid var(--card-border);
+      gap: 20px;
+      background: #FAFAFB;
     }
 
-    .tab-btn {
-      padding: 8px 16px;
-      border-radius: 10px;
+    .tab-link {
       background: transparent;
       border: none;
-      color: var(--muted);
-      font-size: 0.9rem;
-      font-weight: 700;
+      padding: 10px 4px 14px;
+      font-family: inherit;
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: var(--text-muted);
       cursor: pointer;
-      transition: all 0.2s ease;
+      position: relative;
+      transition: color 0.15s ease;
     }
 
-    .tab-btn.active {
-      background: var(--card-subtle);
-      color: var(--primary);
+    .tab-link:hover {
+      color: var(--text-main);
     }
 
-    .section-title {
-      font-family: var(--font-heading);
-      font-size: 1.05rem;
-      font-weight: 800;
-      margin: 20px 0 12px;
-      color: var(--primary);
+    .tab-link.active {
+      color: var(--text-main);
+      font-weight: 700;
+    }
+
+    .tab-link.active::after {
+      content: "";
+      position: absolute;
+      bottom: -1px;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: var(--text-main);
+      border-radius: 2px 2px 0 0;
+    }
+
+    .tab-content {
+      padding: 28px 28px 32px;
+    }
+
+    /* Form Styling */
+    .form-section {
+      margin-bottom: 28px;
+    }
+
+    .section-eyebrow {
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      color: var(--text-muted);
+      margin-bottom: 14px;
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 6px;
     }
 
-    .form-grid {
+    .section-eyebrow::after {
+      content: "";
+      flex: 1;
+      height: 1px;
+      background: var(--border-subtle);
+    }
+
+    .form-row {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 14px;
+      gap: 16px;
+      margin-bottom: 14px;
     }
 
     @media (max-width: 640px) {
-      .form-grid { grid-template-columns: 1fr; }
+      .form-row { grid-template-columns: 1fr; }
     }
 
-    .full-width { grid-column: 1 / -1; }
+    .full-row {
+      grid-column: 1 / -1;
+    }
 
-    .field-group {
+    .form-group {
       display: flex;
       flex-direction: column;
       gap: 6px;
     }
 
-    .field-group label {
+    .form-label {
       font-size: 0.8rem;
-      font-weight: 700;
-      color: var(--text);
+      font-weight: 600;
+      color: #3F3F46;
     }
 
-    .field-group input, .field-group select {
-      background: var(--card-subtle);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 10px 14px;
-      color: var(--text);
+    .form-control {
+      background: #FFFFFF;
+      border: 1px solid #D4D4D8;
+      border-radius: var(--radius-sm);
+      padding: 10px 12px;
       font-family: inherit;
-      font-size: 0.9rem;
+      font-size: 0.88rem;
+      color: var(--text-main);
       outline: none;
-      transition: border-color 0.2s;
+      transition: all 0.15s ease;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02);
     }
 
-    .field-group input:focus, .field-group select:focus {
-      border-color: var(--primary);
+    .form-control:focus {
+      border-color: #09090B;
+      box-shadow: 0 0 0 3px rgba(9, 9, 11, 0.08);
     }
 
-    .hint {
+    .form-hint {
       font-size: 0.74rem;
-      color: var(--muted);
+      color: var(--text-muted);
     }
 
-    /* Preset Themes Grid */
-    .theme-presets {
+    /* Theme Minimalist Chips */
+    .theme-selector-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(105px, 1fr));
       gap: 10px;
-      margin-top: 6px;
     }
 
-    .theme-preset-btn {
+    .theme-option {
+      border: 1.5px solid #E4E4E7;
+      background: #FFFFFF;
+      border-radius: var(--radius-sm);
+      padding: 10px 8px;
       display: flex;
       flex-direction: column;
       align-items: center;
       gap: 6px;
-      padding: 10px;
-      border-radius: 12px;
-      background: var(--card-subtle);
-      border: 2px solid transparent;
       cursor: pointer;
-      color: var(--text);
-      font-size: 0.78rem;
+      transition: all 0.15s ease;
+    }
+
+    .theme-option:hover {
+      border-color: #A1A1AA;
+      background: #FBFBFC;
+    }
+
+    .theme-option.active {
+      border-color: #09090B;
+      background: #F4F4F5;
       font-weight: 700;
-      transition: all 0.2s ease;
     }
 
-    .theme-preset-btn:hover {
-      background: rgba(255, 255, 255, 0.1);
-    }
-
-    .theme-preset-btn.active {
-      border-color: var(--primary);
-    }
-
-    .color-swatch {
-      width: 24px;
-      height: 24px;
+    .swatch {
+      width: 18px;
+      height: 18px;
       border-radius: 50%;
-      border: 2px solid #FFF;
+      border: 1.5px solid rgba(0,0,0,0.1);
     }
 
-    /* Vehicle Checkbox Cards */
-    .vehicles-selector {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
-      gap: 10px;
-      margin-top: 6px;
+    .theme-name {
+      font-size: 0.76rem;
+      color: var(--text-main);
     }
 
-    .vehicle-card {
+    /* Vehicle Checkbox Badges */
+    .vehicle-chips {
       display: flex;
-      align-items: center;
+      flex-wrap: wrap;
       gap: 8px;
-      padding: 8px 12px;
-      background: var(--card-subtle);
-      border-radius: 10px;
-      border: 1px solid var(--border);
+    }
+
+    .vehicle-badge-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 12px;
+      border-radius: 999px;
+      background: #FFFFFF;
+      border: 1px solid #E4E4E7;
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: #3F3F46;
       cursor: pointer;
-      font-size: 0.82rem;
+      transition: all 0.15s ease;
+      user-select: none;
+    }
+
+    .vehicle-badge-label input {
+      accent-color: #09090B;
+      width: 14px;
+      height: 14px;
+    }
+
+    .vehicle-badge-label:has(input:checked) {
+      border-color: #09090B;
+      background: #F4F4F5;
+      color: #09090B;
       font-weight: 600;
     }
 
-    .vehicle-card input {
-      accent-color: var(--primary);
-      width: 16px;
-      height: 16px;
-    }
-
-    /* Action Buttons Row */
-    .form-actions {
+    /* Save Action Footer */
+    .editor-footer {
       display: flex;
+      align-items: center;
       gap: 12px;
-      margin-top: 24px;
-      padding-top: 18px;
-      border-top: 1px solid var(--border);
+      padding-top: 20px;
+      border-top: 1px solid var(--card-border);
+      margin-top: 10px;
     }
 
     /* Right Preview Column */
-    .preview-panel {
+    .preview-column {
+      position: sticky;
+      top: 86px;
       display: flex;
       flex-direction: column;
       gap: 16px;
     }
 
-    .preview-header {
+    /* Success / Result Alert Box */
+    .success-alert {
+      background: #F0FDF4;
+      border: 1px solid #BBF7D0;
+      border-radius: var(--radius-md);
+      padding: 16px 18px;
+      display: none;
+      animation: alertSlide 0.25s ease;
+    }
+
+    .success-alert.show {
+      display: block;
+    }
+
+    @keyframes alertSlide {
+      from { opacity: 0; transform: translateY(-4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .alert-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: #166534;
+      margin-bottom: 6px;
+    }
+
+    .alert-file {
+      font-size: 0.78rem;
+      color: #15803D;
+      margin-bottom: 10px;
+    }
+
+    .alert-file code {
+      background: rgba(22, 101, 52, 0.08);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-weight: 600;
+    }
+
+    .alert-actions {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      background: #FFFFFF;
+      border: 1px solid #DCFCE7;
+      padding: 8px 12px;
+      border-radius: var(--radius-sm);
+    }
+
+    .url-text {
+      flex: 1;
+      font-family: monospace;
+      font-size: 0.8rem;
+      color: #14532D;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    /* Clean Phone Frame Mockup */
+    .device-preview-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
+      padding: 0 4px;
     }
 
-    .preview-header h2 {
-      font-family: var(--font-heading);
-      font-size: 1.1rem;
-      font-weight: 800;
+    .device-title {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--text-main);
     }
 
-    .phone-mockup {
-      width: 100%;
-      height: 680px;
-      background: #000;
+    .preview-frame-container {
+      background: #FFFFFF;
+      border: 1px solid var(--card-border);
       border-radius: 36px;
-      padding: 12px;
-      border: 4px solid #2B344B;
-      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6);
+      padding: 10px;
+      box-shadow: 0 12px 36px -4px rgba(0, 0, 0, 0.06);
+      height: 640px;
       display: flex;
       flex-direction: column;
-      overflow: hidden;
-      position: relative;
-    }
-
-    .phone-notch {
-      width: 120px;
-      height: 18px;
-      background: #111;
-      border-radius: 0 0 14px 14px;
-      margin: 0 auto 6px;
-      z-index: 10;
     }
 
     .phone-screen {
       flex: 1;
-      border-radius: 26px;
+      border: 1px solid #E8E8ED;
+      border-radius: 28px;
       overflow: hidden;
-      border: none;
       width: 100%;
-      background: #FFF;
+      height: 100%;
+      background: #F7F4E8;
     }
 
-    /* Success / Result Banner */
-    .result-box {
-      background: rgba(34, 197, 94, 0.12);
-      border: 1px solid rgba(34, 197, 94, 0.35);
-      border-radius: 14px;
-      padding: 16px;
-      display: none;
-      animation: fadeIn 0.3s ease;
+    /* Clients Table (Minimalist) */
+    .clients-table-wrap {
+      overflow-x: auto;
     }
 
-    .result-box.show {
-      display: block;
-    }
-
-    .result-title {
-      font-size: 0.95rem;
-      font-weight: 800;
-      color: var(--accent);
-      margin-bottom: 8px;
-    }
-
-    .result-link-wrap {
-      display: flex;
-      gap: 8px;
-      align-items: center;
-      background: rgba(0, 0, 0, 0.35);
-      padding: 8px 12px;
-      border-radius: 8px;
-      font-family: monospace;
-      font-size: 0.85rem;
-      word-break: break-all;
-    }
-
-    /* Clients List Table */
-    .clients-table {
+    .minimal-table {
       width: 100%;
       border-collapse: collapse;
-      margin-top: 14px;
+      font-size: 0.86rem;
     }
 
-    .clients-table th, .clients-table td {
-      padding: 12px 14px;
+    .minimal-table th {
       text-align: left;
-      border-bottom: 1px solid var(--border);
-      font-size: 0.88rem;
+      padding: 12px 14px;
+      font-weight: 600;
+      color: var(--text-muted);
+      border-bottom: 1px solid var(--card-border);
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
     }
 
-    .clients-table th {
-      color: var(--muted);
-      font-weight: 700;
+    .minimal-table td {
+      padding: 14px;
+      border-bottom: 1px solid var(--border-subtle);
+      vertical-align: middle;
     }
 
-    .action-icon-btn {
-      background: transparent;
-      border: none;
-      color: var(--primary);
-      cursor: pointer;
-      font-weight: 700;
-      text-decoration: underline;
-      padding: 2px 4px;
+    .minimal-table tr:hover td {
+      background: #FAFAFB;
     }
 
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(-6px); }
-      to { opacity: 1; transform: translateY(0); }
+    .client-badge-dot {
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      margin-right: 6px;
     }
   </style>
 </head>
 <body>
 
+  <!-- Top Navigation -->
   <header>
-    <a href="index.html" class="brand-logo">
-      <img src="assets/logo-taxi.svg" alt="Logo">
-      <h1>Agency Admin Portal</h1>
-      <span>Multi-Tenant</span>
+    <a href="index.html" class="brand-wrap">
+      <div class="brand-mark">🚖</div>
+      <div class="brand-title">Taxi Portal Studio</div>
+      <span class="brand-tag">Admin</span>
     </a>
-    <div class="header-links">
-      <a href="index.html" target="_blank" class="btn btn-secondary">👁️ View Customer Portal</a>
+    <div class="header-actions">
+      <a href="index.html" target="_blank" class="btn btn-secondary">
+        <span>Preview Customer Portal</span>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+      </a>
     </div>
   </header>
 
-  <main class="main-layout">
-    
-    <!-- Left Column: Form Panel -->
-    <section class="form-panel">
-      <div class="panel-tabs">
-        <button type="button" class="tab-btn active" id="tabNewClient">➕ Create New Client</button>
-        <button type="button" class="tab-btn" id="tabAllClients">📋 All Saved Clients (<span id="clientsCount">0</span>)</button>
+  <!-- Main Content Layout -->
+  <main class="dashboard-container">
+
+    <!-- Left Editor Card -->
+    <section class="editor-card">
+      <div class="nav-tabs">
+        <button type="button" class="tab-link active" id="tabCreate">Create New Client</button>
+        <button type="button" class="tab-link" id="tabList">Saved Clients (<span id="clientsCount">0</span>)</button>
       </div>
 
-      <!-- CREATE CLIENT FORM -->
-      <div id="createClientSection">
+      <!-- CREATE FORM -->
+      <div class="tab-content" id="createSection">
         <form id="clientForm" onsubmit="return false;">
-          
-          <div class="section-title">1. Business Identity</div>
-          <div class="form-grid">
-            <div class="field-group">
-              <label for="inputBusinessName">Business Name *</label>
-              <input type="text" id="inputBusinessName" placeholder="e.g. Raj Travels" required>
-            </div>
 
-            <div class="field-group">
-              <label for="inputSlug">Client Slug (URL Identifier) *</label>
-              <input type="text" id="inputSlug" placeholder="e.g. raj-travels" required>
-              <span class="hint">Will generate: /?client=<strong id="slugPreview">raj-travels</strong></span>
-            </div>
-
-            <div class="field-group full-width">
-              <label for="inputTagline">Tagline / Pitch</label>
-              <input type="text" id="inputTagline" value="Reliable rides for local, airport and outstation travel.">
-            </div>
-
-            <div class="field-group">
-              <label for="inputCity">City & State *</label>
-              <input type="text" id="inputCity" placeholder="e.g. Ahmedabad, Gujarat" required>
-            </div>
-
-            <div class="field-group">
-              <label for="inputBadge">Status Pill Badge</label>
-              <input type="text" id="inputBadge" value="24/7 Verified Taxi Partner">
-            </div>
-          </div>
-
-          <div class="section-title">2. Contact Numbers & Dispatch</div>
-          <div class="form-grid">
-            <div class="field-group">
-              <label for="inputWhatsapp">WhatsApp Number (For Bookings) *</label>
-              <input type="text" id="inputWhatsapp" placeholder="e.g. 919876543210 (with country code)" required>
-              <span class="hint">Bookings will be sent directly to this WhatsApp number</span>
-            </div>
-
-            <div class="field-group">
-              <label for="inputPhone">Calling Phone Number *</label>
-              <input type="text" id="inputPhone" placeholder="e.g. +91 987 654 3210" required>
-            </div>
-
-            <div class="field-group">
-              <label for="inputAltPhone">Alternate Phone Number</label>
-              <input type="text" id="inputAltPhone" placeholder="Optional secondary phone">
-            </div>
-
-            <div class="field-group">
-              <label for="inputMaps">Google Maps Location Link</label>
-              <input type="text" id="inputMaps" placeholder="e.g. https://maps.app.goo.gl/...">
-            </div>
-          </div>
-
-          <div class="section-title">3. Theme & Aesthetics</div>
-          <div class="field-group full-width">
-            <label>Select Preset Brand Theme:</label>
-            <div class="theme-presets">
-              <div class="theme-preset-btn active" data-preset="taxi">
-                <span class="color-swatch" style="background:#FFD900;"></span>
-                <span>Taxi Yellow</span>
+          <!-- SECTION 1: IDENTITY -->
+          <div class="form-section">
+            <div class="section-eyebrow">1. Business Information</div>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label" for="inputBusinessName">Business Name *</label>
+                <input type="text" id="inputBusinessName" class="form-control" placeholder="e.g. Raj Travels" required>
               </div>
-              <div class="theme-preset-btn" data-preset="royal">
-                <span class="color-swatch" style="background:#E2B755;"></span>
-                <span>Royal Gold</span>
+
+              <div class="form-group">
+                <label class="form-label" for="inputSlug">URL Identifier (Slug) *</label>
+                <input type="text" id="inputSlug" class="form-control" placeholder="e.g. raj-travels" required>
+                <span class="form-hint">URL: /?client=<strong id="slugHint">raj-travels</strong></span>
               </div>
-              <div class="theme-preset-btn" data-preset="eco">
-                <span class="color-swatch" style="background:#10B981;"></span>
-                <span>Eco Green</span>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group full-row">
+                <label class="form-label" for="inputTagline">Tagline</label>
+                <input type="text" id="inputTagline" class="form-control" value="Reliable rides for local, airport and outstation travel.">
               </div>
-              <div class="theme-preset-btn" data-preset="blue">
-                <span class="color-swatch" style="background:#3B82F6;"></span>
-                <span>Ocean Blue</span>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label" for="inputCity">City & State *</label>
+                <input type="text" id="inputCity" class="form-control" placeholder="e.g. Ahmedabad, Gujarat" required>
               </div>
-              <div class="theme-preset-btn" data-preset="red">
-                <span class="color-swatch" style="background:#EF4444;"></span>
-                <span>Ruby Red</span>
+
+              <div class="form-group">
+                <label class="form-label" for="inputBadge">Header Badge</label>
+                <input type="text" id="inputBadge" class="form-control" value="24/7 Verified Taxi Partner">
               </div>
             </div>
           </div>
 
-          <div class="section-title">4. Vehicle Fleet Offered</div>
-          <div class="field-group full-width">
-            <div class="vehicles-selector" id="vehiclesSelector">
-              <label class="vehicle-card"><input type="checkbox" value="sedan" checked> Sedan (Dzire)</label>
-              <label class="vehicle-card"><input type="checkbox" value="ertiga" checked> Ertiga (6 Seater)</label>
-              <label class="vehicle-card"><input type="checkbox" value="innova" checked> Innova (7 Seater)</label>
-              <label class="vehicle-card"><input type="checkbox" value="crysta" checked> Innova Crysta</label>
-              <label class="vehicle-card"><input type="checkbox" value="urbania"> Force Urbania</label>
-              <label class="vehicle-card"><input type="checkbox" value="tempo"> Tempo Traveller</label>
+          <!-- SECTION 2: DISPATCH & PHONE -->
+          <div class="form-section">
+            <div class="section-eyebrow">2. Contact & WhatsApp Dispatch</div>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label" for="inputWhatsapp">WhatsApp Number *</label>
+                <input type="text" id="inputWhatsapp" class="form-control" placeholder="e.g. 919876543210" required>
+                <span class="form-hint">Passenger bookings send directly to this number</span>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="inputPhone">Calling Number *</label>
+                <input type="text" id="inputPhone" class="form-control" placeholder="e.g. +91 987 654 3210" required>
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label" for="inputAltPhone">Alternate Phone (Optional)</label>
+                <input type="text" id="inputAltPhone" class="form-control" placeholder="+91 987 654 3211">
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="inputMaps">Google Maps Location Link</label>
+                <input type="text" id="inputMaps" class="form-control" placeholder="https://maps.app.goo.gl/...">
+              </div>
             </div>
           </div>
 
-          <div class="section-title">5. Social & Review Links</div>
-          <div class="form-grid">
-            <div class="field-group full-width">
-              <label for="inputGoogleReview">Google Review Link</label>
-              <input type="text" id="inputGoogleReview" placeholder="Google Maps review URL">
-            </div>
-            <div class="field-group">
-              <label for="inputInstagram">Instagram Handle / URL</label>
-              <input type="text" id="inputInstagram" placeholder="e.g. https://instagram.com/rajtravels">
-            </div>
-            <div class="field-group">
-              <label for="inputWebsite">Existing Website (Optional)</label>
-              <input type="text" id="inputWebsite" placeholder="https://rajtravels.com">
+          <!-- SECTION 3: THEME -->
+          <div class="form-section">
+            <div class="section-eyebrow">3. Theme Palette</div>
+            <div class="theme-selector-grid">
+              <div class="theme-option active" data-preset="taxi">
+                <span class="swatch" style="background:#FFD900;"></span>
+                <span class="theme-name">Taxi Yellow</span>
+              </div>
+              <div class="theme-option" data-preset="royal">
+                <span class="swatch" style="background:#E2B755;"></span>
+                <span class="theme-name">Royal Gold</span>
+              </div>
+              <div class="theme-option" data-preset="eco">
+                <span class="swatch" style="background:#10B981;"></span>
+                <span class="theme-name">Eco Green</span>
+              </div>
+              <div class="theme-option" data-preset="blue">
+                <span class="swatch" style="background:#3B82F6;"></span>
+                <span class="theme-name">Ocean Blue</span>
+              </div>
+              <div class="theme-option" data-preset="red">
+                <span class="swatch" style="background:#EF4444;"></span>
+                <span class="theme-name">Crimson</span>
+              </div>
             </div>
           </div>
 
-          <div class="form-actions">
+          <!-- SECTION 4: FLEET -->
+          <div class="form-section">
+            <div class="section-eyebrow">4. Vehicle Fleet Offered</div>
+            <div class="vehicle-chips" id="vehiclesSelector">
+              <label class="vehicle-badge-label">
+                <input type="checkbox" value="sedan" checked> Sedan (Dzire)
+              </label>
+              <label class="vehicle-badge-label">
+                <input type="checkbox" value="ertiga" checked> Maruti Ertiga
+              </label>
+              <label class="vehicle-badge-label">
+                <input type="checkbox" value="innova" checked> Toyota Innova
+              </label>
+              <label class="vehicle-badge-label">
+                <input type="checkbox" value="crysta" checked> Innova Crysta
+              </label>
+              <label class="vehicle-badge-label">
+                <input type="checkbox" value="urbania"> Force Urbania
+              </label>
+              <label class="vehicle-badge-label">
+                <input type="checkbox" value="tempo"> Tempo Traveller
+              </label>
+            </div>
+          </div>
+
+          <!-- SECTION 5: SOCIALS -->
+          <div class="form-section">
+            <div class="section-eyebrow">5. Reviews & Online Profiles</div>
+            <div class="form-row">
+              <div class="form-group full-row">
+                <label class="form-label" for="inputGoogleReview">Google Review Link</label>
+                <input type="text" id="inputGoogleReview" class="form-control" placeholder="https://maps.google.com/review/...">
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label" for="inputInstagram">Instagram Profile</label>
+                <input type="text" id="inputInstagram" class="form-control" placeholder="https://instagram.com/rajtravels">
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="inputWebsite">Official Website (Optional)</label>
+                <input type="text" id="inputWebsite" class="form-control" placeholder="https://rajtravels.com">
+              </div>
+            </div>
+          </div>
+
+          <!-- SUBMIT ACTIONS -->
+          <div class="editor-footer">
             <button type="button" id="btnSaveClient" class="btn btn-primary">
-              🚀 Save & Automatically Create JSON
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
+              <span>Save & Generate Client JSON</span>
             </button>
             <button type="button" id="btnDownloadJson" class="btn btn-secondary">
-              📥 Download .JSON File
+              <span>Download .JSON</span>
             </button>
           </div>
+
         </form>
       </div>
 
-      <!-- ALL CLIENTS LIST SECTION (Initially Hidden) -->
-      <div id="allClientsSection" style="display:none;">
-        <table class="clients-table">
-          <thead>
-            <tr>
-              <th>Client Name</th>
-              <th>City</th>
-              <th>Phone</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-          <tbody id="clientsTableBody"></tbody>
-        </table>
+      <!-- LIST OF SAVED CLIENTS -->
+      <div class="tab-content" id="listSection" style="display:none;">
+        <div class="clients-table-wrap">
+          <table class="minimal-table">
+            <thead>
+              <tr>
+                <th>Client</th>
+                <th>City</th>
+                <th>Phone</th>
+                <th>Link</th>
+              </tr>
+            </thead>
+            <tbody id="clientsTableBody"></tbody>
+          </table>
+        </div>
       </div>
 
     </section>
 
-    <!-- Right Column: Live Mobile Preview & Result Box -->
-    <section class="preview-panel">
-      <!-- Result Banner -->
-      <div id="resultBox" class="result-box">
-        <div class="result-title">✅ Client Portal Config Generated!</div>
-        <p style="font-size:0.85rem; margin-bottom:8px; color:var(--text);">File created on disk: <code id="createdFilePath">configs/raj-travels.json</code></p>
-        <div class="result-link-wrap">
-          <span id="createdClientUrl" style="flex:1;">/?client=raj-travels</span>
-          <button type="button" id="btnCopyLink" class="btn btn-primary" style="padding:4px 10px; font-size:0.75rem;">Copy Link</button>
+    <!-- Right Live Preview Column -->
+    <aside class="preview-column">
+
+      <!-- Success Notification Box -->
+      <div id="resultBox" class="success-alert">
+        <div class="alert-header">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          <span>Client Config Successfully Created!</span>
+        </div>
+        <div class="alert-file">Saved to <code id="createdFilePath">configs/raj-travels.json</code></div>
+        <div class="alert-actions">
+          <span class="url-text" id="createdClientUrl">/?client=raj-travels</span>
+          <button type="button" id="btnCopyLink" class="btn btn-primary" style="padding:4px 10px; font-size:0.75rem;">Copy</button>
           <a id="btnOpenClient" href="#" target="_blank" class="btn btn-secondary" style="padding:4px 10px; font-size:0.75rem;">Open ↗</a>
         </div>
       </div>
 
-      <div class="preview-header">
-        <h2>📱 Live Mobile Preview</h2>
-        <span class="hint">Updates live as you type</span>
+      <div class="device-preview-header">
+        <span class="device-title">Live Smartphone Preview</span>
+        <span class="form-hint">Synchronized live with form</span>
       </div>
 
-      <div class="phone-mockup">
-        <div class="phone-notch"></div>
+      <div class="preview-frame-container">
         <iframe id="previewIframe" class="phone-screen" src="index.html"></iframe>
       </div>
-    </section>
+
+    </aside>
 
   </main>
 
   <script>
     (function() {
-      // Elements
+      // Form elements
       const inputBusinessName = document.getElementById('inputBusinessName');
       const inputSlug = document.getElementById('inputSlug');
-      const slugPreview = document.getElementById('slugPreview');
+      const slugHint = document.getElementById('slugHint');
       const inputTagline = document.getElementById('inputTagline');
       const inputCity = document.getElementById('inputCity');
       const inputBadge = document.getElementById('inputBadge');
@@ -625,15 +788,15 @@
       const btnCopyLink = document.getElementById('btnCopyLink');
       const btnOpenClient = document.getElementById('btnOpenClient');
       const previewIframe = document.getElementById('previewIframe');
-      const tabNewClient = document.getElementById('tabNewClient');
-      const tabAllClients = document.getElementById('tabAllClients');
-      const createClientSection = document.getElementById('createClientSection');
-      const allClientsSection = document.getElementById('allClientsSection');
+      const tabCreate = document.getElementById('tabCreate');
+      const tabList = document.getElementById('tabList');
+      const createSection = document.getElementById('createSection');
+      const listSection = document.getElementById('listSection');
       const clientsTableBody = document.getElementById('clientsTableBody');
       const clientsCount = document.getElementById('clientsCount');
-      const themePresetBtns = document.querySelectorAll('.theme-preset-btn');
+      const themeOptions = document.querySelectorAll('.theme-option');
 
-      // Theme definitions
+      // Curated Theme Presets
       const THEMES = {
         taxi: {
           primary: '#FFD900',
@@ -702,41 +865,45 @@
         }
       };
 
-      let selectedThemeKey = 'taxi';
+      let currentThemeKey = 'taxi';
 
-      // Theme Preset Click
-      themePresetBtns.forEach(btn => {
-        btn.addEventListener('click', () => {
-          themePresetBtns.forEach(b => b.classList.remove('active'));
-          btn.classList.add('active');
-          selectedThemeKey = btn.dataset.preset;
-          triggerPreviewUpdate();
+      // Theme Picker Handlers
+      themeOptions.forEach(opt => {
+        opt.addEventListener('click', () => {
+          themeOptions.forEach(o => o.classList.remove('active'));
+          opt.classList.add('active');
+          currentThemeKey = opt.dataset.preset;
+          syncLivePreview();
         });
       });
 
-      // Auto Slug Generation from Name
+      // Auto Slug Generator
       inputBusinessName.addEventListener('input', () => {
-        const val = inputBusinessName.value.trim().toLowerCase()
+        const slug = inputBusinessName.value.trim().toLowerCase()
           .replace(/[^a-z0-9]+/g, '-')
           .replace(/^-+|-+$/g, '');
-        inputSlug.value = val;
-        slugPreview.textContent = val || 'client-slug';
-        triggerPreviewUpdate();
+        inputSlug.value = slug;
+        slugHint.textContent = slug || 'client-slug';
+        syncLivePreview();
       });
 
       inputSlug.addEventListener('input', () => {
-        slugPreview.textContent = inputSlug.value || 'client-slug';
+        slugHint.textContent = inputSlug.value || 'client-slug';
       });
 
-      // Build JSON Object
+      // Form inputs trigger live preview
+      [inputTagline, inputCity, inputBadge, inputPhone, inputWhatsapp].forEach(elem => {
+        elem.addEventListener('input', syncLivePreview);
+      });
+
+      // Build Config Data Object
       function buildConfigObject() {
         const name = inputBusinessName.value.trim() || 'My Taxi Service';
         const city = inputCity.value.trim() || 'Surat, Gujarat';
         const phone = inputPhone.value.trim() || '+91 910 910 5155';
         const cleanWhatsapp = (inputWhatsapp.value.trim() || '919109105155').replace(/[^0-9]/g, '');
-        const theme = THEMES[selectedThemeKey] || THEMES.taxi;
+        const theme = THEMES[currentThemeKey] || THEMES.taxi;
 
-        // Collect vehicles
         const vehicleMap = {
           sedan: { id: "sedan", name: "Sedan (Dzire / Etios)", capacity: "4 Seater", default: true },
           ertiga: { id: "ertiga", name: "Maruti Ertiga", capacity: "6 Seater" },
@@ -751,11 +918,8 @@
           if (vehicleMap[cb.value]) selectedVehicles.push(vehicleMap[cb.value]);
         });
 
-        if (selectedVehicles.length === 0) {
-          selectedVehicles.push(vehicleMap.sedan);
-        }
+        if (selectedVehicles.length === 0) selectedVehicles.push(vehicleMap.sedan);
 
-        // Social links
         const socialLinks = [];
         if (inputGoogleReview.value.trim()) {
           socialLinks.push({
@@ -840,8 +1004,8 @@
         };
       }
 
-      // Live update iframe preview
-      function triggerPreviewUpdate() {
+      // Live synchronize with phone preview
+      function syncLivePreview() {
         const configObj = buildConfigObject();
         try {
           if (previewIframe.contentWindow && previewIframe.contentWindow.applyConfigPreview) {
@@ -850,7 +1014,7 @@
         } catch {}
       }
 
-      // Save to server API (Auto creates configs/[slug].json)
+      // Save to server
       btnSaveClient.addEventListener('click', async () => {
         if (!inputBusinessName.value.trim()) {
           alert('Please enter a Business Name');
@@ -862,7 +1026,7 @@
         const configData = buildConfigObject();
 
         btnSaveClient.disabled = true;
-        btnSaveClient.textContent = 'Saving & Writing JSON...';
+        btnSaveClient.innerHTML = '<span>Saving JSON...</span>';
 
         try {
           const res = await fetch('/api/save-client', {
@@ -879,23 +1043,24 @@
             resultBox.classList.add('show');
             resultBox.scrollIntoView({ behavior: 'smooth' });
 
-            // Reload iframe with new client
             previewIframe.src = result.clientUrl;
-            loadAllClients();
+            loadClientsList();
           } else {
-            alert('Error creating client JSON: ' + (result.error || 'Server error'));
+            alert('Error: ' + (result.error || 'Failed to save config'));
           }
         } catch (err) {
           console.error(err);
-          alert('Could not connect to server API. Downloading JSON file instead...');
           downloadJsonFile(slug, configData);
         } finally {
           btnSaveClient.disabled = false;
-          btnSaveClient.textContent = '🚀 Save & Automatically Create JSON';
+          btnSaveClient.innerHTML = `
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
+            <span>Save & Generate Client JSON</span>
+          `;
         }
       });
 
-      // Download fallback
+      // Direct download
       btnDownloadJson.addEventListener('click', () => {
         const slug = inputSlug.value.trim() || 'client';
         downloadJsonFile(slug, buildConfigObject());
@@ -913,16 +1078,16 @@
         setTimeout(() => URL.revokeObjectURL(url), 1000);
       }
 
-      // Copy link
+      // Copy Link
       btnCopyLink.addEventListener('click', () => {
         navigator.clipboard.writeText(createdClientUrl.textContent).then(() => {
-          btnCopyLink.textContent = '✓ Copied!';
-          setTimeout(() => btnCopyLink.textContent = 'Copy Link', 2000);
+          btnCopyLink.textContent = '✓ Copied';
+          setTimeout(() => btnCopyLink.textContent = 'Copy', 2000);
         });
       });
 
-      // Load all clients list
-      async function loadAllClients() {
+      // Load Saved Clients
+      async function loadClientsList() {
         try {
           const res = await fetch('/api/clients');
           const data = await res.json();
@@ -932,11 +1097,14 @@
             data.clients.forEach(c => {
               const tr = document.createElement('tr');
               tr.innerHTML = `
-                <td><strong>${c.name}</strong><br><span style="font-size:0.75rem; color:var(--muted);">${c.slug}</span></td>
-                <td>${c.city}</td>
-                <td>${c.phone}</td>
                 <td>
-                  <a href="${c.url}" target="_blank" class="action-icon-btn">Open Portal ↗</a>
+                  <strong>${c.name}</strong><br>
+                  <span style="font-size:0.74rem; color:#71717A;">${c.slug}</span>
+                </td>
+                <td style="color:#52525B;">${c.city}</td>
+                <td style="color:#52525B;">${c.phone}</td>
+                <td>
+                  <a href="${c.url}" target="_blank" class="btn btn-secondary" style="padding:4px 10px; font-size:0.75rem;">Open ↗</a>
                 </td>
               `;
               clientsTableBody.appendChild(tr);
@@ -945,23 +1113,23 @@
         } catch {}
       }
 
-      // Tab switcher
-      tabNewClient.addEventListener('click', () => {
-        tabNewClient.classList.add('active');
-        tabAllClients.classList.remove('active');
-        createClientSection.style.display = 'block';
-        allClientsSection.style.display = 'none';
+      // Tabs
+      tabCreate.addEventListener('click', () => {
+        tabCreate.classList.add('active');
+        tabList.classList.remove('active');
+        createSection.style.display = 'block';
+        listSection.style.display = 'none';
       });
 
-      tabAllClients.addEventListener('click', () => {
-        tabAllClients.classList.add('active');
-        tabNewClient.classList.remove('active');
-        createClientSection.style.display = 'none';
-        allClientsSection.style.display = 'block';
-        loadAllClients();
+      tabList.addEventListener('click', () => {
+        tabList.classList.add('active');
+        tabCreate.classList.remove('active');
+        createSection.style.display = 'none';
+        listSection.style.display = 'block';
+        loadClientsList();
       });
 
-      loadAllClients();
+      loadClientsList();
     })();
   </script>
 </body>
