@@ -412,10 +412,38 @@
       color: var(--text-main);
     }
 
-    /* Vehicle Checkbox Badges */
+    /* Vehicle Checkbox Badges & Add Vehicle */
+    .vehicle-section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+
+    .btn-text-action {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      border: 1px solid #E4E4E7;
+      background: #FFFFFF;
+      color: #18181B;
+      font-size: 0.76rem;
+      font-weight: 600;
+      cursor: pointer;
+      padding: 5px 10px;
+      border-radius: 999px;
+      transition: all 0.15s ease;
+    }
+
+    .btn-text-action:hover {
+      background: #F4F4F5;
+      border-color: #09090B;
+    }
+
     .vehicle-chips {
       display: flex;
       flex-wrap: wrap;
+      align-items: center;
       gap: 8px;
     }
 
@@ -446,6 +474,86 @@
       background: #F4F4F5;
       color: #09090B;
       font-weight: 600;
+    }
+
+    .vehicle-badge-add-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 7px 13px;
+      border-radius: 999px;
+      background: #FFFFFF;
+      border: 1px dashed #D4D4D8;
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: #52525B;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .vehicle-badge-add-btn:hover {
+      border-color: #09090B;
+      color: #09090B;
+      background: #F4F4F5;
+    }
+
+    .vehicle-remove-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 16px;
+      height: 16px;
+      padding: 0;
+      margin-left: 2px;
+      border-radius: 50%;
+      background: transparent;
+      border: none;
+      color: #A1A1AA;
+      font-size: 13px;
+      line-height: 1;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .vehicle-remove-btn:hover {
+      background: #FEE2E2;
+      color: #EF4444;
+    }
+
+    .add-vehicle-panel {
+      margin-top: 10px;
+      padding: 12px 14px;
+      background: #FAFAFA;
+      border: 1px solid #E4E4E7;
+      border-radius: 12px;
+      animation: fadeIn 0.2s ease-out;
+    }
+
+    .add-vehicle-title {
+      font-size: 0.74rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #71717A;
+      margin-bottom: 8px;
+    }
+
+    .add-vehicle-form-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: flex-end;
+      gap: 8px;
+    }
+
+    .add-vehicle-buttons {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 1px;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-4px); }
+      to { opacity: 1; transform: translateY(0); }
     }
 
     /* Save Action Footer */
@@ -873,26 +981,75 @@
 
           <!-- SECTION 4: FLEET -->
           <div class="form-section">
-            <div class="section-eyebrow">4. Vehicle Fleet Offered</div>
+            <div class="vehicle-section-header">
+              <div class="section-eyebrow" style="margin-bottom: 0;">4. Vehicle Fleet Offered</div>
+              <button type="button" id="btnToggleAddVehicle" class="btn-text-action" title="Add a custom vehicle model">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                <span>Add Vehicle</span>
+              </button>
+            </div>
+
             <div class="vehicle-chips" id="vehiclesSelector">
-              <label class="vehicle-badge-label">
-                <input type="checkbox" value="sedan" checked> Sedan (Dzire)
+              <label class="vehicle-badge-label" data-id="sedan" data-name="Sedan (Dzire / Etios)" data-capacity="4 Seater">
+                <input type="checkbox" value="sedan" checked>
+                <span class="veh-label-text">Sedan (Dzire)</span>
               </label>
-              <label class="vehicle-badge-label">
-                <input type="checkbox" value="ertiga" checked> Maruti Ertiga
+              <label class="vehicle-badge-label" data-id="ertiga" data-name="Maruti Ertiga" data-capacity="6 Seater">
+                <input type="checkbox" value="ertiga" checked>
+                <span class="veh-label-text">Maruti Ertiga</span>
               </label>
-              <label class="vehicle-badge-label">
-                <input type="checkbox" value="innova" checked> Toyota Innova
+              <label class="vehicle-badge-label" data-id="innova" data-name="Toyota Innova" data-capacity="7 Seater">
+                <input type="checkbox" value="innova" checked>
+                <span class="veh-label-text">Toyota Innova</span>
               </label>
-              <label class="vehicle-badge-label">
-                <input type="checkbox" value="crysta" checked> Innova Crysta
+              <label class="vehicle-badge-label" data-id="crysta" data-name="Innova Crysta" data-capacity="7 Seater">
+                <input type="checkbox" value="crysta" checked>
+                <span class="veh-label-text">Innova Crysta</span>
               </label>
-              <label class="vehicle-badge-label">
-                <input type="checkbox" value="urbania"> Force Urbania
+              <label class="vehicle-badge-label" data-id="urbania" data-name="Force Urbania" data-capacity="12-17 Seater">
+                <input type="checkbox" value="urbania">
+                <span class="veh-label-text">Force Urbania</span>
               </label>
-              <label class="vehicle-badge-label">
-                <input type="checkbox" value="tempo"> Tempo Traveller
+              <label class="vehicle-badge-label" data-id="tempo" data-name="Tempo Traveller" data-capacity="12-20 Seater">
+                <input type="checkbox" value="tempo">
+                <span class="veh-label-text">Tempo Traveller</span>
               </label>
+              
+              <button type="button" id="btnAddVehicleChipBtn" class="vehicle-badge-add-btn" title="Add another car model">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                <span>Add Vehicle</span>
+              </button>
+            </div>
+
+            <!-- Expandable Add Vehicle Drawer -->
+            <div id="addVehiclePanel" class="add-vehicle-panel" style="display: none;">
+              <div class="add-vehicle-title">Add Vehicle to Fleet</div>
+              <div class="add-vehicle-form-row">
+                <div class="form-group" style="flex: 2; min-width: 180px; margin-bottom: 0;">
+                  <label class="form-label" for="newVehModel" style="font-size: 0.73rem;">Vehicle Name *</label>
+                  <input type="text" id="newVehModel" class="form-control" style="padding: 7px 10px; font-size: 0.82rem;" placeholder="e.g. Kia Carens, Honda City, Bolero, Audi A6">
+                </div>
+                <div class="form-group" style="flex: 1; min-width: 130px; margin-bottom: 0;">
+                  <label class="form-label" for="newVehCapacity" style="font-size: 0.73rem;">Capacity</label>
+                  <input type="text" id="newVehCapacity" class="form-control" style="padding: 7px 10px; font-size: 0.82rem;" placeholder="e.g. 6 Seater" list="capacityList">
+                  <datalist id="capacityList">
+                    <option value="4 Seater">
+                    <option value="6 Seater">
+                    <option value="7 Seater">
+                    <option value="8 Seater">
+                    <option value="12 Seater">
+                    <option value="17+ Seater">
+                  </datalist>
+                </div>
+                <div class="add-vehicle-buttons">
+                  <button type="button" id="btnConfirmAddVehicle" class="btn btn-primary" style="padding: 7px 14px; font-size: 0.82rem;">
+                    <span>Add to Fleet</span>
+                  </button>
+                  <button type="button" id="btnCancelAddVehicle" class="btn btn-secondary" style="padding: 7px 12px; font-size: 0.82rem;">
+                    <span>Cancel</span>
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
 
@@ -1042,6 +1199,16 @@
       const btnResetLogo = document.getElementById('btnResetLogo');
       let customLogoDataUrl = null;
 
+      // Vehicle Fleet elements
+      const vehiclesSelector = document.getElementById('vehiclesSelector');
+      const addVehiclePanel = document.getElementById('addVehiclePanel');
+      const btnToggleAddVehicle = document.getElementById('btnToggleAddVehicle');
+      const btnAddVehicleChipBtn = document.getElementById('btnAddVehicleChipBtn');
+      const btnConfirmAddVehicle = document.getElementById('btnConfirmAddVehicle');
+      const btnCancelAddVehicle = document.getElementById('btnCancelAddVehicle');
+      const newVehModel = document.getElementById('newVehModel');
+      const newVehCapacity = document.getElementById('newVehCapacity');
+
       // Curated Theme Presets
       const THEMES = {
         taxi: {
@@ -1175,6 +1342,108 @@
         elem.addEventListener('input', syncLivePreview);
       });
 
+      // --- Vehicle Fleet Management ---
+      function createVehicleBadge({ id, name, capacity, checked = true, isCustom = true }) {
+        const label = document.createElement('label');
+        label.className = `vehicle-badge-label${isCustom ? ' custom-vehicle' : ''}`;
+        label.dataset.id = id;
+        label.dataset.name = name;
+        label.dataset.capacity = capacity || '4 Seater';
+
+        const capDisplay = capacity ? ` <span style="opacity:0.6;font-size:0.75rem;">(${capacity})</span>` : '';
+        const removeBtnHtml = isCustom 
+          ? `<button type="button" class="vehicle-remove-btn" title="Remove ${name}">&times;</button>` 
+          : '';
+
+        label.innerHTML = `
+          <input type="checkbox" value="${id}" ${checked ? 'checked' : ''}>
+          <span class="veh-label-text">${name}${capDisplay}</span>
+          ${removeBtnHtml}
+        `;
+
+        label.querySelector('input').addEventListener('change', syncLivePreview);
+
+        if (isCustom) {
+          const removeBtn = label.querySelector('.vehicle-remove-btn');
+          if (removeBtn) {
+            removeBtn.addEventListener('click', (e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              label.remove();
+              syncLivePreview();
+            });
+          }
+        }
+
+        return label;
+      }
+
+      function openAddVehiclePanel() {
+        addVehiclePanel.style.display = 'block';
+        newVehModel.focus();
+      }
+
+      function closeAddVehiclePanel() {
+        addVehiclePanel.style.display = 'none';
+        newVehModel.value = '';
+        newVehCapacity.value = '';
+      }
+
+      btnToggleAddVehicle.addEventListener('click', () => {
+        if (addVehiclePanel.style.display === 'none' || !addVehiclePanel.style.display) {
+          openAddVehiclePanel();
+        } else {
+          closeAddVehiclePanel();
+        }
+      });
+
+      btnAddVehicleChipBtn.addEventListener('click', openAddVehiclePanel);
+      btnCancelAddVehicle.addEventListener('click', closeAddVehiclePanel);
+
+      function handleAddNewVehicle() {
+        const name = newVehModel.value.trim();
+        if (!name) {
+          newVehModel.focus();
+          return;
+        }
+        const capacity = newVehCapacity.value.trim() || '4 Seater';
+        const slugId = name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') || ('veh-' + Date.now());
+
+        // Check if already exists in selector
+        const existing = document.querySelector(`#vehiclesSelector .vehicle-badge-label[data-id="${slugId}"]`);
+        if (existing) {
+          const cb = existing.querySelector('input');
+          if (cb) cb.checked = true;
+          closeAddVehiclePanel();
+          syncLivePreview();
+          return;
+        }
+
+        const badge = createVehicleBadge({ id: slugId, name, capacity, checked: true, isCustom: true });
+        vehiclesSelector.insertBefore(badge, btnAddVehicleChipBtn);
+        closeAddVehiclePanel();
+        syncLivePreview();
+      }
+
+      btnConfirmAddVehicle.addEventListener('click', handleAddNewVehicle);
+      newVehModel.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          handleAddNewVehicle();
+        }
+      });
+      newVehCapacity.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          handleAddNewVehicle();
+        }
+      });
+
+      // Hook initial checkboxes to live sync
+      document.querySelectorAll('#vehiclesSelector .vehicle-badge-label input[type="checkbox"]').forEach(cb => {
+        cb.addEventListener('change', syncLivePreview);
+      });
+
       // Build Config Data Object
       function buildConfigObject() {
         const name = inputBusinessName.value.trim() || 'My Taxi Service';
@@ -1183,21 +1452,31 @@
         const cleanWhatsapp = (inputWhatsapp.value.trim() || '919109105155').replace(/[^0-9]/g, '');
         const theme = THEMES[currentThemeKey] || THEMES.taxi;
 
-        const vehicleMap = {
-          sedan: { id: "sedan", name: "Sedan (Dzire / Etios)", capacity: "4 Seater", default: true },
-          ertiga: { id: "ertiga", name: "Maruti Ertiga", capacity: "6 Seater" },
-          innova: { id: "innova", name: "Toyota Innova", capacity: "7 Seater" },
-          crysta: { id: "crysta", name: "Innova Crysta", capacity: "7 Seater" },
-          urbania: { id: "urbania", name: "Force Urbania", capacity: "12-17 Seater" },
-          tempo: { id: "tempo", name: "Tempo Traveller", capacity: "12-20 Seater" }
-        };
-
         const selectedVehicles = [];
-        document.querySelectorAll('#vehiclesSelector input[type="checkbox"]:checked').forEach(cb => {
-          if (vehicleMap[cb.value]) selectedVehicles.push(vehicleMap[cb.value]);
+        document.querySelectorAll('#vehiclesSelector .vehicle-badge-label').forEach(label => {
+          const cb = label.querySelector('input[type="checkbox"]');
+          if (!cb || !cb.checked) return;
+
+          const id = label.dataset.id || cb.value;
+          const name = label.dataset.name || label.querySelector('.veh-label-text')?.textContent?.trim() || id;
+          const capacity = label.dataset.capacity || '4 Seater';
+
+          selectedVehicles.push({
+            id: id,
+            name: name,
+            capacity: capacity,
+            ...(selectedVehicles.length === 0 ? { default: true } : {})
+          });
         });
 
-        if (selectedVehicles.length === 0) selectedVehicles.push(vehicleMap.sedan);
+        if (selectedVehicles.length === 0) {
+          selectedVehicles.push({
+            id: "sedan",
+            name: "Sedan (Dzire / Etios)",
+            capacity: "4 Seater",
+            default: true
+          });
+        }
 
         const socialLinks = [];
         if (inputGoogleReview.value.trim()) {
@@ -1278,7 +1557,7 @@
           agencyBranding: {
             showPoweredBy: true,
             agencyName: "Davlabs",
-            agencyLink: "https://davlabs.com"
+            agencyLink: "https://davlabs.in"
           }
         };
       }
@@ -1453,9 +1732,36 @@
           }
 
           // Vehicles
-          const vehicleIds = (data.vehicles || []).map(v => v.id);
-          document.querySelectorAll('#vehiclesSelector input[type="checkbox"]').forEach(cb => {
-            cb.checked = vehicleIds.includes(cb.value);
+          const clientVehicles = data.vehicles || [];
+          const clientVehicleIds = clientVehicles.map(v => v.id);
+
+          // Remove any previous custom badges
+          document.querySelectorAll('#vehiclesSelector .vehicle-badge-label.custom-vehicle').forEach(el => el.remove());
+
+          clientVehicles.forEach(veh => {
+            let label = document.querySelector(`#vehiclesSelector .vehicle-badge-label[data-id="${veh.id}"]`);
+            if (!label) {
+              label = createVehicleBadge({
+                id: veh.id,
+                name: veh.name,
+                capacity: veh.capacity,
+                checked: true,
+                isCustom: true
+              });
+              vehiclesSelector.insertBefore(label, btnAddVehicleChipBtn);
+            } else {
+              const cb = label.querySelector('input[type="checkbox"]');
+              if (cb) cb.checked = true;
+            }
+          });
+
+          // Uncheck any badges that are NOT in clientVehicles
+          document.querySelectorAll('#vehiclesSelector .vehicle-badge-label').forEach(label => {
+            const id = label.dataset.id;
+            if (!clientVehicleIds.includes(id)) {
+              const cb = label.querySelector('input[type="checkbox"]');
+              if (cb) cb.checked = false;
+            }
           });
 
           // Social links
@@ -1494,6 +1800,16 @@
         themeOptions.forEach(opt => opt.classList.toggle('active', opt.dataset.preset === 'taxi'));
         logoPreviewImg.src = THEMES.taxi.logo;
         btnResetLogo.style.display = 'none';
+
+        // Reset vehicles: remove custom badges & set default 4 checks
+        document.querySelectorAll('#vehiclesSelector .vehicle-badge-label.custom-vehicle').forEach(el => el.remove());
+        const defaultChecked = ['sedan', 'ertiga', 'innova', 'crysta'];
+        document.querySelectorAll('#vehiclesSelector .vehicle-badge-label').forEach(label => {
+          const cb = label.querySelector('input[type="checkbox"]');
+          if (cb) cb.checked = defaultChecked.includes(label.dataset.id);
+        });
+        closeAddVehiclePanel();
+
         btnSaveClient.innerHTML = `
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
           <span>Save & Generate Client JSON</span>
