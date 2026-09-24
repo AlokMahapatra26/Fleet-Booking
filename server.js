@@ -97,6 +97,25 @@ const server = http.createServer((req, res) => {
           throw new Error('Missing client data payload');
         }
 
+        // If custom logo image uploaded (base64)
+        if (payload.logoBase64 && payload.logoBase64.startsWith('data:image/')) {
+          const match = payload.logoBase64.match(/^data:image\/([a-zA-Z0-9+]+);base64,(.+)$/);
+          if (match) {
+            let ext = match[1].toLowerCase();
+            if (ext === 'svg+xml') ext = 'svg';
+            if (ext === 'jpeg') ext = 'jpg';
+            const base64Data = match[2];
+            const logosDir = path.join(ROOT_DIR, 'assets', 'logos');
+            if (!fs.existsSync(logosDir)) fs.mkdirSync(logosDir, { recursive: true });
+            
+            const logoFileName = `${slug}-logo.${ext}`;
+            const logoPath = path.join(logosDir, logoFileName);
+            fs.writeFileSync(logoPath, Buffer.from(base64Data, 'base64'));
+            
+            payload.data.brand.logoUrl = `assets/logos/${logoFileName}`;
+          }
+        }
+
         const filePath = path.join(CONFIGS_DIR, `${slug}.json`);
         const jsonContent = JSON.stringify(payload.data, null, 2);
 

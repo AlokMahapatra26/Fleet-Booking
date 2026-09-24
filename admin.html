@@ -221,6 +221,79 @@
       padding: 28px 28px 32px;
     }
 
+    /* Minimalist Logo Uploader Card */
+    .logo-uploader-card {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 14px 16px;
+      background: #FAFAFB;
+      border: 1px solid #E8E8ED;
+      border-radius: var(--radius-md);
+      margin-bottom: 20px;
+    }
+
+    .logo-avatar-wrap {
+      width: 58px;
+      height: 58px;
+      border-radius: 50%;
+      background: #FFFFFF;
+      border: 2px solid #E4E4E7;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+
+    .logo-avatar-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .logo-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .logo-label {
+      font-size: 0.84rem;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    .logo-subtext {
+      font-size: 0.74rem;
+      color: var(--text-muted);
+    }
+
+    .logo-btn-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 4px;
+    }
+
+    .btn-sm {
+      padding: 6px 12px;
+      font-size: 0.78rem;
+    }
+
+    .btn-text-muted {
+      background: transparent;
+      border: none;
+      color: #EF4444;
+      font-size: 0.75rem;
+      font-weight: 600;
+      cursor: pointer;
+      padding: 2px 4px;
+    }
+    .btn-text-muted:hover {
+      text-decoration: underline;
+    }
+
     /* Form Styling */
     .form-section {
       margin-bottom: 28px;
@@ -684,7 +757,27 @@
 
           <!-- SECTION 1: IDENTITY -->
           <div class="form-section">
-            <div class="section-eyebrow">1. Business Information</div>
+            <div class="section-eyebrow">1. Business Information & Branding</div>
+
+            <!-- Tasteful Logo Upload Widget -->
+            <div class="logo-uploader-card">
+              <div class="logo-avatar-wrap">
+                <img id="logoPreviewImg" src="assets/logo-taxi.svg" alt="Company Logo Preview">
+              </div>
+              <div class="logo-meta">
+                <div class="logo-label">Business Logo</div>
+                <div class="logo-subtext">Upload PNG, JPG, SVG, or WEBP (Square recommended)</div>
+                <div class="logo-btn-row">
+                  <label for="inputLogoFile" class="btn btn-secondary btn-sm">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+                    <span>Upload Logo</span>
+                  </label>
+                  <input type="file" id="inputLogoFile" accept="image/*" style="display:none;">
+                  <button type="button" id="btnResetLogo" class="btn-text-muted" style="display:none;">Remove Custom Logo</button>
+                </div>
+              </div>
+            </div>
+
             <div class="form-row">
               <div class="form-group">
                 <label class="form-label" for="inputBusinessName">Business Name *</label>
@@ -933,6 +1026,12 @@
       const clientsCount = document.getElementById('clientsCount');
       const themeOptions = document.querySelectorAll('.theme-option');
 
+      // Logo Upload elements
+      const inputLogoFile = document.getElementById('inputLogoFile');
+      const logoPreviewImg = document.getElementById('logoPreviewImg');
+      const btnResetLogo = document.getElementById('btnResetLogo');
+      let customLogoDataUrl = null;
+
       // Curated Theme Presets
       const THEMES = {
         taxi: {
@@ -1010,8 +1109,41 @@
           themeOptions.forEach(o => o.classList.remove('active'));
           opt.classList.add('active');
           currentThemeKey = opt.dataset.preset;
+          if (!customLogoDataUrl) {
+            logoPreviewImg.src = THEMES[currentThemeKey].logo;
+          }
           syncLivePreview();
         });
+      });
+
+      // Logo File Upload Handler
+      inputLogoFile.addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        // Size check (max 5MB)
+        if (file.size > 5 * 1024 * 1024) {
+          alert('Image size must be under 5MB');
+          return;
+        }
+
+        const reader = new FileReader();
+        reader.onload = (event) => {
+          customLogoDataUrl = event.target.result;
+          logoPreviewImg.src = customLogoDataUrl;
+          btnResetLogo.style.display = 'inline-block';
+          syncLivePreview();
+        };
+        reader.readAsDataURL(file);
+      });
+
+      // Reset Logo
+      btnResetLogo.addEventListener('click', () => {
+        customLogoDataUrl = null;
+        inputLogoFile.value = '';
+        logoPreviewImg.src = THEMES[currentThemeKey].logo;
+        btnResetLogo.style.display = 'none';
+        syncLivePreview();
       });
 
       // Auto Slug Generator
@@ -1090,7 +1222,7 @@
             tagline: inputTagline.value.trim() || 'Reliable rides for local, airport and outstation travel.',
             locationText: city,
             badge: inputBadge.value.trim() || '24/7 Verified Taxi Partner',
-            logoUrl: theme.logo,
+            logoUrl: customLogoDataUrl || theme.logo,
             theme: {
               primary: theme.primary,
               primaryHover: theme.primaryHover,
@@ -1169,7 +1301,11 @@
           const res = await fetch('/api/save-client', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ slug, data: configData })
+            body: JSON.stringify({
+              slug,
+              data: configData,
+              logoBase64: customLogoDataUrl
+            })
           });
 
           const result = await res.json();
