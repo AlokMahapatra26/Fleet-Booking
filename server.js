@@ -33,6 +33,15 @@ const MIME_TYPES = {
   '.webmanifest': 'application/manifest+json'
 };
 
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'davlabs@123';
+
+function isAuthorized(req) {
+  const authHeader = req.headers['authorization'] || req.headers['x-admin-key'];
+  if (!authHeader) return false;
+  const token = authHeader.replace(/^Bearer\s+/i, '').trim();
+  return token === ADMIN_PASSWORD;
+}
+
 const server = http.createServer((req, res) => {
   const parsedUrl = url.parse(req.url, true);
   const pathname = parsedUrl.pathname;
@@ -40,7 +49,7 @@ const server = http.createServer((req, res) => {
   // Enable CORS
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, DELETE, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, x-admin-key');
 
   if (req.method === 'OPTIONS') {
     res.writeHead(204);
@@ -80,8 +89,36 @@ const server = http.createServer((req, res) => {
     return;
   }
 
+  // --- API: Verify Admin Password ---
+  if (req.method === 'POST' && pathname === '/api/verify-auth') {
+    let body = '';
+    req.on('data', chunk => { body += chunk; });
+    req.on('end', () => {
+      try {
+        const payload = JSON.parse(body);
+        if (payload.password === ADMIN_PASSWORD) {
+          res.writeHead(200, { 'Content-Type': 'application/json' });
+          res.end(JSON.stringify({ success: true, token: ADMIN_PASSWORD }));
+        } else {
+          res.writeHead(401, { 'Content-Type': 'application/json' });
+          res.end(JSON.stringify({ success: false, error: 'Incorrect password' }));
+        }
+      } catch {
+        res.writeHead(400, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ success: false, error: 'Invalid request' }));
+      }
+    });
+    return;
+  }
+
   // --- API: Save / Generate Client JSON Automatically ---
   if (req.method === 'POST' && pathname === '/api/save-client') {
+    if (!isAuthorized(req)) {
+      res.writeHead(401, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ success: false, error: 'Unauthorized: invalid or missing admin password' }));
+      return;
+    }
+
     let body = '';
     req.on('data', chunk => { body += chunk; });
     req.on('end', () => {
@@ -148,6 +185,12 @@ const server = http.createServer((req, res) => {
 
   // --- API: Delete Client ---
   if (req.method === 'DELETE' && pathname === '/api/delete-client') {
+    if (!isAuthorized(req)) {
+      res.writeHead(401, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ success: false, error: 'Unauthorized: invalid or missing admin password' }));
+      return;
+    }
+
     const slug = (parsedUrl.query.slug || '').trim().toLowerCase().replace(/[^a-z0-9_-]/g, '');
     if (!slug) {
       res.writeHead(400, { 'Content-Type': 'application/json' });

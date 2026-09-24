@@ -831,9 +831,167 @@
       border-radius: 50%;
       margin-right: 6px;
     }
+
+    /* Auth Lock Overlay */
+    .auth-overlay {
+      position: fixed;
+      inset: 0;
+      background: #FFFFFF;
+      z-index: 999999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .auth-card {
+      width: 100%;
+      max-width: 370px;
+      padding: 38px 30px;
+      background: #FFFFFF;
+      border: 1px solid #E4E4E7;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+      text-align: center;
+    }
+
+    .auth-icon-wrap {
+      width: 48px;
+      height: 48px;
+      margin: 0 auto 16px;
+      border-radius: 12px;
+      background: #F4F4F5;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #09090B;
+    }
+
+    .auth-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #09090B;
+      margin: 0 0 6px 0;
+      letter-spacing: -0.02em;
+    }
+
+    .auth-subtitle {
+      font-size: 0.82rem;
+      color: #71717A;
+      margin: 0 0 24px 0;
+      line-height: 1.4;
+    }
+
+    .auth-form {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .auth-input-group {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .auth-input {
+      padding-right: 42px !important;
+      font-size: 0.95rem !important;
+      letter-spacing: 0.02em;
+      border-radius: 12px !important;
+    }
+
+    .auth-eye-btn {
+      position: absolute;
+      right: 12px;
+      background: none;
+      border: none;
+      color: #A1A1AA;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 4px;
+      transition: color 0.15s ease;
+    }
+
+    .auth-eye-btn:hover {
+      color: #09090B;
+    }
+
+    .auth-submit-btn {
+      width: 100%;
+      justify-content: center;
+      padding: 10px 16px !important;
+      font-size: 0.88rem !important;
+      border-radius: 12px !important;
+      margin-top: 4px;
+    }
+
+    .auth-error {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      font-size: 0.78rem;
+      color: #DC2626;
+      background: #FEF2F2;
+      border: 1px solid #FCA5A5;
+      padding: 8px 12px;
+      border-radius: 8px;
+      animation: shake 0.3s ease-in-out;
+    }
+
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      20%, 60% { transform: translateX(-5px); }
+      40%, 80% { transform: translateX(5px); }
+    }
+
+    .auth-footer {
+      margin-top: 24px;
+      font-size: 0.72rem;
+      color: #A1A1AA;
+      font-weight: 500;
+    }
   </style>
 </head>
 <body>
+
+  <!-- Master Auth Lock Screen -->
+  <div id="authOverlay" class="auth-overlay">
+    <div class="auth-card">
+      <div class="auth-icon-wrap">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect width="18" height="11" x="3" y="11" rx="2" ry="2"/>
+          <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+        </svg>
+      </div>
+      <h1 class="auth-title">Admin Access</h1>
+      <p class="auth-subtitle">Enter master password to access Taxi Portal Studio</p>
+
+      <form id="authForm" class="auth-form" onsubmit="return false;">
+        <div class="auth-input-group">
+          <input type="password" id="adminPasswordInput" class="form-control auth-input" placeholder="Enter password" autofocus autocomplete="current-password">
+          <button type="button" id="btnTogglePassword" class="auth-eye-btn" title="Show / Hide Password">
+            <svg id="eyeIcon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
+          </button>
+        </div>
+        <div id="authErrorMsg" class="auth-error" style="display: none;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          <span>Incorrect password. Please try again.</span>
+        </div>
+        <button type="submit" id="btnUnlock" class="btn btn-primary auth-submit-btn">
+          <span>Unlock Dashboard</span>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+        </button>
+      </form>
+
+      <div class="auth-footer">
+        <span>Protected by Davlabs</span>
+      </div>
+    </div>
+  </div>
 
   <!-- Top Navigation -->
   <header>
@@ -849,6 +1007,10 @@
         <span>Preview Customer Portal</span>
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
       </a>
+      <button type="button" id="btnLogout" class="btn btn-secondary" title="Lock Admin Portal">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        <span>Lock</span>
+      </button>
     </div>
   </header>
 
@@ -1208,6 +1370,65 @@
       const btnCancelAddVehicle = document.getElementById('btnCancelAddVehicle');
       const newVehModel = document.getElementById('newVehModel');
       const newVehCapacity = document.getElementById('newVehCapacity');
+
+      // --- Admin Lock & Password State ---
+      const authOverlay = document.getElementById('authOverlay');
+      const authForm = document.getElementById('authForm');
+      const adminPasswordInput = document.getElementById('adminPasswordInput');
+      const btnTogglePassword = document.getElementById('btnTogglePassword');
+      const authErrorMsg = document.getElementById('authErrorMsg');
+      const btnUnlock = document.getElementById('btnUnlock');
+      const btnLogout = document.getElementById('btnLogout');
+      const MASTER_PASSWORD = 'davlabs@123';
+      const AUTH_KEY = 'davlabs_admin_auth';
+
+      function checkAuth() {
+        const token = sessionStorage.getItem(AUTH_KEY);
+        if (token === MASTER_PASSWORD) {
+          authOverlay.style.display = 'none';
+          return true;
+        } else {
+          authOverlay.style.display = 'flex';
+          adminPasswordInput.value = '';
+          authErrorMsg.style.display = 'none';
+          setTimeout(() => adminPasswordInput.focus(), 60);
+          return false;
+        }
+      }
+
+      function handleUnlock() {
+        const val = adminPasswordInput.value.trim();
+        if (val === MASTER_PASSWORD) {
+          sessionStorage.setItem(AUTH_KEY, MASTER_PASSWORD);
+          authErrorMsg.style.display = 'none';
+          authOverlay.style.display = 'none';
+          loadClientsList();
+        } else {
+          authErrorMsg.style.display = 'flex';
+          adminPasswordInput.focus();
+          adminPasswordInput.select();
+        }
+      }
+
+      authForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        handleUnlock();
+      });
+
+      btnTogglePassword.addEventListener('click', () => {
+        if (adminPasswordInput.type === 'password') {
+          adminPasswordInput.type = 'text';
+          btnTogglePassword.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.88 9.88a3 3 0 1 0 4.24 4.24"/><path d="M10.73 5.08A10.43 10.43 0 0 1 12 5c7 0 10 7 10 7a13.16 13.16 0 0 1-1.67 2.68"/><path d="M6.61 6.61A13.526 13.526 0 0 0 2 12s3 7 10 7a9.74 9.74 0 0 0 5.39-1.61"/><line x1="2" y1="2" x2="22" y2="22"/></svg>`;
+        } else {
+          adminPasswordInput.type = 'password';
+          btnTogglePassword.innerHTML = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>`;
+        }
+      });
+
+      btnLogout.addEventListener('click', () => {
+        sessionStorage.removeItem(AUTH_KEY);
+        checkAuth();
+      });
 
       // Curated Theme Presets
       const THEMES = {
@@ -1589,7 +1810,10 @@
         try {
           const res = await fetch('/api/save-client', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: { 
+              'Content-Type': 'application/json',
+              'x-admin-key': sessionStorage.getItem(AUTH_KEY) || MASTER_PASSWORD
+            },
             body: JSON.stringify({
               slug,
               data: configData,
@@ -1825,7 +2049,12 @@
         }
 
         try {
-          const res = await fetch(`/api/delete-client?slug=${slug}`, { method: 'DELETE' });
+          const res = await fetch(`/api/delete-client?slug=${slug}`, { 
+            method: 'DELETE',
+            headers: {
+              'x-admin-key': sessionStorage.getItem(AUTH_KEY) || MASTER_PASSWORD
+            }
+          });
           const result = await res.json();
           if (result.success) {
             loadClientsList();
@@ -1888,7 +2117,10 @@
         });
       }
 
-      loadClientsList();
+      // Check authentication on initial load
+      if (checkAuth()) {
+        loadClientsList();
+      }
     })();
   </script>
 </body>
