@@ -4,7 +4,7 @@
     "shortName": "EcoGreen Cabs",
     "tagline": "100% Zero-emission electric rides for clean city travel.",
     "locationText": "Bengaluru, Karnataka",
-    "badge": "🌱 100% Green Certified",
+    "badge": "\ud83c\udf31 100% Green Certified",
     "logoUrl": "assets/logo-eco.svg",
     "theme": {
       "primary": "#10B981",
@@ -32,26 +32,70 @@
     "googleMapsUrl": "https://maps.google.com/?q=Indiranagar+Bengaluru"
   },
   "rides": [
-    { "id": "city", "label": "Eco City Ride", "default": true },
-    { "id": "airport", "label": "Airport Electric Drop" },
-    { "id": "corporate", "label": "Corporate Green Commute" },
-    { "id": "hourly", "label": "Hourly Eco Rental", "hasHourlyPackages": true }
+    {
+      "id": "city",
+      "label": "Eco City Ride",
+      "default": true
+    },
+    {
+      "id": "airport",
+      "label": "Airport Electric Drop"
+    },
+    {
+      "id": "corporate",
+      "label": "Corporate Green Commute"
+    },
+    {
+      "id": "hourly",
+      "label": "Hourly Eco Rental",
+      "hasHourlyPackages": true
+    }
   ],
   "hourlyPackages": [
-    { "id": "4h40k", "hours": "4 Hours", "km": "40 KM Included", "default": true },
-    { "id": "8h80k", "hours": "8 Hours", "km": "80 KM Included" }
+    {
+      "id": "4h40k",
+      "hours": "4 Hours",
+      "km": "40 KM Included",
+      "default": true
+    },
+    {
+      "id": "8h80k",
+      "hours": "8 Hours",
+      "km": "80 KM Included"
+    }
   ],
   "vehicles": [
-    { "id": "nexon-ev", "name": "Tata Nexon EV Max", "capacity": "4 Passengers", "luggage": "3 Bags", "default": true },
-    { "id": "tigor-ev", "name": "Tata Tigor EV Sedan", "capacity": "4 Passengers", "luggage": "2 Bags" },
-    { "id": "mg-zs-ev", "name": "MG ZS EV Premium", "capacity": "4 Passengers", "luggage": "4 Bags" },
-    { "id": "byd-e6", "name": "BYD e6 Electric MPV", "capacity": "5 Passengers", "luggage": "5 Bags" }
+    {
+      "id": "nexon-ev",
+      "name": "Tata Nexon EV Max",
+      "capacity": "4 Passengers",
+      "luggage": "3 Bags",
+      "default": true
+    },
+    {
+      "id": "tigor-ev",
+      "name": "Tata Tigor EV Sedan",
+      "capacity": "4 Passengers",
+      "luggage": "2 Bags"
+    },
+    {
+      "id": "mg-zs-ev",
+      "name": "MG ZS EV Premium",
+      "capacity": "4 Passengers",
+      "luggage": "4 Bags"
+    },
+    {
+      "id": "byd-e6",
+      "name": "BYD e6 Electric MPV",
+      "capacity": "5 Passengers",
+      "luggage": "5 Bags"
+    }
   ],
   "socialLinks": [
     {
       "type": "review",
       "label": "Google Business Rating",
-      "subtitle": "4.8 ★★★★★ Eco Reviews",
+      "subtitle": "4.8 \u2605\u2605\u2605\u2605\u2605 Eco Reviews",
       "url": "https://maps.google.com"
     },
     {
@@ -75,9 +119,7 @@
   },
   "agencyBranding": {
     "showPoweredBy": true,
-    "agencyName": "YourAgency",
-    "agencyLink": "https://youragency.com",
-    "agencyPhone": "+91XXXXXXXXXX",
-    "agencyPhoneDisplay": "Agency Partner"
+    "agencyName": "Davlabs",
+    "agencyLink": "https://davlabs.com"
   }
 }

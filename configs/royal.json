@@ -4,7 +4,7 @@
     "shortName": "Royal Cabs",
     "tagline": "Premium chauffeur driven luxury cars & airport transfers.",
     "locationText": "Mumbai, Maharashtra",
-    "badge": "★ VIP Chauffeur Service",
+    "badge": "\u2605 VIP Chauffeur Service",
     "logoUrl": "assets/logo-luxury.svg",
     "theme": {
       "primary": "#E2B755",
@@ -32,29 +32,85 @@
     "googleMapsUrl": "https://maps.google.com/?q=Bandra+Kurla+Complex+Mumbai"
   },
   "rides": [
-    { "id": "airport", "label": "Airport VIP Transfer", "default": true },
-    { "id": "city", "label": "City Luxury Ride" },
-    { "id": "outstation", "label": "Outstation Executive" },
-    { "id": "wedding", "label": "Wedding Fleet" },
-    { "id": "hourly", "label": "Hourly Chauffeur", "hasHourlyPackages": true }
+    {
+      "id": "airport",
+      "label": "Airport VIP Transfer",
+      "default": true
+    },
+    {
+      "id": "city",
+      "label": "City Luxury Ride"
+    },
+    {
+      "id": "outstation",
+      "label": "Outstation Executive"
+    },
+    {
+      "id": "wedding",
+      "label": "Wedding Fleet"
+    },
+    {
+      "id": "hourly",
+      "label": "Hourly Chauffeur",
+      "hasHourlyPackages": true
+    }
   ],
   "hourlyPackages": [
-    { "id": "4h40k", "hours": "4 Hours", "km": "40 KM Included", "default": true },
-    { "id": "8h80k", "hours": "8 Hours", "km": "80 KM Included" },
-    { "id": "12h120k", "hours": "12 Hours", "km": "120 KM Included" }
+    {
+      "id": "4h40k",
+      "hours": "4 Hours",
+      "km": "40 KM Included",
+      "default": true
+    },
+    {
+      "id": "8h80k",
+      "hours": "8 Hours",
+      "km": "80 KM Included"
+    },
+    {
+      "id": "12h120k",
+      "hours": "12 Hours",
+      "km": "120 KM Included"
+    }
   ],
   "vehicles": [
-    { "id": "mercedes", "name": "Mercedes E-Class", "capacity": "3 VIPs", "luggage": "3 Bags", "default": true },
-    { "id": "bmw", "name": "BMW 5 Series", "capacity": "3 VIPs", "luggage": "3 Bags" },
-    { "id": "crysta-vip", "name": "Innova Crysta Lounge", "capacity": "6 Passengers", "luggage": "5 Bags" },
-    { "id": "fortuner", "name": "Toyota Fortuner 4x4", "capacity": "6 Passengers", "luggage": "4 Bags" },
-    { "id": "vellfire", "name": "Toyota Vellfire Luxury", "capacity": "6 VIPs", "luggage": "6 Bags" }
+    {
+      "id": "mercedes",
+      "name": "Mercedes E-Class",
+      "capacity": "3 VIPs",
+      "luggage": "3 Bags",
+      "default": true
+    },
+    {
+      "id": "bmw",
+      "name": "BMW 5 Series",
+      "capacity": "3 VIPs",
+      "luggage": "3 Bags"
+    },
+    {
+      "id": "crysta-vip",
+      "name": "Innova Crysta Lounge",
+      "capacity": "6 Passengers",
+      "luggage": "5 Bags"
+    },
+    {
+      "id": "fortuner",
+      "name": "Toyota Fortuner 4x4",
+      "capacity": "6 Passengers",
+      "luggage": "4 Bags"
+    },
+    {
+      "id": "vellfire",
+      "name": "Toyota Vellfire Luxury",
+      "capacity": "6 VIPs",
+      "luggage": "6 Bags"
+    }
   ],
   "socialLinks": [
     {
       "type": "review",
       "label": "Read Client Reviews",
-      "subtitle": "5.0 ★★★★★ Verified Luxury",
+      "subtitle": "5.0 \u2605\u2605\u2605\u2605\u2605 Verified Luxury",
       "url": "https://maps.google.com"
     },
     {
@@ -78,9 +134,7 @@
   },
   "agencyBranding": {
     "showPoweredBy": true,
-    "agencyName": "YourAgency",
-    "agencyLink": "https://youragency.com",
-    "agencyPhone": "+91XXXXXXXXXX",
-    "agencyPhoneDisplay": "Contact Agency"
+    "agencyName": "Davlabs",
+    "agencyLink": "https://davlabs.com"
   }
 }

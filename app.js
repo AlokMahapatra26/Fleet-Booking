@@ -191,18 +191,14 @@
       DOM.secondaryCallBtn.style.display = 'none';
     }
 
-    if (cfg.agencyBranding && cfg.agencyBranding.showPoweredBy) {
-      DOM.agencyLink.textContent = cfg.agencyBranding.agencyName || 'Agency';
-      DOM.agencyLink.href = cfg.agencyBranding.agencyLink || '#';
-      if (cfg.agencyBranding.agencyPhone) {
-        DOM.agencyPhoneDivider.style.display = 'inline';
-        DOM.agencyPhoneLink.style.display = 'inline';
-        DOM.agencyPhoneLink.href = `tel:${cfg.agencyBranding.agencyPhone}`;
-        DOM.agencyPhoneLink.textContent = cfg.agencyBranding.agencyPhoneDisplay || cfg.agencyBranding.agencyPhone;
-      } else {
-        DOM.agencyPhoneDivider.style.display = 'none';
-        DOM.agencyPhoneLink.style.display = 'none';
-      }
+    if (cfg.agencyBranding && cfg.agencyBranding.showPoweredBy === false) {
+      if (DOM.agencyBrandContainer) DOM.agencyBrandContainer.style.display = 'none';
+    } else {
+      if (DOM.agencyBrandContainer) DOM.agencyBrandContainer.style.display = 'block';
+      DOM.agencyLink.textContent = (cfg.agencyBranding && cfg.agencyBranding.agencyName) || 'Davlabs';
+      DOM.agencyLink.href = (cfg.agencyBranding && cfg.agencyBranding.agencyLink) || '#';
+      if (DOM.agencyPhoneDivider) DOM.agencyPhoneDivider.style.display = 'none';
+      if (DOM.agencyPhoneLink) DOM.agencyPhoneLink.style.display = 'none';
     }
 
     // 11. Set Date Inputs Default
