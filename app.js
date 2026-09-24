@@ -53,8 +53,7 @@
     agencyPhoneLink: document.getElementById('agencyPhoneLink'),
     toastNotice: document.getElementById('toastNotice'),
     saveContactBtn: document.getElementById('saveContactBtn'),
-    sharePageBtn: document.getElementById('sharePageBtn'),
-    demoClientBtns: document.querySelectorAll('.demo-client-btn')
+    sharePageBtn: document.getElementById('sharePageBtn')
   };
 
   /**
@@ -91,14 +90,12 @@
       if (!response.ok) throw new Error(`Could not load ${configUrl}`);
       config = await response.json();
       applyConfig(config);
-      updateDemoSwitcherState(clientParam || 'esskay');
     } catch (err) {
       console.warn('Failed to load specific config, falling back to default config.json:', err);
       if (configUrl !== './config.json') {
         const fallbackRes = await fetch('./config.json');
         config = await fallbackRes.json();
         applyConfig(config);
-        updateDemoSwitcherState('esskay');
       }
     }
   }
@@ -543,32 +540,9 @@
     });
   }
 
-  /**
-   * White-Label Live Switcher Bar (Demo Feature)
-   */
-  function updateDemoSwitcherState(currentClient) {
-    DOM.demoClientBtns.forEach(btn => {
-      if (btn.dataset.client === currentClient) {
-        btn.classList.add('active');
-      } else {
-        btn.classList.remove('active');
-      }
-    });
-  }
-
-  DOM.demoClientBtns.forEach(btn => {
-    btn.addEventListener('click', () => {
-      const client = btn.dataset.client;
-      loadConfiguration(client);
-      showToast(`Switched white-label theme to: ${btn.textContent}`);
-    });
-  });
-
-  // If embedded inside an iframe (like Admin preview), hide demo bar for clean look
+  // If embedded inside an iframe (like Admin preview), mark body class
   if (window.self !== window.top) {
     document.body.classList.add('is-iframe-preview');
-    const demoBar = document.getElementById('demoSwitcherBar');
-    if (demoBar) demoBar.style.display = 'none';
   }
 
   // Expose applyConfig for live admin iframe preview

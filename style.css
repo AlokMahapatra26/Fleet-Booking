@@ -769,62 +769,7 @@ select.form-control {
   text-decoration: underline;
 }
 
-/* Floating White-Label Demo Switcher Bar */
-.whitelabel-demo-bar {
-  position: fixed;
-  bottom: 12px;
-  left: 50%;
-  transform: translateX(-50%);
-  background: rgba(18, 18, 18, 0.92);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  border-radius: 999px;
-  padding: 6px 10px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  z-index: 1000;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
-}
 
-.demo-label {
-  font-size: 0.72rem;
-  font-weight: 800;
-  color: #FFD900;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  padding-left: 6px;
-  white-space: nowrap;
-}
-
-.demo-btn-group {
-  display: flex;
-  gap: 4px;
-}
-
-.demo-client-btn {
-  background: rgba(255, 255, 255, 0.1);
-  border: none;
-  color: #FFFFFF;
-  padding: 5px 10px;
-  border-radius: 999px;
-  font-size: 0.75rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  white-space: nowrap;
-}
-
-.demo-client-btn:hover {
-  background: rgba(255, 255, 255, 0.25);
-}
-
-.demo-client-btn.active {
-  background: var(--theme-primary);
-  color: var(--theme-primary-contrast);
-  font-weight: 800;
-}
 
 /* Toast Notifications */
 .toast-notice {

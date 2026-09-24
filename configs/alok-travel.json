@@ -1,0 +1,111 @@
+{
+  "brand": {
+    "name": "Alok Travel",
+    "shortName": "Alok Taxi",
+    "tagline": "Reliable rides for local, airport and outstation travel.",
+    "locationText": "Vapi , Gujrat",
+    "badge": "24/7 Verified Taxi Partner",
+    "logoUrl": "assets/logos/alok-travel-logo.png",
+    "theme": {
+      "primary": "#FFD900",
+      "primaryHover": "#E6C200",
+      "primaryContrast": "#0A0A0A",
+      "background": "#F7F4E8",
+      "cardBg": "#FFFFFF",
+      "text": "#111111",
+      "muted": "#747168",
+      "border": "rgba(17, 17, 17, 0.08)",
+      "accent": "#22C55E",
+      "pattern": "taxi-stripes"
+    }
+  },
+  "contact": {
+    "primaryPhone": "+919109105155",
+    "displayPhone": "+91 910 910 5155",
+    "whatsappPhone": "8849561649",
+    "secondaryPhone": "ssad",
+    "secondaryDisplayPhone": "ssad",
+    "googleMapsUrl": "https://maps.app.goo.gl/23MS5yuACmahAAaKA"
+  },
+  "rides": [
+    {
+      "id": "local",
+      "label": "Local Taxi",
+      "default": true
+    },
+    {
+      "id": "airport",
+      "label": "Airport"
+    },
+    {
+      "id": "outstation",
+      "label": "Outstation"
+    },
+    {
+      "id": "oneway",
+      "label": "One Way"
+    },
+    {
+      "id": "roundtrip",
+      "label": "Round Trip"
+    },
+    {
+      "id": "hourly",
+      "label": "Hourly",
+      "hasHourlyPackages": true
+    }
+  ],
+  "hourlyPackages": [
+    {
+      "id": "4h40k",
+      "hours": "4 Hours",
+      "km": "Up to 40 KM",
+      "default": true
+    },
+    {
+      "id": "8h80k",
+      "hours": "8 Hours",
+      "km": "Up to 80 KM"
+    },
+    {
+      "id": "12h120k",
+      "hours": "12 Hours",
+      "km": "Up to 120 KM"
+    }
+  ],
+  "vehicles": [
+    {
+      "id": "sedan",
+      "name": "Sedan (Dzire / Etios)",
+      "capacity": "4 Seater",
+      "default": true
+    },
+    {
+      "id": "ertiga",
+      "name": "Maruti Ertiga",
+      "capacity": "6 Seater"
+    },
+    {
+      "id": "innova",
+      "name": "Toyota Innova",
+      "capacity": "7 Seater"
+    },
+    {
+      "id": "crysta",
+      "name": "Innova Crysta",
+      "capacity": "7 Seater"
+    }
+  ],
+  "socialLinks": [],
+  "vcard": {
+    "fn": "Alok Travel",
+    "org": "Alok Travel",
+    "title": "Taxi Service",
+    "note": "Alok Travel in Vapi , Gujrat. Reliable taxi bookings."
+  },
+  "agencyBranding": {
+    "showPoweredBy": true,
+    "agencyName": "Scan Era",
+    "agencyLink": "https://scanera.in"
+  }
+}
