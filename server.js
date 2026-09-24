@@ -9,7 +9,7 @@ const fs = require('fs');
 const path = require('path');
 const url = require('url');
 
-const PORT = process.env.PORT || 8080;
+const PORT = process.env.PORT || 4000;
 const ROOT_DIR = __dirname;
 const CONFIGS_DIR = path.join(ROOT_DIR, 'configs');
 
@@ -144,11 +144,11 @@ const server = http.createServer((req, res) => {
             const base64Data = match[2];
             const logosDir = path.join(ROOT_DIR, 'assets', 'logos');
             if (!fs.existsSync(logosDir)) fs.mkdirSync(logosDir, { recursive: true });
-            
+
             const logoFileName = `${slug}-logo.${ext}`;
             const logoPath = path.join(logosDir, logoFileName);
             fs.writeFileSync(logoPath, Buffer.from(base64Data, 'base64'));
-            
+
             payload.data.brand.logoUrl = `assets/logos/${logoFileName}`;
           }
         }

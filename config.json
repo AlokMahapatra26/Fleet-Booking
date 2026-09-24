@@ -1,10 +1,10 @@
 {
   "brand": {
-    "name": "TAXI SERVICES",
-    "shortName": "Taxi Service",
-    "tagline": "Reliable rides for local, airport and outstation travel.",
-    "locationText": "Surat, Gujarat",
-    "badge": "24/7 Verified Taxi Partner",
+    "name": "DAV Labs",
+    "shortName": "DAV Labs",
+    "tagline": "Elite engineering, design & strategy to build high-performance digital infrastructure.",
+    "locationText": "Vapi, Gujarat",
+    "badge": "Verified Digital Solutions Partner",
     "logoUrl": "assets/logo-taxi.svg",
     "theme": {
       "primary": "#FFD900",
@@ -22,14 +22,14 @@
     }
   },
   "contact": {
-    "primaryPhone": "+919109105155",
-    "displayPhone": "+91 910 910 5155",
-    "whatsappPhone": "919109105155",
-    "secondaryPhone": "+916353851656",
-    "secondaryDisplayPhone": "+91 635 385 1656",
-    "email": "info@taxitravels.in",
-    "address": "Surat, Gujarat, India",
-    "googleMapsUrl": "https://maps.app.goo.gl/gyRVsJUg8bS3QFoa9?g_st=ac"
+    "primaryPhone": "+917383149649",
+    "displayPhone": "+91 73831 49649",
+    "whatsappPhone": "917383149649",
+    "secondaryPhone": "+917383149649",
+    "secondaryDisplayPhone": "+91 73831 49649",
+    "email": "contact@davlabs.in",
+    "address": "Vapi, Valsad, Gujarat - 396195",
+    "googleMapsUrl": "https://davlabs.in"
   },
   "rides": [
     {
@@ -112,39 +112,33 @@
   ],
   "socialLinks": [
     {
-      "type": "review",
-      "label": "Write a Google Review",
-      "subtitle": "5.0 ★★★★★ on Google Maps",
-      "url": "https://maps.google.com"
+      "type": "website",
+      "label": "Official Website",
+      "subtitle": "davlabs.in",
+      "url": "https://davlabs.in"
     },
     {
       "type": "instagram",
       "label": "Instagram",
-      "subtitle": "@taxitravels",
-      "url": "https://instagram.com"
+      "subtitle": "@davlabs",
+      "url": "https://instagram.com/davlabs"
     },
     {
-      "type": "facebook",
-      "label": "Facebook",
-      "subtitle": "Taxi Travels Official",
-      "url": "https://facebook.com"
-    },
-    {
-      "type": "website",
-      "label": "Official Website",
-      "subtitle": "taxitravels.in",
-      "url": "https://taxitravels.in"
+      "type": "review",
+      "label": "Contact Us",
+      "subtitle": "davlabs.in/contact",
+      "url": "https://davlabs.in/contact"
     }
   ],
   "vcard": {
-    "fn": "Taxi Travels",
-    "org": "Taxi Travels",
-    "title": "Taxi Service",
-    "note": "Reliable local, outstation and airport rides."
+    "fn": "DAV Labs",
+    "org": "DAV Labs Solutions",
+    "title": "Digital Solutions Agency",
+    "note": "Elite engineering, design & strategy to build high-performance digital infrastructure."
   },
   "agencyBranding": {
     "showPoweredBy": true,
-    "agencyName": "Davlabs",
+    "agencyName": "DAV Labs",
     "agencyLink": "https://davlabs.in"
   }
 }
