@@ -1,0 +1,16 @@
+{
+  "name": "fleet-booking",
+  "version": "1.0.0",
+  "description": "White-Label Travel & Taxi Portal",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "keywords": [
+    "taxi",
+    "travel",
+    "pwa"
+  ],
+  "author": "Davlabs",
+  "license": "ISC"
+}
