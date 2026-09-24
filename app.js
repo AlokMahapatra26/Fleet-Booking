@@ -79,10 +79,8 @@
     const urlParams = new URLSearchParams(window.location.search);
     const clientParam = clientName || urlParams.get('client');
 
-    if (clientParam && clientParam !== 'default' && clientParam !== 'esskay') {
+    if (clientParam && clientParam !== 'default') {
       configUrl = `./configs/${clientParam}.json`;
-    } else if (clientParam === 'esskay') {
-      configUrl = './configs/esskay.json';
     }
 
     try {

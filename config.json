@@ -1,7 +1,7 @@
 {
   "brand": {
-    "name": "ESSKAY TRAVELS",
-    "shortName": "Esskay Taxi",
+    "name": "TAXI SERVICES",
+    "shortName": "Taxi Service",
     "tagline": "Reliable rides for local, airport and outstation travel.",
     "locationText": "Surat, Gujarat",
     "badge": "24/7 Verified Taxi Partner",
@@ -27,7 +27,7 @@
     "whatsappPhone": "919109105155",
     "secondaryPhone": "+916353851656",
     "secondaryDisplayPhone": "+91 635 385 1656",
-    "email": "info@esskaytravels.com",
+    "email": "info@taxitravels.in",
     "address": "Surat, Gujarat, India",
     "googleMapsUrl": "https://maps.app.goo.gl/gyRVsJUg8bS3QFoa9?g_st=ac"
   },
@@ -114,37 +114,37 @@
     {
       "type": "review",
       "label": "Write a Google Review",
-      "subtitle": "4.9 \u2605\u2605\u2605\u2605\u2605 on Google Maps",
-      "url": "https://www.google.com/maps/place/ESSKAY+TRAVELS+SURAT/@21.2039248,72.8220761,17z/data=!4m8!3m7!1s0x3be04fec5c829711:0x2f21c78894d2dba7!8m2!3d21.2039248!4d72.8220761!9m1!1b1!16s%2Fg%2F11whn_mm0j!18m1!1e1?entry=ttu&g_ep=EgoyMDI2MDcxNS4wIKXMDSoASAFQAw%3D%3D"
+      "subtitle": "5.0 ★★★★★ on Google Maps",
+      "url": "https://maps.google.com"
     },
     {
       "type": "instagram",
       "label": "Instagram",
-      "subtitle": "@travelsesskay",
-      "url": "https://www.instagram.com/travelsesskay?igsh=MXN0N2FlcnhrNXo2Mg=="
+      "subtitle": "@taxitravels",
+      "url": "https://instagram.com"
     },
     {
       "type": "facebook",
       "label": "Facebook",
-      "subtitle": "Esskay Travels Official",
-      "url": "https://www.facebook.com/share/18wGjToe6g/"
+      "subtitle": "Taxi Travels Official",
+      "url": "https://facebook.com"
     },
     {
       "type": "website",
       "label": "Official Website",
-      "subtitle": "esskay.vercel.app",
-      "url": "https://esskay.vercel.app/"
+      "subtitle": "taxitravels.in",
+      "url": "https://taxitravels.in"
     }
   ],
   "vcard": {
-    "fn": "Esskay Travels",
-    "org": "Esskay Travels",
+    "fn": "Taxi Travels",
+    "org": "Taxi Travels",
     "title": "Taxi Service",
-    "note": "Taxi Service in Surat. Reliable local, outstation and airport rides."
+    "note": "Reliable local, outstation and airport rides."
   },
   "agencyBranding": {
     "showPoweredBy": true,
     "agencyName": "Davlabs",
-    "agencyLink": "https://davlabs.com"
+    "agencyLink": "https://davlabs.in"
   }
 }

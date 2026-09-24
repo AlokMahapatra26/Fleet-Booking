@@ -55,7 +55,7 @@ You **never need to open or write JSON files manually**.
 ## 🌐 Multi-Tenant Client URLs
 
 Every client created gets their own dedicated link:
-* `https://your-domain.com/?client=esskay` (loads `configs/esskay.json`)
+* `https://your-domain.com/?client=alok-travel` (loads `configs/alok-travel.json`)
 * `https://your-domain.com/?client=royal` (loads `configs/royal.json`)
 * `https://your-domain.com/?client=ecogreen` (loads `configs/ecogreen.json`)
 * `https://your-domain.com/?client=raj-travels` (loads `configs/raj-travels.json`)
@@ -72,7 +72,7 @@ Every client created gets their own dedicated link:
 ├── manifest.json           # Progressive Web App manifest
 ├── service-worker.js       # Offline cache & PWA install service worker
 ├── configs/                # Pre-built white-label client examples
-│   ├── esskay.json         # Yellow/Black Classic Taxi (Surat)
+│   ├── alok-travel.json    # Yellow/Black Classic Taxi (Vapi)
 │   ├── royal.json          # Midnight Navy & Gold Luxury Chauffeur (Mumbai)
 │   └── ecogreen.json       # Emerald Green & Slate EV Cabs (Bengaluru)
 ├── assets/                 # Scalable vector graphics and logos

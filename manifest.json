@@ -1,7 +1,7 @@
 {
   "id": "./",
-  "name": "ESSKAY TRAVELS Taxi",
-  "short_name": "Esskay Taxi",
+  "name": "TAXI SERVICES Booking",
+  "short_name": "Taxi Service",
   "description": "Book reliable local, airport and outstation taxi service in Surat.",
   "lang": "en-IN",
   "start_url": "./?source=pwa",
