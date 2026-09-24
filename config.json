@@ -1,0 +1,93 @@
+{
+  "brand": {
+    "name": "ESSKAY TRAVELS",
+    "shortName": "Esskay Taxi",
+    "tagline": "Reliable rides for local, airport and outstation travel.",
+    "locationText": "Surat, Gujarat",
+    "badge": "24/7 Verified Taxi Partner",
+    "logoUrl": "assets/logo-taxi.svg",
+    "theme": {
+      "primary": "#FFD900",
+      "primaryHover": "#E6C200",
+      "primaryContrast": "#0A0A0A",
+      "background": "#F7F4E8",
+      "cardBg": "#FFFFFF",
+      "text": "#111111",
+      "muted": "#747168",
+      "border": "rgba(17, 17, 17, 0.08)",
+      "accent": "#22C55E",
+      "cardRadius": "26px",
+      "buttonRadius": "16px",
+      "pattern": "taxi-stripes"
+    }
+  },
+  "contact": {
+    "primaryPhone": "+919109105155",
+    "displayPhone": "+91 910 910 5155",
+    "whatsappPhone": "919109105155",
+    "secondaryPhone": "+916353851656",
+    "secondaryDisplayPhone": "+91 635 385 1656",
+    "email": "info@esskaytravels.com",
+    "address": "Surat, Gujarat, India",
+    "googleMapsUrl": "https://maps.app.goo.gl/gyRVsJUg8bS3QFoa9?g_st=ac"
+  },
+  "rides": [
+    { "id": "local", "label": "Local Taxi", "default": true },
+    { "id": "airport", "label": "Airport" },
+    { "id": "outstation", "label": "Outstation" },
+    { "id": "oneway", "label": "One Way" },
+    { "id": "roundtrip", "label": "Round Trip" },
+    { "id": "hourly", "label": "Hourly", "hasHourlyPackages": true }
+  ],
+  "hourlyPackages": [
+    { "id": "4h40k", "hours": "4 Hours", "km": "Up to 40 KM", "default": true },
+    { "id": "8h80k", "hours": "8 Hours", "km": "Up to 80 KM" },
+    { "id": "12h120k", "hours": "12 Hours", "km": "Up to 120 KM" }
+  ],
+  "vehicles": [
+    { "id": "sedan", "name": "Sedan (Dzire / Etios)", "capacity": "4 Seater", "luggage": "2 Bags", "default": true },
+    { "id": "ertiga", "name": "Ertiga", "capacity": "6 Seater", "luggage": "3 Bags" },
+    { "id": "innova", "name": "Toyota Innova", "capacity": "7 Seater", "luggage": "4 Bags" },
+    { "id": "crysta", "name": "Innova Crysta", "capacity": "7 Seater", "luggage": "4 Bags" },
+    { "id": "urbania", "name": "Force Urbania", "capacity": "12-17 Seater", "luggage": "8+ Bags" }
+  ],
+  "socialLinks": [
+    {
+      "type": "review",
+      "label": "Write a Google Review",
+      "subtitle": "4.9 ★★★★★ on Google Maps",
+      "url": "https://www.google.com/maps/place/ESSKAY+TRAVELS+SURAT/@21.2039248,72.8220761,17z/data=!4m8!3m7!1s0x3be04fec5c829711:0x2f21c78894d2dba7!8m2!3d21.2039248!4d72.8220761!9m1!1b1!16s%2Fg%2F11whn_mm0j!18m1!1e1?entry=ttu&g_ep=EgoyMDI2MDcxNS4wIKXMDSoASAFQAw%3D%3D"
+    },
+    {
+      "type": "instagram",
+      "label": "Instagram",
+      "subtitle": "@travelsesskay",
+      "url": "https://www.instagram.com/travelsesskay?igsh=MXN0N2FlcnhrNXo2Mg=="
+    },
+    {
+      "type": "facebook",
+      "label": "Facebook",
+      "subtitle": "Esskay Travels Official",
+      "url": "https://www.facebook.com/share/18wGjToe6g/"
+    },
+    {
+      "type": "website",
+      "label": "Official Website",
+      "subtitle": "esskay.vercel.app",
+      "url": "https://esskay.vercel.app/"
+    }
+  ],
+  "vcard": {
+    "fn": "Esskay Travels",
+    "org": "Esskay Travels",
+    "title": "Taxi Service",
+    "note": "Taxi Service in Surat. Reliable local, outstation and airport rides."
+  },
+  "agencyBranding": {
+    "showPoweredBy": true,
+    "agencyName": "Scan Era",
+    "agencyLink": "https://scanera.in",
+    "agencyPhone": "+916353851656",
+    "agencyPhoneDisplay": "6353851656"
+  }
+}

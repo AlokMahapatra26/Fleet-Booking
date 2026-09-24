@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#FFD900" id="metaThemeColor">
+  <meta name="description" content="Book reliable local, airport and outstation taxi service." id="metaDescription">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title id="pageTitle">Taxi Service Booking Portal</title>
+
+  <link rel="manifest" href="manifest.json" id="manifestLink">
+  <link rel="icon" type="image/svg+xml" href="assets/logo-taxi.svg" id="faviconLink">
+  <link rel="apple-touch-icon" href="assets/logo-taxi.svg" id="appleTouchIcon">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <main class="app-container">
+    
+    <!-- Top Action Bar -->
+    <header class="top-nav">
+      <div class="brand-badge-pill">
+        <span class="status-dot"></span>
+        <span id="badgeText">Verified Partner</span>
+      </div>
+      <div class="top-actions">
+        <button class="icon-btn" id="saveContactBtn" type="button" aria-label="Save Contact" title="Save to Phone Contacts">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+            <polyline points="17 21 17 13 7 13 7 21"></polyline>
+            <polyline points="7 3 7 8 15 8"></polyline>
+          </svg>
+        </button>
+        <button class="icon-btn" id="sharePageBtn" type="button" aria-label="Share Portal" title="Share Page">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="18" cy="5" r="3"></circle>
+            <circle cx="6" cy="12" r="3"></circle>
+            <circle cx="18" cy="19" r="3"></circle>
+            <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+            <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- Brand Profile & Hero -->
+    <section class="profile-card">
+      <div class="logo-wrapper">
+        <div class="logo-ring"></div>
+        <img id="brandLogo" class="brand-logo-img" src="assets/logo-taxi.svg" alt="Company Logo">
+      </div>
+      <h1 id="brandName" class="brand-title">ESSKAY TRAVELS</h1>
+      <p id="brandTagline" class="brand-tagline">Reliable rides for local, airport and outstation travel.</p>
+      <div class="location-badge" id="locationBadge">
+        <svg viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5a2.5 2.5 0 0 1 0-5 2.5 2.5 0 0 1 0 5z"/>
+        </svg>
+        <span id="locationText">Surat, Gujarat</span>
+      </div>
+    </section>
+
+    <!-- Taxi Stripe Accent -->
+    <div class="taxi-pattern-strip" id="patternStrip"></div>
+
+    <!-- Quick Action Grid -->
+    <div class="quick-actions-grid">
+      <a id="callNowLink" href="tel:+919109105155" class="quick-action-card call">
+        <div class="qa-icon-wrap">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+          </svg>
+        </div>
+        <span class="qa-label">Call Now</span>
+      </a>
+
+      <a id="whatsappChatLink" href="https://wa.me/919109105155" target="_blank" rel="noopener noreferrer" class="quick-action-card whatsapp">
+        <div class="qa-icon-wrap">
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.816 9.816 0 0 0 12.04 2m.01 1.67c4.54 0 8.24 3.7 8.24 8.24 0 2.2-.86 4.27-2.42 5.82a8.18 8.18 0 0 1-5.82 2.42c-1.42 0-2.82-.37-4.06-1.07l-.29-.17-3.12.82.83-3.04-.19-.3a8.163 8.163 0 0 1-1.25-4.48c0-4.54 3.7-8.24 8.24-8.24m4.52 11.66c-.25-.12-1.47-.72-1.7-.81-.23-.08-.39-.12-.56.12-.17.25-.65.81-.8 1-.15.19-.29.21-.54.08-.25-.12-1.05-.39-2-1.23-.74-.66-1.23-1.47-1.38-1.72-.15-.25-.02-.38.11-.51.11-.11.25-.29.37-.43.12-.15.17-.25.25-.41.08-.17.04-.31-.02-.44-.06-.12-.56-1.35-.77-1.85-.2-.49-.41-.42-.56-.43h-.48c-.17 0-.44.06-.67.31-.23.25-.88.86-.88 2.1 0 1.24.9 2.44 1.03 2.61.12.17 1.77 2.7 4.29 3.78.6.26 1.07.41 1.44.53.6.19 1.15.16 1.58.1.48-.07 1.47-.6 1.68-1.18.21-.58.21-1.07.15-1.18-.07-.11-.23-.17-.48-.29z"/>
+          </svg>
+        </div>
+        <span class="qa-label">WhatsApp</span>
+      </a>
+
+      <a id="locationMapLink" href="https://maps.google.com" target="_blank" rel="noopener noreferrer" class="quick-action-card location">
+        <div class="qa-icon-wrap">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"></polygon>
+            <line x1="8" y1="2" x2="8" y2="18"></line>
+            <line x1="16" y1="6" x2="16" y2="22"></line>
+          </svg>
+        </div>
+        <span class="qa-label">Location</span>
+      </a>
+    </div>
+
+    <!-- Booking Form Section -->
+    <section class="booking-section" id="bookingCard">
+      <div class="section-header">
+        <h2 class="section-title">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
+            <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
+          </svg>
+          Book Your Taxi
+        </h2>
+        <p class="section-subtitle">Select ride type, add trip details, and send on WhatsApp.</p>
+      </div>
+
+      <!-- Ride Type Selector Chips -->
+      <div class="ride-type-chips" id="rideTypesContainer"></div>
+
+      <!-- Hourly Packages Toggle Panel (Visible when hourly is selected) -->
+      <div class="hourly-packages-panel" id="hourlyPackagePanel" hidden>
+        <div class="hourly-title">Select Hourly Rental Package:</div>
+        <div class="hourly-options-grid" id="hourlyPackagesContainer"></div>
+      </div>
+
+      <!-- Booking Form Fields -->
+      <form id="bookingForm" onsubmit="return false;">
+        <!-- Customer Name -->
+        <div class="form-group">
+          <label class="form-label" for="customerNameInput">Customer Name *</label>
+          <div class="input-container">
+            <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+              <circle cx="12" cy="7" r="4"></circle>
+            </svg>
+            <input type="text" id="customerNameInput" class="form-control" placeholder="Enter your full name" required autocomplete="name">
+          </div>
+        </div>
+
+        <!-- Pickup Location -->
+        <div class="form-group">
+          <label class="form-label" for="pickupInput">Pickup Location *</label>
+          <div class="input-container">
+            <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"></path>
+              <circle cx="12" cy="9" r="2.5"></circle>
+            </svg>
+            <input type="text" id="pickupInput" class="form-control" placeholder="Pickup address, airport or hotel" required autocomplete="street-address">
+          </div>
+          <button type="button" id="useGpsBtn" class="gps-btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="22" y1="12" x2="18" y2="12"></line>
+              <line x1="6" y1="12" x2="2" y2="12"></line>
+              <line x1="12" y1="6" x2="12" y2="2"></line>
+              <line x1="12" y1="22" x2="12" y2="18"></line>
+            </svg>
+            <span id="gpsBtnText">Use my current GPS location</span>
+          </button>
+        </div>
+
+        <!-- Drop Location -->
+        <div class="form-group">
+          <label class="form-label" for="destinationInput">Drop Location *</label>
+          <div class="input-container">
+            <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+              <circle cx="12" cy="10" r="3"></circle>
+            </svg>
+            <input type="text" id="destinationInput" class="form-control" placeholder="Destination, area or city" required>
+          </div>
+        </div>
+
+        <!-- Travel Date & Time -->
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="travelDateInput">Travel Date</label>
+            <div class="input-container">
+              <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                <line x1="16" y1="2" x2="16" y2="6"></line>
+                <line x1="8" y1="2" x2="8" y2="6"></line>
+                <line x1="3" y1="10" x2="21" y2="10"></line>
+              </svg>
+              <input type="date" id="travelDateInput" class="form-control">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="travelTimeInput">Pickup Time</label>
+            <div class="input-container">
+              <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <polyline points="12 6 12 12 16 14"></polyline>
+              </svg>
+              <input type="time" id="travelTimeInput" class="form-control">
+            </div>
+          </div>
+        </div>
+
+        <!-- Vehicle Selection -->
+        <div class="form-group">
+          <label class="form-label" for="vehicleSelect">Preferred Vehicle</label>
+          <div class="input-container">
+            <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.5 2.8C2.1 11 2 11.3 2 11.6V16c0 .6.4 1 1 1h2"></path>
+              <circle cx="7" cy="17" r="2"></circle>
+              <circle cx="17" cy="17" r="2"></circle>
+            </svg>
+            <select id="vehicleSelect" class="form-control"></select>
+          </div>
+        </div>
+
+        <!-- Send WhatsApp Button -->
+        <button type="button" id="bookWhatsAppBtn" class="whatsapp-book-btn">
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.816 9.816 0 0 0 12.04 2m.01 1.67c4.54 0 8.24 3.7 8.24 8.24 0 2.2-.86 4.27-2.42 5.82a8.18 8.18 0 0 1-5.82 2.42c-1.42 0-2.82-.37-4.06-1.07l-.29-.17-3.12.82.83-3.04-.19-.3a8.163 8.163 0 0 1-1.25-4.48c0-4.54 3.7-8.24 8.24-8.24m4.52 11.66c-.25-.12-1.47-.72-1.7-.81-.23-.08-.39-.12-.56.12-.17.25-.65.81-.8 1-.15.19-.29.21-.54.08-.25-.12-1.05-.39-2-1.23-.74-.66-1.23-1.47-1.38-1.72-.15-.25-.02-.38.11-.51.11-.11.25-.29.37-.43.12-.15.17-.25.25-.41.08-.17.04-.31-.02-.44-.06-.12-.56-1.35-.77-1.85-.2-.49-.41-.42-.56-.43h-.48c-.17 0-.44.06-.67.31-.23.25-.88.86-.88 2.1 0 1.24.9 2.44 1.03 2.61.12.17 1.77 2.7 4.29 3.78.6.26 1.07.41 1.44.53.6.19 1.15.16 1.58.1.48-.07 1.47-.6 1.68-1.18.21-.58.21-1.07.15-1.18-.07-.11-.23-.17-.48-.29z"/>
+          </svg>
+          <span>Send Booking on WhatsApp</span>
+          <svg class="arrow-icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+            <polyline points="12 5 19 12 12 19"></polyline>
+          </svg>
+        </button>
+      </form>
+    </section>
+
+    <!-- Social & Business Directory Links -->
+    <section class="links-section">
+      <div class="section-label-bar">
+        <h2 id="connectTitle">Connect with Us</h2>
+      </div>
+      <div class="links-list" id="socialLinksContainer"></div>
+    </section>
+
+    <!-- Install PWA Button Card -->
+    <button class="install-app-card" id="installAppBtn" type="button">
+      <div class="install-icon-wrap">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+          <polyline points="7 10 12 15 17 10"></polyline>
+          <line x1="12" y1="15" x2="12" y2="3"></line>
+        </svg>
+      </div>
+      <div class="install-text">
+        <span class="title" id="installBtnTitle">Install Taxi App</span>
+        <span class="desc" id="installBtnDesc">Add to home screen for 1-tap bookings</span>
+      </div>
+      <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="9 18 15 12 9 6"></polyline>
+      </svg>
+    </button>
+
+    <!-- Footer -->
+    <footer class="app-footer">
+      <a id="secondaryCallBtn" href="tel:" class="secondary-call-btn" style="display:none;">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+        </svg>
+        <span id="secondaryPhoneText">Alternate Contact</span>
+      </a>
+
+      <div class="agency-brand" id="agencyBrandContainer">
+        Powered by <a href="#" id="agencyLink" target="_blank" rel="noopener noreferrer">Agency</a>
+        <span id="agencyPhoneDivider" style="display:none;"> | </span>
+        <a id="agencyPhoneLink" href="tel:" style="display:none;"></a>
+      </div>
+    </footer>
+
+  </main>
+
+  <!-- Floating White-Label Demo Switcher Bar -->
+  <div class="whitelabel-demo-bar" id="demoSwitcherBar">
+    <span class="demo-label">⚡ White-Label Themes:</span>
+    <div class="demo-btn-group">
+      <button class="demo-client-btn active" data-client="esskay" type="button">Esskay (Taxi)</button>
+      <button class="demo-client-btn" data-client="royal" type="button">Royal (Luxury)</button>
+      <button class="demo-client-btn" data-client="ecogreen" type="button">EcoGreen (EV)</button>
+    </div>
+  </div>
+
+  <!-- Toast Notice -->
+  <div id="toastNotice" class="toast-notice"></div>
+
+  <!-- Main JavaScript App -->
+  <script src="app.js"></script>
+</body>
+</html>

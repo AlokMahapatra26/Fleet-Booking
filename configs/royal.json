@@ -1,0 +1,86 @@
+{
+  "brand": {
+    "name": "ROYAL STAR CHAUFFEUR",
+    "shortName": "Royal Cabs",
+    "tagline": "Premium chauffeur driven luxury cars & airport transfers.",
+    "locationText": "Mumbai, Maharashtra",
+    "badge": "★ VIP Chauffeur Service",
+    "logoUrl": "assets/logo-luxury.svg",
+    "theme": {
+      "primary": "#E2B755",
+      "primaryHover": "#CA9F3B",
+      "primaryContrast": "#0B0F19",
+      "background": "#0B0E14",
+      "cardBg": "#131822",
+      "text": "#F3F4F6",
+      "muted": "#9CA3AF",
+      "border": "rgba(226, 183, 85, 0.22)",
+      "accent": "#E2B755",
+      "cardRadius": "24px",
+      "buttonRadius": "14px",
+      "pattern": "luxury-gold"
+    }
+  },
+  "contact": {
+    "primaryPhone": "+919876543210",
+    "displayPhone": "+91 987 654 3210",
+    "whatsappPhone": "919876543210",
+    "secondaryPhone": "+919876543211",
+    "secondaryDisplayPhone": "+91 987 654 3211",
+    "email": "bookings@royalstarchauffeur.com",
+    "address": "Bandra Kurla Complex, Mumbai, India",
+    "googleMapsUrl": "https://maps.google.com/?q=Bandra+Kurla+Complex+Mumbai"
+  },
+  "rides": [
+    { "id": "airport", "label": "Airport VIP Transfer", "default": true },
+    { "id": "city", "label": "City Luxury Ride" },
+    { "id": "outstation", "label": "Outstation Executive" },
+    { "id": "wedding", "label": "Wedding Fleet" },
+    { "id": "hourly", "label": "Hourly Chauffeur", "hasHourlyPackages": true }
+  ],
+  "hourlyPackages": [
+    { "id": "4h40k", "hours": "4 Hours", "km": "40 KM Included", "default": true },
+    { "id": "8h80k", "hours": "8 Hours", "km": "80 KM Included" },
+    { "id": "12h120k", "hours": "12 Hours", "km": "120 KM Included" }
+  ],
+  "vehicles": [
+    { "id": "mercedes", "name": "Mercedes E-Class", "capacity": "3 VIPs", "luggage": "3 Bags", "default": true },
+    { "id": "bmw", "name": "BMW 5 Series", "capacity": "3 VIPs", "luggage": "3 Bags" },
+    { "id": "crysta-vip", "name": "Innova Crysta Lounge", "capacity": "6 Passengers", "luggage": "5 Bags" },
+    { "id": "fortuner", "name": "Toyota Fortuner 4x4", "capacity": "6 Passengers", "luggage": "4 Bags" },
+    { "id": "vellfire", "name": "Toyota Vellfire Luxury", "capacity": "6 VIPs", "luggage": "6 Bags" }
+  ],
+  "socialLinks": [
+    {
+      "type": "review",
+      "label": "Read Client Reviews",
+      "subtitle": "5.0 ★★★★★ Verified Luxury",
+      "url": "https://maps.google.com"
+    },
+    {
+      "type": "instagram",
+      "label": "Instagram Portfolio",
+      "subtitle": "@royalstarchauffeur",
+      "url": "https://instagram.com"
+    },
+    {
+      "type": "website",
+      "label": "Corporate Portal",
+      "subtitle": "royalstarchauffeur.com",
+      "url": "https://royalstarchauffeur.com"
+    }
+  ],
+  "vcard": {
+    "fn": "Royal Star Chauffeur",
+    "org": "Royal Star Luxury Travel Mumbai",
+    "title": "VIP Chauffeur Service",
+    "note": "Executive chauffeur and airport transfers in Mumbai."
+  },
+  "agencyBranding": {
+    "showPoweredBy": true,
+    "agencyName": "YourAgency",
+    "agencyLink": "https://youragency.com",
+    "agencyPhone": "+91XXXXXXXXXX",
+    "agencyPhoneDisplay": "Contact Agency"
+  }
+}

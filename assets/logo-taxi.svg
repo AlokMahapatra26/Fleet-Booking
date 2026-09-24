@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <defs>
+    <linearGradient id="yellowGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFE844" />
+      <stop offset="60%" stop-color="#FFD900" />
+      <stop offset="100%" stop-color="#E5B200" />
+    </linearGradient>
+    <radialGradient id="badgeGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="70%" stop-color="#191919" />
+      <stop offset="100%" stop-color="#080808" />
+    </radialGradient>
+  </defs>
+  
+  <!-- Outer Ring with Taxi Checkers -->
+  <circle cx="100" cy="100" r="94" fill="url(#badgeGlow)" stroke="url(#yellowGrad)" stroke-width="6" />
+  
+  <!-- Inner Ring -->
+  <circle cx="100" cy="100" r="82" fill="#121212" stroke="rgba(255,217,0,0.3)" stroke-width="1.5" />
+  
+  <!-- Taxi Roof Sign -->
+  <rect x="78" y="44" width="44" height="13" rx="4" fill="url(#yellowGrad)" />
+  <text x="100" y="54" font-family="Arial, sans-serif" font-weight="900" font-size="8" fill="#111" text-anchor="middle" letter-spacing="1">TAXI</text>
+  
+  <!-- Sleek Car Silhouette -->
+  <path d="M52 108 L65 76 Q72 65 92 64 L108 64 Q128 65 135 76 L148 108 Q154 112 154 118 L154 128 Q154 132 150 132 L142 132 Q138 132 136 126 Q132 118 122 118 Q112 118 108 126 Q106 132 100 132 L94 132 Q88 132 86 126 Q82 118 72 118 Q62 118 58 126 Q56 132 50 132 L46 132 Q42 132 42 128 L42 118 Q42 112 52 108 Z" fill="url(#yellowGrad)" />
+  
+  <!-- Windshield -->
+  <path d="M68 79 L77 71 Q85 68 100 68 Q115 68 123 71 L132 79 Q134 82 130 84 L70 84 Q66 82 68 79 Z" fill="#111111" />
+  
+  <!-- Headlights -->
+  <ellipse cx="58" cy="106" rx="7" ry="4" fill="#FFFFFF" opacity="0.9" />
+  <ellipse cx="142" cy="106" rx="7" ry="4" fill="#FFFFFF" opacity="0.9" />
+  
+  <!-- Wheels / Hubcaps -->
+  <circle cx="70" cy="130" r="10" fill="#050505" stroke="url(#yellowGrad)" stroke-width="2.5" />
+  <circle cx="70" cy="130" r="4" fill="url(#yellowGrad)" />
+  <circle cx="130" cy="130" r="10" fill="#050505" stroke="url(#yellowGrad)" stroke-width="2.5" />
+  <circle cx="130" cy="130" r="4" fill="url(#yellowGrad)" />
+  
+  <!-- Brand Text -->
+  <text x="100" y="158" font-family="'Plus Jakarta Sans', Arial, sans-serif" font-weight="900" font-size="14" fill="#FFFFFF" text-anchor="middle" letter-spacing="2">ESSKAY</text>
+  <text x="100" y="172" font-family="'Plus Jakarta Sans', Arial, sans-serif" font-weight="700" font-size="9" fill="url(#yellowGrad)" text-anchor="middle" letter-spacing="3">TRAVELS</text>
+</svg>
