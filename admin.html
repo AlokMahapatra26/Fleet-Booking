@@ -1114,37 +1114,10 @@
             </div>
           </div>
 
-          <!-- SECTION 3: THEME -->
-          <div class="form-section">
-            <div class="section-eyebrow">3. Theme Palette</div>
-            <div class="theme-selector-grid">
-              <div class="theme-option active" data-preset="taxi">
-                <span class="swatch" style="background:#FFD900;"></span>
-                <span class="theme-name">Taxi Yellow</span>
-              </div>
-              <div class="theme-option" data-preset="royal">
-                <span class="swatch" style="background:#E2B755;"></span>
-                <span class="theme-name">Royal Gold</span>
-              </div>
-              <div class="theme-option" data-preset="eco">
-                <span class="swatch" style="background:#10B981;"></span>
-                <span class="theme-name">Eco Green</span>
-              </div>
-              <div class="theme-option" data-preset="blue">
-                <span class="swatch" style="background:#3B82F6;"></span>
-                <span class="theme-name">Ocean Blue</span>
-              </div>
-              <div class="theme-option" data-preset="red">
-                <span class="swatch" style="background:#EF4444;"></span>
-                <span class="theme-name">Crimson</span>
-              </div>
-            </div>
-          </div>
-
-          <!-- SECTION 4: FLEET -->
+          <!-- SECTION 3: FLEET -->
           <div class="form-section">
             <div class="vehicle-section-header">
-              <div class="section-eyebrow" style="margin-bottom: 0;">4. Vehicle Fleet Offered</div>
+              <div class="section-eyebrow" style="margin-bottom: 0;">3. Vehicle Fleet Offered</div>
               <button type="button" id="btnToggleAddVehicle" class="btn-text-action" title="Add a custom vehicle model">
                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
                 <span>Add Vehicle</span>
@@ -1215,9 +1188,9 @@
             </div>
           </div>
 
-          <!-- SECTION 5: SOCIALS -->
+          <!-- SECTION 4: SOCIALS -->
           <div class="form-section">
-            <div class="section-eyebrow">5. Reviews & Online Profiles</div>
+            <div class="section-eyebrow">4. Reviews & Online Profiles</div>
             <div class="form-row">
               <div class="form-group full-row">
                 <label class="form-label" for="inputGoogleReview">Google Review Link</label>
@@ -1353,7 +1326,6 @@
       const listSection = document.getElementById('listSection');
       const clientsTableBody = document.getElementById('clientsTableBody');
       const clientsCount = document.getElementById('clientsCount');
-      const themeOptions = document.querySelectorAll('.theme-option');
 
       // Logo Upload elements
       const inputLogoFile = document.getElementById('inputLogoFile');
@@ -1501,18 +1473,6 @@
 
       let currentThemeKey = 'taxi';
 
-      // Theme Picker Handlers
-      themeOptions.forEach(opt => {
-        opt.addEventListener('click', () => {
-          themeOptions.forEach(o => o.classList.remove('active'));
-          opt.classList.add('active');
-          currentThemeKey = opt.dataset.preset;
-          if (!customLogoDataUrl) {
-            logoPreviewImg.src = THEMES[currentThemeKey].logo;
-          }
-          syncLivePreview();
-        });
-      });
 
       // Logo File Upload Handler
       inputLogoFile.addEventListener('change', (e) => {
@@ -1939,9 +1899,6 @@
             }
           }
           currentThemeKey = matchedTheme;
-          themeOptions.forEach(opt => {
-            opt.classList.toggle('active', opt.dataset.preset === matchedTheme);
-          });
 
           // Logo
           if (data.brand?.logoUrl) {
@@ -2021,7 +1978,6 @@
         clientForm.reset();
         customLogoDataUrl = null;
         currentThemeKey = 'taxi';
-        themeOptions.forEach(opt => opt.classList.toggle('active', opt.dataset.preset === 'taxi'));
         logoPreviewImg.src = THEMES.taxi.logo;
         btnResetLogo.style.display = 'none';
 

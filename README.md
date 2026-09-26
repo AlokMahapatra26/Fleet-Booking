@@ -41,7 +41,6 @@ You **never need to open or write JSON files manually**.
    * Business Name (e.g. `Raj Travels`)
    * WhatsApp & Phone Numbers
    * City & Location
-   * Select a Color Theme (Taxi Yellow, Royal Gold, Eco Green, Ocean Blue, Ruby Red)
    * Choose Vehicle Fleet (Sedan, Ertiga, Innova, Crysta, etc.)
    * Add Google Review link
 3. Watch the **Live Smartphone Preview** update in real-time.
