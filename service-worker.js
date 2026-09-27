@@ -1,14 +1,21 @@
-const CACHE_NAME = 'travel-pwa-v1';
+const CACHE_NAME = 'travel-pwa-v2';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
   './style.css',
-  './app.js',
+  './css/tokens.css',
+  './css/components.css',
+  './css/taxi.css',
+  './css/travel.css',
+  './js/taxi.js',
+  './js/travel.js',
+  './js/app.js',
   './config.json',
   './manifest.json',
   './assets/logo-taxi.svg',
   './assets/logo-luxury.svg',
-  './assets/logo-eco.svg'
+  './assets/logo-eco.svg',
+  './assets/logo-travel.svg'
 ];
 
 self.addEventListener('install', (event) => {

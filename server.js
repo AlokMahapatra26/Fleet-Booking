@@ -68,15 +68,16 @@ const server = http.createServer((req, res) => {
           return {
             slug,
             name: content.brand?.name || slug,
+            template: content.template || 'taxi',
             city: content.brand?.locationText || '',
             phone: content.contact?.displayPhone || content.contact?.primaryPhone || '',
             whatsapp: content.contact?.whatsappPhone || '',
             primaryColor: content.brand?.theme?.primary || '#FFD900',
-            logoUrl: content.brand?.logoUrl || 'assets/logo-taxi.svg',
+            logoUrl: content.brand?.logoUrl || (content.template === 'travel' ? 'assets/logo-travel.svg' : 'assets/logo-taxi.svg'),
             url: `/?client=${slug}`
           };
         } catch {
-          return { slug, name: slug, url: `/?client=${slug}` };
+          return { slug, name: slug, template: 'taxi', url: `/?client=${slug}` };
         }
       });
 
@@ -242,6 +243,16 @@ const server = http.createServer((req, res) => {
     res.writeHead(200, { 'Content-Type': contentType });
     res.end(data);
   });
+});
+
+server.on('error', (err) => {
+  if (err.code === 'EADDRINUSE') {
+    console.error(`\n❌ Port ${PORT} is already in use by another process.`);
+    console.error(`   To free port ${PORT}, run: fuser -k ${PORT}/tcp or kill $(lsof -t -i:${PORT})\n`);
+    process.exit(1);
+  } else {
+    console.error('Server error:', err);
+  }
 });
 
 server.listen(PORT, () => {

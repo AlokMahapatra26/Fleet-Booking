@@ -1,0 +1,160 @@
+/* ==========================================================================
+   DESIGN TOKENS, TYPOGRAPHY, RESET & BASE LAYOUT
+   ========================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
+:root {
+  /* Dynamic White-Label Brand Tokens (Overridden by config.json at runtime) */
+  --theme-primary: #FFD900;
+  --theme-primary-hover: #E6C200;
+  --theme-primary-contrast: #0A0A0A;
+  --theme-bg: #F7F4E8;
+  --theme-card-bg: #FFFFFF;
+  --theme-card-bg-subtle: #FDFDFB;
+  --theme-text: #111111;
+  --theme-muted: #6B7280;
+  --theme-border: rgba(17, 17, 17, 0.08);
+  --theme-accent: #22C55E;
+  --theme-radius-card: 26px;
+  --theme-radius-btn: 16px;
+  --theme-shadow: 0 20px 50px rgba(0, 0, 0, 0.07);
+  --theme-shadow-hover: 0 24px 60px rgba(0, 0, 0, 0.12);
+
+  /* Fixed System Tokens */
+  --font-heading: 'Outfit', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-body: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --whatsapp-green: #25D366;
+  --whatsapp-dark: #128C7E;
+  --danger: #EF4444;
+}
+
+/* Base Reset & Box Sizing */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  min-height: 100%;
+  background-color: var(--theme-bg);
+  color: var(--theme-text);
+  font-family: var(--font-body);
+  -webkit-text-size-adjust: 100%;
+  scroll-behavior: smooth;
+  transition: background-color 0.35s ease, color 0.35s ease;
+}
+
+body {
+  min-height: 100vh;
+  min-height: 100dvh;
+  background-color: var(--theme-bg);
+  color: var(--theme-text);
+  line-height: 1.5;
+  overflow-x: hidden;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-bottom: 70px;
+}
+
+/* Subtle Textured Background Pattern */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  opacity: 0.28;
+  background-image: radial-gradient(var(--theme-text) 0.6px, transparent 0.6px);
+  background-size: 16px 16px;
+  mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,0.1) 85%);
+  -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,0.1) 85%);
+}
+
+/* Responsive Smartphone Viewport Container */
+.app-container {
+  width: 100%;
+  max-width: 480px;
+  margin: 0 auto;
+  position: relative;
+  padding: 12px 14px 28px;
+}
+
+/* Top Action Header Bar */
+.top-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 4px 16px;
+  position: relative;
+  z-index: 10;
+}
+
+.brand-badge-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  background: var(--theme-card-bg);
+  border: 1px solid var(--theme-border);
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--theme-text);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+}
+
+.status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: var(--theme-accent);
+  box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.2);
+  animation: pulseDot 2s infinite ease-in-out;
+}
+
+@keyframes pulseDot {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.25); opacity: 0.7; }
+}
+
+.top-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.icon-btn {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  border: 1px solid var(--theme-border);
+  background: var(--theme-card-bg);
+  color: var(--theme-text);
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s ease, background 0.2s ease;
+  position: relative;
+}
+
+.icon-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.09);
+  background: var(--theme-primary);
+  color: var(--theme-primary-contrast);
+}
+
+.icon-btn:active {
+  transform: scale(0.94);
+}
+
+.icon-btn svg {
+  width: 19px;
+  height: 19px;
+}

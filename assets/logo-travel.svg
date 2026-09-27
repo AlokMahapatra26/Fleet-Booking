@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <defs>
+    <linearGradient id="travelSkyGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0EA5E9" />
+      <stop offset="50%" stop-color="#2563EB" />
+      <stop offset="100%" stop-color="#1E1B4B" />
+    </linearGradient>
+    <linearGradient id="sunGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FDE047" />
+      <stop offset="100%" stop-color="#F97316" />
+    </linearGradient>
+    <linearGradient id="goldRing" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#38BDF8" />
+      <stop offset="50%" stop-color="#818CF8" />
+      <stop offset="100%" stop-color="#F59E0B" />
+    </linearGradient>
+  </defs>
+
+  <!-- Outer Glow Ring -->
+  <circle cx="100" cy="100" r="94" fill="#0A0E1A" stroke="url(#goldRing)" stroke-width="5" />
+  <circle cx="100" cy="100" r="84" fill="url(#travelSkyGrad)" stroke="rgba(255,255,255,0.15)" stroke-width="1.5" />
+
+  <!-- Rising Golden Sun -->
+  <circle cx="100" cy="85" r="30" fill="url(#sunGrad)" opacity="0.9" />
+
+  <!-- Mountain Silhouettes -->
+  <polygon points="40,132 82,78 116,132" fill="#1E293B" opacity="0.85" />
+  <polygon points="76,86 82,78 88,86 85,92 78,92" fill="#FFFFFF" opacity="0.85" /> <!-- Snow cap -->
+  
+  <polygon points="86,132 128,70 168,132" fill="#0F172A" />
+  <polygon points="120,80 128,70 136,80 132,88 123,88" fill="#FFFFFF" opacity="0.95" /> <!-- Snow cap -->
+
+  <!-- Clouds / Horizon Base -->
+  <path d="M30 130 Q50 122 80 126 Q110 120 140 125 Q170 121 176 130 L176 142 L24 142 Z" fill="#090D16" />
+
+  <!-- Airplane Silhouette Ascending -->
+  <g transform="translate(118, 54) rotate(-22) scale(0.9)">
+    <path d="M0,8 L14,8 L24,0 L27,0 L23,8 L36,8 L40,4 L43,4 L41,10 L43,16 L40,16 L36,12 L23,12 L27,20 L24,20 L14,12 L0,12 Q-3,10 0,8 Z" fill="#FFFFFF" filter="drop-shadow(0 2px 4px rgba(0,0,0,0.4))" />
+    <!-- Contrail Jet Stream -->
+    <path d="M-2,10 Q-15,11 -28,14" stroke="rgba(255,255,255,0.5)" stroke-width="2" stroke-linecap="round" stroke-dasharray="2,3" fill="none" />
+  </g>
+
+  <!-- Compass Star Accents -->
+  <circle cx="48" cy="62" r="1.8" fill="#FFFFFF" opacity="0.8" />
+  <circle cx="152" cy="74" r="1.5" fill="#FDE047" opacity="0.9" />
+
+  <!-- Brand Typography -->
+  <text x="100" y="158" font-family="'Plus Jakarta Sans', Arial, sans-serif" font-weight="900" font-size="13" fill="#FFFFFF" text-anchor="middle" letter-spacing="3">TOURS &amp; TRAVEL</text>
+  <text x="100" y="172" font-family="'Plus Jakarta Sans', Arial, sans-serif" font-weight="700" font-size="8" fill="#38BDF8" text-anchor="middle" letter-spacing="4">EXPLORE THE WORLD</text>
+</svg>

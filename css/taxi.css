@@ -1,0 +1,132 @@
+/* ==========================================================================
+   TAXI BOOKING TEMPLATE SPECIFIC STYLES
+   ========================================================================== */
+
+/* Ride Type Chips / Tabs */
+.ride-type-chips {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+@media (max-width: 380px) {
+  .ride-type-chips {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.chip-btn {
+  background: var(--theme-card-bg-subtle);
+  border: 1px solid var(--theme-border);
+  color: var(--theme-text);
+  padding: 10px 6px;
+  border-radius: 12px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.02);
+}
+
+.chip-btn:hover {
+  background: rgba(0, 0, 0, 0.04);
+}
+
+.chip-btn.active {
+  background: var(--theme-primary);
+  color: var(--theme-primary-contrast);
+  border-color: var(--theme-primary);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
+  transform: translateY(-1px);
+}
+
+/* Hourly Package Panel */
+.hourly-packages-panel {
+  background: rgba(0, 0, 0, 0.03);
+  border: 1px dashed var(--theme-border);
+  border-radius: 14px;
+  padding: 12px;
+  margin-bottom: 16px;
+  animation: fadeIn 0.25s ease;
+}
+
+.hourly-packages-panel[hidden] {
+  display: none;
+}
+
+.hourly-title {
+  font-size: 0.78rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  color: var(--theme-muted);
+  letter-spacing: 0.05em;
+  margin-bottom: 8px;
+}
+
+.hourly-options-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+  gap: 8px;
+}
+
+.hourly-package-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 8px 6px;
+  border-radius: 10px;
+  border: 1px solid var(--theme-border);
+  background: var(--theme-card-bg);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.hourly-package-btn .hours {
+  font-size: 0.85rem;
+  font-weight: 800;
+}
+
+.hourly-package-btn .km {
+  font-size: 0.7rem;
+  color: var(--theme-muted);
+}
+
+.hourly-package-btn.active {
+  background: var(--theme-primary);
+  color: var(--theme-primary-contrast);
+  border-color: var(--theme-primary);
+}
+
+.hourly-package-btn.active .km {
+  color: var(--theme-primary-contrast);
+  opacity: 0.85;
+}
+
+/* GPS Geolocation Button */
+.gps-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 6px;
+  background: transparent;
+  border: none;
+  color: var(--theme-accent);
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+  padding: 2px 4px;
+  border-radius: 6px;
+  transition: opacity 0.2s ease;
+}
+
+.gps-btn:hover {
+  text-decoration: underline;
+  opacity: 0.85;
+}
+
+.gps-btn svg {
+  width: 15px;
+  height: 15px;
+}

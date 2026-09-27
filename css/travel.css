@@ -1,0 +1,198 @@
+/* ==========================================================================
+   TRAVEL & TOUR COMPANY TEMPLATE SPECIFIC STYLES
+   ========================================================================== */
+
+/* Tour Type Chips / Tabs */
+.tour-type-chips {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+@media (max-width: 380px) {
+  .tour-type-chips {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Popular Destinations Quick Suggester */
+.popular-dest-chips {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.dest-chip-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--theme-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.dest-pill {
+  background: var(--theme-card-bg-subtle);
+  border: 1px solid var(--theme-border);
+  color: var(--theme-text);
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  user-select: none;
+}
+
+.dest-pill:hover {
+  background: var(--theme-primary);
+  color: var(--theme-primary-contrast);
+  border-color: var(--theme-primary);
+  transform: translateY(-1px);
+}
+
+.dest-pill:active {
+  transform: scale(0.95);
+}
+
+/* Trip Duration Badge */
+.trip-duration-tag {
+  display: none;
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: var(--theme-accent);
+  background: rgba(34, 197, 94, 0.12);
+  border: 1px solid rgba(34, 197, 94, 0.25);
+  padding: 2px 7px;
+  border-radius: 999px;
+  margin-left: 6px;
+  vertical-align: middle;
+}
+
+/* PASSENGERS COUNTER CARD (ADULTS & KIDS) */
+.passengers-counter-card {
+  background: var(--theme-card-bg-subtle);
+  border: 1.5px solid var(--theme-border);
+  border-radius: 16px;
+  padding: 14px 14px;
+  margin-bottom: 14px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+}
+
+.passenger-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.passenger-card-title {
+  font-size: 0.84rem;
+  font-weight: 800;
+  color: var(--theme-text);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.passenger-card-title svg {
+  color: var(--theme-muted);
+}
+
+.passenger-summary-badge {
+  font-size: 0.74rem;
+  font-weight: 700;
+  color: var(--theme-accent);
+  background: rgba(34, 197, 94, 0.12);
+  border: 1px solid rgba(34, 197, 94, 0.2);
+  padding: 3px 9px;
+  border-radius: 999px;
+  letter-spacing: -0.01em;
+}
+
+.steppers-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+@media (max-width: 380px) {
+  .steppers-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.stepper-item {
+  background: var(--theme-card-bg);
+  border: 1px solid var(--theme-border);
+  border-radius: 12px;
+  padding: 10px 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.02);
+}
+
+.stepper-meta {
+  display: flex;
+  flex-direction: column;
+}
+
+.stepper-label {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--theme-text);
+}
+
+.stepper-subtext {
+  font-size: 0.68rem;
+  color: var(--theme-muted);
+  font-weight: 500;
+}
+
+.stepper-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.stepper-btn {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 1.5px solid var(--theme-border);
+  background: var(--theme-card-bg-subtle);
+  color: var(--theme-text);
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  user-select: none;
+}
+
+.stepper-btn:hover {
+  background: var(--theme-primary);
+  color: var(--theme-primary-contrast);
+  border-color: var(--theme-primary);
+  transform: scale(1.08);
+}
+
+.stepper-btn:active {
+  transform: scale(0.92);
+}
+
+.stepper-btn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.stepper-value {
+  font-size: 0.98rem;
+  font-weight: 800;
+  color: var(--theme-text);
+  min-width: 20px;
+  text-align: center;
+}
