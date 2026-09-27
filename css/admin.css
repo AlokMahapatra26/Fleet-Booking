@@ -1,5 +1,6 @@
 @import "./admin-preview.css";
 @import "./admin-auth.css";
+@import "./admin-widgets.css";
 
 /* ==========================================================================
    ADMIN DASHBOARD — TAXI & TRAVEL PORTAL STUDIO
@@ -173,50 +174,57 @@ header {
   overflow: hidden;
 }
 
-/* Segmented Tabs */
-.nav-tabs {
+/* Tasteful Segmented Tabs Header Bar */
+.editor-tabs-bar {
   display: flex;
-  padding: 16px 24px 0;
-  border-bottom: 1px solid var(--card-border);
-  gap: 20px;
-  background: #FAFAFB;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 24px;
+  border-bottom: 1px solid #F0F0F3;
+  background: #FFFFFF;
+}
+
+.nav-tabs {
+  display: inline-flex;
+  align-items: center;
+  background: #F4F4F5;
+  padding: 3px;
+  border-radius: 8px;
+  gap: 2px;
+  border: none;
 }
 
 .tab-link {
   background: transparent;
   border: none;
-  padding: 10px 4px 14px;
+  padding: 6px 14px;
   font-family: inherit;
-  font-size: 0.88rem;
-  font-weight: 600;
-  color: var(--text-muted);
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: #71717A;
   cursor: pointer;
+  border-radius: 6px;
+  transition: all 0.15s cubic-bezier(0.16, 1, 0.3, 1);
   position: relative;
-  transition: color 0.15s ease;
 }
 
 .tab-link:hover {
-  color: var(--text-main);
+  color: #18181B;
 }
 
 .tab-link.active {
-  color: var(--text-main);
-  font-weight: 700;
+  background: #FFFFFF;
+  color: #09090B;
+  font-weight: 600;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.04);
 }
 
 .tab-link.active::after {
-  content: "";
-  position: absolute;
-  bottom: -1px;
-  left: 0;
-  right: 0;
-  height: 2px;
-  background: var(--text-main);
-  border-radius: 2px 2px 0 0;
+  display: none;
 }
 
 .tab-content {
-  padding: 28px 28px 32px;
+  padding: 20px 24px 24px;
 }
 
 /* Minimalist Logo Uploader Card */
@@ -694,10 +702,32 @@ header {
 .editor-footer {
   display: flex;
   align-items: center;
+  justify-content: space-between;
+  padding-top: 18px;
+  border-top: 1px solid #F0F0F3;
+  margin-top: 16px;
+  flex-wrap: wrap;
   gap: 12px;
-  padding-top: 20px;
-  border-top: 1px solid var(--card-border);
-  margin-top: 10px;
+}
+
+.editor-footer-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.editor-footer-right {
+  display: flex;
+  align-items: center;
+}
+
+.preview-sync-hint {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.75rem;
+  color: #71717A;
+  font-weight: 500;
 }
 
 /* Clients Table (Minimalist) */

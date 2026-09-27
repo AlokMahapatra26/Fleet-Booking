@@ -1,11 +1,29 @@
 {
+  "template": "taxi",
+  "sections": [
+    {
+      "id": "social-links",
+      "type": "social-links",
+      "enabled": true
+    },
+    {
+      "id": "pwa-install",
+      "type": "pwa-install",
+      "enabled": true
+    },
+    {
+      "id": "hero-header",
+      "type": "hero-header",
+      "enabled": true
+    }
+  ],
   "brand": {
-    "name": "Alok Travel",
-    "shortName": "Alok Taxi",
+    "name": "sdasd",
+    "shortName": "sdasd Taxi",
     "tagline": "Reliable rides for local, airport and outstation travel.",
-    "locationText": "Vapi , Gujrat",
+    "locationText": "Surat, Gujarat",
     "badge": "24/7 Verified Taxi Partner",
-    "logoUrl": "assets/logos/alok-travel-logo.png",
+    "logoUrl": "assets/logo-taxi.svg",
     "theme": {
       "primary": "#FFD900",
       "primaryHover": "#E6C200",
@@ -22,10 +40,10 @@
   "contact": {
     "primaryPhone": "+919109105155",
     "displayPhone": "+91 910 910 5155",
-    "whatsappPhone": "8849561649",
-    "secondaryPhone": "ssad",
-    "secondaryDisplayPhone": "ssad",
-    "googleMapsUrl": "https://maps.app.goo.gl/23MS5yuACmahAAaKA"
+    "whatsappPhone": "919109105155",
+    "secondaryPhone": "",
+    "secondaryDisplayPhone": "",
+    "googleMapsUrl": "https://maps.google.com"
   },
   "rides": [
     {
@@ -53,6 +71,33 @@
       "id": "hourly",
       "label": "Hourly",
       "hasHourlyPackages": true
+    }
+  ],
+  "tourTypes": [
+    {
+      "id": "holiday",
+      "label": "Holiday Package",
+      "default": true
+    },
+    {
+      "id": "family",
+      "label": "Family Vacation"
+    },
+    {
+      "id": "weekend",
+      "label": "Weekend Getaway"
+    },
+    {
+      "id": "sightseeing",
+      "label": "Sightseeing Tour"
+    },
+    {
+      "id": "custom",
+      "label": "Custom Itinerary"
+    },
+    {
+      "id": "honeymoon",
+      "label": "Honeymoon Special"
     }
   ],
   "hourlyPackages": [
@@ -98,10 +143,10 @@
   ],
   "socialLinks": [],
   "vcard": {
-    "fn": "Alok Travel",
-    "org": "Alok Travel",
+    "fn": "sdasd",
+    "org": "sdasd",
     "title": "Taxi Service",
-    "note": "Alok Travel in Vapi , Gujrat. Reliable taxi bookings."
+    "note": "sdasd in Surat, Gujarat. Professional travel & transport bookings."
   },
   "agencyBranding": {
     "showPoweredBy": true,

@@ -70,6 +70,19 @@
     
     const urlParams = new URLSearchParams(window.location.search);
     const clientParam = clientName || urlParams.get('client');
+    const isPreviewMode = window.self !== window.top || urlParams.has('preview');
+
+    if (isPreviewMode && !clientParam) {
+      applyConfig({
+        brand: { name: '', theme: {} },
+        contact: {},
+        sections: []
+      });
+      if (window.parent && window.parent !== window) {
+        window.parent.postMessage({ type: 'PREVIEW_IFRAME_READY' }, '*');
+      }
+      return;
+    }
 
     if (clientParam && clientParam !== 'default') {
       configUrl = `./configs/${clientParam}.json`;
@@ -158,19 +171,80 @@
     }
     if (DOM.locationMapLink) DOM.locationMapLink.href = cfg.contact.googleMapsUrl || '#';
 
-    // 5. Template Section Switching & Delegation
-    if (isTravel) {
-      if (DOM.taxiBookingSection) DOM.taxiBookingSection.style.display = 'none';
-      if (DOM.travelBookingSection) DOM.travelBookingSection.style.display = 'block';
-      if (window.TravelPortal) {
-        window.TravelPortal.init(cfg, showToast);
+    // 5. Dynamic Section Orchestration & Widget Reordering
+    const appMain = document.getElementById('appMain') || document.querySelector('main.app-container') || document.querySelector('.app-container');
+    let sections = cfg.sections;
+
+    if (!Array.isArray(sections)) {
+      if (window.self !== window.top || new URLSearchParams(window.location.search).has('preview')) {
+        sections = [];
+      } else {
+        sections = [
+          { id: 'hero-header', type: 'hero-header', enabled: true },
+          { id: 'quick-actions', type: 'quick-actions', enabled: true },
+          { id: 'taxi-booking', type: 'taxi-booking', enabled: !isTravel },
+          { id: 'travel-booking', type: 'travel-booking', enabled: isTravel },
+          { id: 'google-reviews', type: 'google-reviews', enabled: true },
+          { id: 'social-links', type: 'social-links', enabled: true },
+          { id: 'pwa-install', type: 'pwa-install', enabled: true },
+          { id: 'footer', type: 'footer', enabled: true }
+        ];
       }
-    } else {
-      if (DOM.travelBookingSection) DOM.travelBookingSection.style.display = 'none';
-      if (DOM.taxiBookingSection) DOM.taxiBookingSection.style.display = 'block';
-      if (window.TaxiPortal) {
-        window.TaxiPortal.init(cfg, showToast);
+    }
+
+    if (appMain) {
+      // Sync Top-nav bar visibility with hero-header widget
+      const heroSec = sections.find(s => (s.type === 'hero-header' || s.id === 'hero-header'));
+      const topNav = appMain.querySelector('.top-nav');
+      if (topNav) {
+        const showNav = !!(heroSec && heroSec.enabled !== false);
+        topNav.style.display = showNav ? '' : 'none';
+        topNav.classList.toggle('is-active', showNav);
       }
+
+      // Hide all potential widget sections first
+      const allSections = appMain.querySelectorAll('[data-section-id]');
+      allSections.forEach(el => {
+        el.style.display = 'none';
+        el.classList.remove('is-active');
+      });
+
+      // Mount and display widgets in defined order
+      sections.forEach(sec => {
+        const secType = sec.type || sec.id;
+        const elem = appMain.querySelector(`[data-section-id="${secType}"]`);
+        if (elem) {
+          elem.style.display = (sec.enabled === false) ? 'none' : '';
+          elem.classList.toggle('is-active', sec.enabled !== false);
+          if (sec.enabled !== false) {
+            appMain.appendChild(elem);
+          }
+        }
+      });
+
+      // Remove any empty message notice to keep screen completely empty by default
+      const emptyMsg = appMain.querySelector('#emptyStateNotice');
+      if (emptyMsg) {
+        emptyMsg.remove();
+      }
+    }
+
+    // Initialize Active Booking Modules
+    const isTaxiEnabled = sections.some(s => (s.type === 'taxi-booking' || s.id === 'taxi-booking') && s.enabled !== false);
+    const isTravelEnabled = sections.some(s => (s.type === 'travel-booking' || s.id === 'travel-booking') && s.enabled !== false);
+
+    if (isTaxiEnabled && window.TaxiPortal) {
+      window.TaxiPortal.init(cfg, showToast);
+    }
+    if (isTravelEnabled && window.TravelPortal) {
+      window.TravelPortal.init(cfg, showToast);
+    }
+
+    // Google Reviews Link
+    const btnWriteGoogleReview = document.getElementById('btnWriteGoogleReview');
+    if (btnWriteGoogleReview) {
+      const reviewUrl = (cfg.socialLinks || []).find(s => s.type === 'review')?.url || cfg.contact?.googleMapsUrl || '#';
+      btnWriteGoogleReview.href = reviewUrl;
     }
 
     // 6. Social / Business Directory Links (Reused)
@@ -178,15 +252,18 @@
     renderSocialLinks(cfg.socialLinks || []);
 
     // 7. PWA Install Card (Reused)
+    if (DOM.installAppBtn) {
+      DOM.installAppBtn.style.display = 'flex';
+    }
     if (DOM.installBtnTitle) {
-      DOM.installBtnTitle.textContent = isTravel
+      DOM.installBtnTitle.textContent = (cfg.pwa && cfg.pwa.title) || (isTravel
         ? `Install ${cfg.brand.shortName || 'Travel'} App`
-        : `Install ${cfg.brand.shortName || 'Taxi'} App`;
+        : `Install ${cfg.brand.shortName || 'Taxi'} App`);
     }
     if (DOM.installBtnDesc) {
-      DOM.installBtnDesc.textContent = isTravel
+      DOM.installBtnDesc.textContent = (cfg.pwa && cfg.pwa.desc) || (isTravel
         ? `Add to home screen for 1-tap tour bookings`
-        : `Add to home screen for 1-tap bookings`;
+        : `Add to home screen for 1-tap bookings`);
     }
 
     // 8. Secondary Phone & Agency Footer (Reused)
@@ -388,6 +465,11 @@
 
   // Expose applyConfig for live admin iframe preview
   window.applyConfigPreview = applyConfig;
+  window.addEventListener('message', (event) => {
+    if (event.data && event.data.type === 'APPLY_CONFIG_PREVIEW') {
+      applyConfig(event.data.config);
+    }
+  });
 
   // Initialize Application
   loadConfiguration();

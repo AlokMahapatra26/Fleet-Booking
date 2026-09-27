@@ -1,4 +1,5 @@
 {
+  "$schema": "./configs/schema.json",
   "template": "taxi",
   "brand": {
     "name": "DAV Labs",

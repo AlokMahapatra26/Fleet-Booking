@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Admin Dashboard — Taxi Portal Studio</title>
+  <title>Admin Dashboard — Page Builder</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap">
@@ -22,7 +22,7 @@
         </svg>
       </div>
       <h1 class="auth-title">Admin Access</h1>
-      <p class="auth-subtitle">Enter master password to access Taxi Portal Studio</p>
+      <p class="auth-subtitle">Enter master password to access Page Builder</p>
 
       <form id="authForm" class="auth-form" onsubmit="return false;">
         <div class="auth-input-group">
@@ -51,9 +51,9 @@
   <header>
     <a href="index.html" class="brand-wrap">
       <div class="brand-mark">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.5 2.8C2.1 11 2 11.3 2 11.6V16c0 .6.4 1 1 1h2"/><circle cx="7" cy="17" r="2"/><circle cx="17" cy="17" r="2"/></svg>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>
       </div>
-      <div class="brand-title">Taxi Portal Studio</div>
+      <div class="brand-title">Page Builder</div>
       <span class="brand-tag">Admin</span>
     </a>
     <div class="header-actions">
@@ -68,255 +68,415 @@
     </div>
   </header>
 
-  <!-- Main Content Layout -->
-  <main class="dashboard-container">
+  <!-- Studio App Shell with Dedicated Application Sidebar -->
+  <div class="studio-app-shell">
 
-    <!-- Left Editor Card -->
-    <section class="editor-card">
-      <div class="nav-tabs">
-        <button type="button" class="tab-link active" id="tabCreate">Create New Client</button>
-        <button type="button" class="tab-link" id="tabList">Saved Clients (<span id="clientsCount">0</span>)</button>
-        <button type="button" id="btnCancelEdit" class="btn btn-secondary btn-sm" style="display:none; margin-left:auto; margin-bottom:8px;">+ New Client</button>
+    <!-- 1. DEDICATED APPLICATION SIDEBAR (Outside Component Container) -->
+    <aside class="studio-sidebar" id="studioSidebar">
+
+      <!-- Top Header & Presets -->
+      <div class="sidebar-top-section">
+        <div class="sidebar-brand-row">
+          <div class="sidebar-title-wrap">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>
+            <span class="sidebar-title">Components</span>
+          </div>
+          <span class="sidebar-count-badge" id="widgetCountBadge">0</span>
+        </div>
+
+        <!-- Template Selection Dropdown -->
+        <div class="sidebar-template-selector">
+          <label class="preset-label" for="selectTemplatePreset">Template:</label>
+          <div class="template-select-wrap">
+            <select id="selectTemplatePreset" class="sidebar-template-select">
+              <option value="clear" selected>Custom / Blank</option>
+              <option value="taxi">Taxi Template</option>
+              <option value="travel">Travel Template</option>
+              <option value="hybrid">Hybrid Template</option>
+            </select>
+            <svg class="select-caret-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+        </div>
       </div>
 
-      <!-- CREATE FORM -->
-      <div class="tab-content" id="createSection">
-        <form id="clientForm" onsubmit="return false;">
-
-          <!-- SECTION 0: TEMPLATE SELECTION -->
-          <div class="form-section">
-            <div class="section-eyebrow">Choose Portal Template</div>
-            <div class="template-selector-grid">
-              <div class="template-card active" data-template="taxi" id="templateCardTaxi">
-                <div class="template-card-top">
-                  <div class="template-icon-wrap taxi">
-                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                      <path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.5 2.8C2.1 11 2 11.3 2 11.6V16c0 .6.4 1 1 1h2"></path>
-                      <circle cx="7" cy="17" r="2"></circle>
-                      <circle cx="17" cy="17" r="2"></circle>
-                    </svg>
-                  </div>
-                  <span class="template-pill">City &amp; Airport</span>
-                </div>
-                <div class="template-title">Taxi Booking Portal</div>
-                <div class="template-desc">Point-to-point rides, airport transfers, hourly rental packages, and cab fleet dispatch.</div>
-                <div class="template-check">
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
-                </div>
-              </div>
-
-              <div class="template-card" data-template="travel" id="templateCardTravel">
-                <div class="template-card-top">
-                  <div class="template-icon-wrap travel">
-                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                      <path d="M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z"></path>
-                    </svg>
-                  </div>
-                  <span class="template-pill" style="background:#EFF6FF;color:#2563EB;border-color:#DBEAFE;">Tours &amp; Packages</span>
-                </div>
-                <div class="template-title">Travel &amp; Tour Portal</div>
-                <div class="template-desc">Holiday tour packages, destination exploration, adults &amp; kids passenger count, and multi-day returns.</div>
-                <div class="template-check">
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
-                </div>
-              </div>
-            </div>
+      <!-- ADD COMPONENTS CATALOG (Dedicated Left Sidebar) -->
+      <div class="sidebar-catalog-block">
+        <div class="sidebar-search-box">
+          <div class="search-input-wrap">
+            <svg class="search-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+            <input type="text" id="widgetLibrarySearch" class="library-search-input" placeholder="Search components..." autocomplete="off">
           </div>
+          <div class="category-pills-row" id="libraryCategoryPills">
+            <button type="button" class="btn-category-pill active" data-cat="all">All</button>
+            <button type="button" class="btn-category-pill" data-cat="core">Core</button>
+            <button type="button" class="btn-category-pill" data-cat="booking">Booking</button>
+            <button type="button" class="btn-category-pill" data-cat="social">Social</button>
+            <button type="button" class="btn-category-pill" data-cat="utility">Utility</button>
+          </div>
+        </div>
 
-          <!-- SECTION 1: IDENTITY -->
-          <div class="form-section">
-            <div class="section-eyebrow">1. Business Information & Branding</div>
+        <!-- Vertical Widget List -->
+        <div class="widget-catalog-list" id="widgetCatalogGrid"></div>
+      </div>
 
-            <!-- Tasteful Logo Upload Widget -->
-            <div class="logo-uploader-card">
-              <div class="logo-avatar-wrap">
-                <img id="logoPreviewImg" src="assets/logo-taxi.svg" alt="Company Logo Preview">
+    </aside>
+
+    <!-- 2. MAIN DASHBOARD CONTENT AREA -->
+    <main class="dashboard-container">
+
+      <!-- MAIN MIDDLE CONTAINER (Editor Card with Page Stack & Component Settings) -->
+      <section class="editor-card">
+        <div class="editor-tabs-bar">
+          <div class="nav-tabs">
+            <button type="button" class="tab-link active" id="tabCreate">Create New Client</button>
+            <button type="button" class="tab-link" id="tabList">Saved Clients (<span id="clientsCount">0</span>)</button>
+          </div>
+          <button type="button" id="btnCancelEdit" class="btn btn-secondary btn-sm" style="display:none;">+ New Client</button>
+        </div>
+
+        <!-- CREATE FORM -->
+        <div class="tab-content" id="createSection">
+          <form id="clientForm" onsubmit="return false;">
+
+            <!-- PAGE STACK (In Main Middle Container - Hidden when 0 components) -->
+            <div class="page-stack-box" id="pageStackBox" style="display: none;">
+              <div class="page-stack-box-header">
+                <div class="page-stack-title-wrap">
+                  <span class="page-stack-title">Page Stack</span>
+                  <span class="stack-status-label" id="stackCountLabel">0 active</span>
+                </div>
+                <span class="page-stack-subtext">Click component to configure settings</span>
               </div>
-              <div class="logo-meta">
-                <div class="logo-label">Business Logo</div>
-                <div class="logo-subtext">Upload PNG, JPG, SVG, or WEBP (Square recommended)</div>
-                <div class="logo-btn-row">
-                  <label for="inputLogoFile" class="btn btn-secondary btn-sm">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
-                    <span>Upload Logo</span>
+              <div class="widget-stack-list" id="widgetStackList"></div>
+            </div>
+
+            <!-- COMPONENT SETTINGS PROPERTIES PANE -->
+            <div class="studio-properties-pane" id="studioPropertiesPane">
+
+              <!-- Empty Canvas Welcome Screen (Shown when 0 widgets are in stack) -->
+              <div class="empty-pane-state" id="emptyPaneState">
+                <div class="empty-pane-icon">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect width="18" height="18" x="3" y="3" rx="3"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>
+                </div>
+                <h3 class="empty-pane-title">Start Building Your Page</h3>
+                <p class="empty-pane-sub">Choose components from the library on the left, or launch instantly with a starter preset:</p>
+                <div class="empty-pane-actions">
+                  <button type="button" class="btn-starter-pill" id="btnLoadTaxiQuick">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6.4 1 1 1h2"/><circle cx="7" cy="17" r="2"/><path d="M9 17h6"/><circle cx="17" cy="17" r="2"/></svg>
+                    <span>Taxi Service</span>
+                  </button>
+                  <button type="button" class="btn-starter-pill" id="btnLoadTravelQuick">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg>
+                    <span>Travel Agency</span>
+                  </button>
+                  <button type="button" class="btn-starter-pill" id="btnLoadHybridQuick">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
+                    <span>Hybrid Fleet</span>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Selected Widget Banner Header (Shown when a widget is selected) -->
+              <div class="pane-header" id="paneHeader" style="display: none;">
+                <div class="pane-header-left">
+                  <div class="pane-icon-box" id="paneHeaderIcon"></div>
+                  <div>
+                    <div class="pane-title-row">
+                      <h3 class="pane-title" id="paneHeaderTitle">Brand Hero Header</h3>
+                      <span class="pane-badge" id="paneHeaderBadge">Core</span>
+                    </div>
+                    <p class="pane-desc" id="paneHeaderDesc">Company logo, verified partner badge, name, tagline &amp; city</p>
+                  </div>
+                </div>
+                <div class="pane-header-right">
+                  <label class="pane-visibility-toggle" title="Show or hide this widget on the customer page">
+                    <input type="checkbox" id="paneVisibilityCheckbox" checked>
+                    <span class="toggle-slider"></span>
+                    <span class="toggle-label" id="paneVisibilityText">Visible on Page</span>
                   </label>
-                  <input type="file" id="inputLogoFile" accept="image/*" style="display:none;">
-                  <button type="button" id="btnResetLogo" class="btn-text-muted" style="display:none;">Remove Custom Logo</button>
-                </div>
-              </div>
-            </div>
-
-            <div class="form-row">
-              <div class="form-group">
-                <label class="form-label" for="inputBusinessName">Business Name *</label>
-                <input type="text" id="inputBusinessName" class="form-control" placeholder="e.g. Raj Travels" required>
-              </div>
-
-              <div class="form-group">
-                <label class="form-label" for="inputSlug">URL Identifier (Slug) *</label>
-                <input type="text" id="inputSlug" class="form-control" placeholder="e.g. raj-travels" required>
-                <span class="form-hint">URL: /?client=<strong id="slugHint">raj-travels</strong></span>
-              </div>
-            </div>
-
-            <div class="form-row">
-              <div class="form-group full-row">
-                <label class="form-label" for="inputTagline">Tagline</label>
-                <input type="text" id="inputTagline" class="form-control" value="Reliable rides for local, airport and outstation travel.">
-              </div>
-            </div>
-
-            <div class="form-row">
-              <div class="form-group">
-                <label class="form-label" for="inputCity">City & State *</label>
-                <input type="text" id="inputCity" class="form-control" placeholder="e.g. Ahmedabad, Gujarat" required>
-              </div>
-
-              <div class="form-group">
-                <label class="form-label" for="inputBadge">Header Badge</label>
-                <input type="text" id="inputBadge" class="form-control" value="24/7 Verified Taxi Partner">
-              </div>
-            </div>
-          </div>
-
-          <!-- SECTION 2: DISPATCH & PHONE -->
-          <div class="form-section">
-            <div class="section-eyebrow">2. Contact & WhatsApp Dispatch</div>
-            <div class="form-row">
-              <div class="form-group">
-                <label class="form-label" for="inputWhatsapp">WhatsApp Number *</label>
-                <input type="text" id="inputWhatsapp" class="form-control" placeholder="e.g. 919876543210" required>
-                <span class="form-hint">Passenger bookings send directly to this number</span>
-              </div>
-
-              <div class="form-group">
-                <label class="form-label" for="inputPhone">Calling Number *</label>
-                <input type="text" id="inputPhone" class="form-control" placeholder="e.g. +91 987 654 3210" required>
-              </div>
-            </div>
-
-            <div class="form-row">
-              <div class="form-group">
-                <label class="form-label" for="inputAltPhone">Alternate Phone (Optional)</label>
-                <input type="text" id="inputAltPhone" class="form-control" placeholder="+91 987 654 3211">
-              </div>
-
-              <div class="form-group">
-                <label class="form-label" for="inputMaps">Google Maps Location Link</label>
-                <input type="text" id="inputMaps" class="form-control" placeholder="https://maps.app.goo.gl/...">
-              </div>
-            </div>
-          </div>
-
-          <!-- SECTION 3: FLEET -->
-          <div class="form-section">
-            <div class="vehicle-section-header">
-              <div class="section-eyebrow" style="margin-bottom: 0;">3. Vehicle Fleet Offered</div>
-              <button type="button" id="btnToggleAddVehicle" class="btn-text-action" title="Add a custom vehicle model">
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-                <span>Add Vehicle</span>
-              </button>
-            </div>
-
-            <div class="vehicle-chips" id="vehiclesSelector">
-              <label class="vehicle-badge-label" data-id="sedan" data-name="Sedan (Dzire / Etios)" data-capacity="4 Seater">
-                <input type="checkbox" value="sedan" checked>
-                <span class="veh-label-text">Sedan (Dzire)</span>
-              </label>
-              <label class="vehicle-badge-label" data-id="ertiga" data-name="Maruti Ertiga" data-capacity="6 Seater">
-                <input type="checkbox" value="ertiga" checked>
-                <span class="veh-label-text">Maruti Ertiga</span>
-              </label>
-              <label class="vehicle-badge-label" data-id="innova" data-name="Toyota Innova" data-capacity="7 Seater">
-                <input type="checkbox" value="innova" checked>
-                <span class="veh-label-text">Toyota Innova</span>
-              </label>
-              <label class="vehicle-badge-label" data-id="crysta" data-name="Innova Crysta" data-capacity="7 Seater">
-                <input type="checkbox" value="crysta" checked>
-                <span class="veh-label-text">Innova Crysta</span>
-              </label>
-              <label class="vehicle-badge-label" data-id="urbania" data-name="Force Urbania" data-capacity="12-17 Seater">
-                <input type="checkbox" value="urbania">
-                <span class="veh-label-text">Force Urbania</span>
-              </label>
-              <label class="vehicle-badge-label" data-id="tempo" data-name="Tempo Traveller" data-capacity="12-20 Seater">
-                <input type="checkbox" value="tempo">
-                <span class="veh-label-text">Tempo Traveller</span>
-              </label>
-              
-              <button type="button" id="btnAddVehicleChipBtn" class="vehicle-badge-add-btn" title="Add another car model">
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-                <span>Add Vehicle</span>
-              </button>
-            </div>
-
-            <!-- Expandable Add Vehicle Drawer -->
-            <div id="addVehiclePanel" class="add-vehicle-panel" style="display: none;">
-              <div class="add-vehicle-title">Add Vehicle to Fleet</div>
-              <div class="add-vehicle-form-row">
-                <div class="form-group" style="flex: 2; min-width: 180px; margin-bottom: 0;">
-                  <label class="form-label" for="newVehModel" style="font-size: 0.73rem;">Vehicle Name *</label>
-                  <input type="text" id="newVehModel" class="form-control" style="padding: 7px 10px; font-size: 0.82rem;" placeholder="e.g. Kia Carens, Honda City, Bolero, Audi A6">
-                </div>
-                <div class="form-group" style="flex: 1; min-width: 130px; margin-bottom: 0;">
-                  <label class="form-label" for="newVehCapacity" style="font-size: 0.73rem;">Capacity</label>
-                  <input type="text" id="newVehCapacity" class="form-control" style="padding: 7px 10px; font-size: 0.82rem;" placeholder="e.g. 6 Seater" list="capacityList">
-                  <datalist id="capacityList">
-                    <option value="4 Seater">
-                    <option value="6 Seater">
-                    <option value="7 Seater">
-                    <option value="8 Seater">
-                    <option value="12 Seater">
-                    <option value="17+ Seater">
-                  </datalist>
-                </div>
-                <div class="add-vehicle-buttons">
-                  <button type="button" id="btnConfirmAddVehicle" class="btn btn-primary" style="padding: 7px 14px; font-size: 0.82rem;">
-                    <span>Add to Fleet</span>
-                  </button>
-                  <button type="button" id="btnCancelAddVehicle" class="btn btn-secondary" style="padding: 7px 12px; font-size: 0.82rem;">
-                    <span>Cancel</span>
+                  <button type="button" class="btn-remove-active" id="btnRemoveActiveWidget" title="Remove this widget from page stack">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>
+                    <span>Remove</span>
                   </button>
                 </div>
               </div>
-            </div>
-          </div>
 
-          <!-- SECTION 4: SOCIALS -->
-          <div class="form-section">
-            <div class="section-eyebrow">4. Reviews & Online Profiles</div>
-            <div class="form-row">
-              <div class="form-group full-row">
-                <label class="form-label" for="inputGoogleReview">Google Review Link</label>
-                <input type="text" id="inputGoogleReview" class="form-control" placeholder="https://maps.google.com/review/...">
+              <!-- Discrete Widget Form Panes (ONLY the selected one is displayed) -->
+              <div class="pane-body" id="paneBody" style="display: none;">
+
+                <!-- 1. HERO HEADER WIDGET PANE -->
+                <div class="widget-form-pane" id="pane-hero-header" data-widget-type="hero-header">
+                  <!-- Logo Upload Card -->
+                  <div class="logo-uploader-card">
+                    <div class="logo-avatar-wrap">
+                      <img id="logoPreviewImg" src="assets/logo-taxi.svg" alt="Company Logo Preview">
+                    </div>
+                    <div class="logo-meta">
+                      <div class="logo-label">Business Logo</div>
+                      <div class="logo-subtext">Upload PNG, JPG, SVG, or WEBP (Square recommended)</div>
+                      <div class="logo-btn-row">
+                        <label for="inputLogoFile" class="btn btn-secondary btn-sm">
+                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+                          <span>Upload Logo</span>
+                        </label>
+                        <input type="file" id="inputLogoFile" accept="image/*" style="display:none;">
+                        <button type="button" id="btnResetLogo" class="btn-text-muted" style="display:none;">Remove Custom Logo</button>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="form-row">
+                    <div class="form-group">
+                      <label class="form-label" for="inputBusinessName">Business Name *</label>
+                      <input type="text" id="inputBusinessName" class="form-control" placeholder="e.g. Raj Travels" required>
+                    </div>
+
+                    <div class="form-group">
+                      <label class="form-label" for="inputSlug">URL Identifier (Slug) *</label>
+                      <input type="text" id="inputSlug" class="form-control" placeholder="e.g. raj-travels" required>
+                      <span class="form-hint">URL: /?client=<strong id="slugHint">raj-travels</strong></span>
+                    </div>
+                  </div>
+
+                  <div class="form-row">
+                    <div class="form-group full-row">
+                      <label class="form-label" for="inputTagline">Tagline</label>
+                      <input type="text" id="inputTagline" class="form-control" value="Reliable rides for local, airport and outstation travel.">
+                    </div>
+                  </div>
+
+                  <div class="form-row">
+                    <div class="form-group">
+                      <label class="form-label" for="inputCity">City &amp; State *</label>
+                      <input type="text" id="inputCity" class="form-control" placeholder="e.g. Ahmedabad, Gujarat" required>
+                    </div>
+
+                    <div class="form-group">
+                      <label class="form-label" for="inputBadge">Header Badge</label>
+                      <input type="text" id="inputBadge" class="form-control" value="24/7 Verified Taxi Partner">
+                    </div>
+                  </div>
+                </div>
+
+                <!-- 2. QUICK ACTIONS WIDGET PANE -->
+                <div class="widget-form-pane" id="pane-quick-actions" data-widget-type="quick-actions">
+                  <div class="form-row">
+                    <div class="form-group">
+                      <label class="form-label" for="inputWhatsapp">WhatsApp Number *</label>
+                      <input type="text" id="inputWhatsapp" class="form-control" placeholder="e.g. 919876543210" required>
+                      <span class="form-hint">Passenger bookings send directly to this number</span>
+                    </div>
+
+                    <div class="form-group">
+                      <label class="form-label" for="inputPhone">Calling Number *</label>
+                      <input type="text" id="inputPhone" class="form-control" placeholder="e.g. +91 987 654 3210" required>
+                    </div>
+                  </div>
+
+                  <div class="form-row">
+                    <div class="form-group">
+                      <label class="form-label" for="inputAltPhone">Alternate Phone (Optional)</label>
+                      <input type="text" id="inputAltPhone" class="form-control" placeholder="+91 987 654 3211">
+                    </div>
+
+                    <div class="form-group">
+                      <label class="form-label" for="inputMaps">Google Maps Location Link</label>
+                      <input type="text" id="inputMaps" class="form-control" placeholder="https://maps.app.goo.gl/...">
+                    </div>
+                  </div>
+                </div>
+
+                <!-- 3. TAXI BOOKING WIDGET PANE -->
+                <div class="widget-form-pane" id="pane-taxi-booking" data-widget-type="taxi-booking">
+                  <div class="vehicle-section-header">
+                    <div class="section-eyebrow" style="margin-bottom: 0;">Vehicle Fleet Offered</div>
+                    <button type="button" id="btnToggleAddVehicle" class="btn-text-action" title="Add a custom vehicle model">
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                      <span>Add Vehicle</span>
+                    </button>
+                  </div>
+
+                  <div class="vehicle-chips" id="vehiclesSelector">
+                    <label class="vehicle-badge-label" data-id="sedan" data-name="Sedan (Dzire / Etios)" data-capacity="4 Seater">
+                      <input type="checkbox" value="sedan" checked>
+                      <span class="veh-label-text">Sedan (Dzire)</span>
+                    </label>
+                    <label class="vehicle-badge-label" data-id="ertiga" data-name="Maruti Ertiga" data-capacity="6 Seater">
+                      <input type="checkbox" value="ertiga" checked>
+                      <span class="veh-label-text">Maruti Ertiga</span>
+                    </label>
+                    <label class="vehicle-badge-label" data-id="innova" data-name="Toyota Innova" data-capacity="7 Seater">
+                      <input type="checkbox" value="innova" checked>
+                      <span class="veh-label-text">Toyota Innova</span>
+                    </label>
+                    <label class="vehicle-badge-label" data-id="crysta" data-name="Innova Crysta" data-capacity="7 Seater">
+                      <input type="checkbox" value="crysta" checked>
+                      <span class="veh-label-text">Innova Crysta</span>
+                    </label>
+                    <label class="vehicle-badge-label" data-id="urbania" data-name="Force Urbania" data-capacity="12-17 Seater">
+                      <input type="checkbox" value="urbania">
+                      <span class="veh-label-text">Force Urbania</span>
+                    </label>
+                    <label class="vehicle-badge-label" data-id="tempo" data-name="Tempo Traveller" data-capacity="12-20 Seater">
+                      <input type="checkbox" value="tempo">
+                      <span class="veh-label-text">Tempo Traveller</span>
+                    </label>
+                    
+                    <button type="button" id="btnAddVehicleChipBtn" class="vehicle-badge-add-btn" title="Add another car model">
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                      <span>Add Vehicle</span>
+                    </button>
+                  </div>
+
+                  <!-- Expandable Add Vehicle Drawer -->
+                  <div id="addVehiclePanel" class="add-vehicle-panel" style="display: none;">
+                    <div class="add-vehicle-title">Add Vehicle to Fleet</div>
+                    <div class="add-vehicle-form-row">
+                      <div class="form-group" style="flex: 2; min-width: 180px; margin-bottom: 0;">
+                        <label class="form-label" for="newVehModel" style="font-size: 0.73rem;">Vehicle Name *</label>
+                        <input type="text" id="newVehModel" class="form-control" style="padding: 7px 10px; font-size: 0.82rem;" placeholder="e.g. Kia Carens, Honda City, Bolero">
+                      </div>
+                      <div class="form-group" style="flex: 1; min-width: 130px; margin-bottom: 0;">
+                        <label class="form-label" for="newVehCapacity" style="font-size: 0.73rem;">Capacity</label>
+                        <input type="text" id="newVehCapacity" class="form-control" style="padding: 7px 10px; font-size: 0.82rem;" placeholder="e.g. 6 Seater" list="capacityList">
+                        <datalist id="capacityList">
+                          <option value="4 Seater">
+                          <option value="6 Seater">
+                          <option value="7 Seater">
+                          <option value="8 Seater">
+                          <option value="12 Seater">
+                          <option value="17+ Seater">
+                        </datalist>
+                      </div>
+                      <div class="add-vehicle-buttons">
+                        <button type="button" id="btnConfirmAddVehicle" class="btn btn-primary" style="padding: 7px 14px; font-size: 0.82rem;">
+                          <span>Add to Fleet</span>
+                        </button>
+                        <button type="button" id="btnCancelAddVehicle" class="btn btn-secondary" style="padding: 7px 12px; font-size: 0.82rem;">
+                          <span>Cancel</span>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- 4. TRAVEL BOOKING WIDGET PANE -->
+                <div class="widget-form-pane" id="pane-travel-booking" data-widget-type="travel-booking">
+                  <div class="form-row">
+                    <div class="form-group full-row">
+                      <label class="form-label" for="inputTravelTitle">Travel Module Headline</label>
+                      <input type="text" id="inputTravelTitle" class="form-control" value="Tour &amp; Holiday Enquiry" placeholder="e.g. Explore Tours &amp; Holiday Packages">
+                      <span class="form-hint">Passenger selects destination, tour type, dates, and adult/child headcounts.</span>
+                    </div>
+                  </div>
+
+                  <div class="form-row">
+                    <div class="form-group full-row">
+                      <label class="form-label">Available Tour Types</label>
+                      <div class="preset-tag-list">
+                        <span class="preset-tag">Holiday Package</span>
+                        <span class="preset-tag">Family Vacation</span>
+                        <span class="preset-tag">Weekend Getaway</span>
+                        <span class="preset-tag">Sightseeing Tour</span>
+                        <span class="preset-tag">Custom Itinerary</span>
+                        <span class="preset-tag">Honeymoon Special</span>
+                      </div>
+                      <span class="form-hint">Includes interactive adult &amp; child counters and 1-tap WhatsApp booking dispatch.</span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- 5. GOOGLE REVIEWS WIDGET PANE -->
+                <div class="widget-form-pane" id="pane-google-reviews" data-widget-type="google-reviews">
+                  <div class="form-row">
+                    <div class="form-group full-row">
+                      <label class="form-label" for="inputGoogleReview">Google Review Link</label>
+                      <input type="text" id="inputGoogleReview" class="form-control" placeholder="https://maps.google.com/review/...">
+                      <span class="form-hint">Displays a 5.0 Star badge and clickable "Write a Review" button.</span>
+                    </div>
+                  </div>
+
+                  <div class="form-row">
+                    <div class="form-group full-row">
+                      <label class="form-label" for="inputGoogleReviewQuote">Featured Review Quote (Optional)</label>
+                      <input type="text" id="inputGoogleReviewQuote" class="form-control" placeholder="e.g. Prompt service, clean cabs and courteous drivers!">
+                    </div>
+                  </div>
+                </div>
+
+                <!-- 6. SOCIAL LINKS WIDGET PANE -->
+                <div class="widget-form-pane" id="pane-social-links" data-widget-type="social-links">
+                  <div class="form-row">
+                    <div class="form-group">
+                      <label class="form-label" for="inputInstagram">Instagram Profile</label>
+                      <input type="text" id="inputInstagram" class="form-control" placeholder="https://instagram.com/rajtravels">
+                    </div>
+
+                    <div class="form-group">
+                      <label class="form-label" for="inputWebsite">Official Website</label>
+                      <input type="text" id="inputWebsite" class="form-control" placeholder="https://rajtravels.com">
+                    </div>
+                  </div>
+                </div>
+
+                <!-- 7. PWA INSTALL WIDGET PANE -->
+                <div class="widget-form-pane" id="pane-pwa-install" data-widget-type="pwa-install">
+                  <div class="form-row">
+                    <div class="form-group full-row">
+                      <label class="form-label" for="inputPwaTitle">PWA Install Button Title</label>
+                      <input type="text" id="inputPwaTitle" class="form-control" value="Install App for Fast Booking" placeholder="Install App">
+                    </div>
+                  </div>
+                  <div class="form-row">
+                    <div class="form-group full-row">
+                      <label class="form-label" for="inputPwaDesc">PWA Description Subtext</label>
+                      <input type="text" id="inputPwaDesc" class="form-control" value="Add to your home screen for quick 1-tap bookings" placeholder="Subtext">
+                    </div>
+                  </div>
+                </div>
+
+                <!-- 8. FOOTER WIDGET PANE -->
+                <div class="widget-form-pane" id="pane-footer" data-widget-type="footer">
+                  <div class="form-row">
+                    <div class="form-group full-row">
+                      <label class="custom-checkbox-label">
+                        <input type="checkbox" id="checkFooterAltPhone" checked>
+                        <span>Display Alternate Phone in Footer</span>
+                      </label>
+                    </div>
+                  </div>
+                  <div class="form-row">
+                    <div class="form-group full-row">
+                      <label class="custom-checkbox-label">
+                        <input type="checkbox" id="checkFooterAgency" checked>
+                        <span>Show &ldquo;Protected by Davlabs&rdquo; Agency Attribution</span>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+
               </div>
             </div>
-            <div class="form-row">
-              <div class="form-group">
-                <label class="form-label" for="inputInstagram">Instagram Profile</label>
-                <input type="text" id="inputInstagram" class="form-control" placeholder="https://instagram.com/rajtravels">
-              </div>
 
-              <div class="form-group">
-                <label class="form-label" for="inputWebsite">Official Website (Optional)</label>
-                <input type="text" id="inputWebsite" class="form-control" placeholder="https://rajtravels.com">
+            <!-- SUBMIT ACTIONS -->
+            <div class="editor-footer">
+              <div class="editor-footer-left">
+                <button type="button" id="btnSaveClient" class="btn btn-primary">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
+                  <span>Save Client</span>
+                </button>
+                <button type="button" id="btnDownloadJson" class="btn btn-secondary">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                  <span>Download .JSON</span>
+                </button>
+              </div>
+              <div class="editor-footer-right">
+                <span class="preview-sync-hint"><span class="pulse-dot"></span> Live preview in sync</span>
               </div>
             </div>
-          </div>
 
-          <!-- SUBMIT ACTIONS -->
-          <div class="editor-footer">
-            <button type="button" id="btnSaveClient" class="btn btn-primary">
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
-              <span>Save & Generate Client JSON</span>
-            </button>
-            <button type="button" id="btnDownloadJson" class="btn btn-secondary">
-              <span>Download .JSON</span>
-            </button>
-          </div>
-
-        </form>
-      </div>
+          </form>
+        </div>
 
       <!-- LIST OF SAVED CLIENTS -->
       <div class="tab-content" id="listSection" style="display:none;">
@@ -382,17 +542,19 @@
           <span class="camera-lens"></span>
           <span class="speaker-sensor"></span>
         </div>
-        <iframe id="previewIframe" class="phone-screen" src="index.html"></iframe>
+        <iframe id="previewIframe" class="phone-screen" src="index.html?preview=empty"></iframe>
         <!-- iOS Home Indicator -->
         <div class="home-indicator"></div>
       </div>
 
     </aside>
 
-  </main>
+    </main>
+  </div>
 
   <script defer src="js/admin-themes.js"></script>
   <script defer src="js/admin-fleet.js"></script>
+  <script defer src="js/admin-widgets.js"></script>
   <script defer src="js/admin.js"></script>
 </body>
 </html>

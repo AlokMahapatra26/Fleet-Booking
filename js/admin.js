@@ -1,14 +1,12 @@
 /**
  * Taxi & Travel Portal Studio - Admin Dashboard Controller
- * Modular script handling authentication, template selection,
+ * Modular script handling authentication, widget stack builder,
  * live preview synchronization, and client configuration CRUD.
+ * Clean, minimal, zero-emoji icon design.
  */
 
 (function () {
-  // Template Selection elements
-  const templateCardTaxi = document.getElementById('templateCardTaxi');
-  const templateCardTravel = document.getElementById('templateCardTravel');
-  let currentTemplate = 'taxi';
+  'use strict';
 
   // Form elements
   const clientForm = document.getElementById('clientForm');
@@ -61,9 +59,13 @@
   const THEMES = window.ADMIN_THEMES || {};
   let currentThemeKey = 'taxi';
 
-  // Initialize Fleet Module
+  // Initialize Modules
   if (window.AdminFleet) {
     window.AdminFleet.init({ onSync: syncLivePreview });
+  }
+
+  if (window.AdminWidgets) {
+    window.AdminWidgets.init({ onSync: syncLivePreview });
   }
 
   // --- Authentication ---
@@ -149,7 +151,7 @@
     btnResetLogo.addEventListener('click', () => {
       customLogoDataUrl = null;
       inputLogoFile.value = '';
-      logoPreviewImg.src = (currentTemplate === 'travel') ? 'assets/logo-travel.svg' : (THEMES[currentThemeKey]?.logo || 'assets/logo-taxi.svg');
+      logoPreviewImg.src = THEMES[currentThemeKey]?.logo || 'assets/logo-taxi.svg';
       btnResetLogo.style.display = 'none';
       syncLivePreview();
     });
@@ -171,74 +173,51 @@
     });
   }
 
+  // Additional widget inputs
+  const inputTravelTitle = document.getElementById('inputTravelTitle');
+  const inputGoogleReviewQuote = document.getElementById('inputGoogleReviewQuote');
+  const inputPwaTitle = document.getElementById('inputPwaTitle');
+  const inputPwaDesc = document.getElementById('inputPwaDesc');
+  const checkFooterAltPhone = document.getElementById('checkFooterAltPhone');
+  const checkFooterAgency = document.getElementById('checkFooterAgency');
+
   // Form inputs triggering live preview
-  [inputTagline, inputCity, inputBadge, inputPhone, inputWhatsapp].forEach(elem => {
+  [
+    inputBusinessName, inputTagline, inputCity, inputBadge, inputPhone,
+    inputWhatsapp, inputAltPhone, inputMaps, inputGoogleReview,
+    inputGoogleReviewQuote, inputInstagram, inputWebsite, inputTravelTitle,
+    inputPwaTitle, inputPwaDesc
+  ].forEach(elem => {
     if (elem) elem.addEventListener('input', syncLivePreview);
   });
 
-  // --- Template Selection Engine ---
-  function setTemplate(tmpl, isUserAction = false) {
-    currentTemplate = (tmpl === 'travel') ? 'travel' : 'taxi';
-    if (templateCardTaxi && templateCardTravel) {
-      if (currentTemplate === 'travel') {
-        templateCardTaxi.classList.remove('active');
-        templateCardTravel.classList.add('active');
-        if (isUserAction) {
-          if (!inputTagline.value || inputTagline.value === 'Reliable rides for local, airport and outstation travel.') {
-            inputTagline.value = 'Curated holiday packages, custom tours & outstation travel.';
-          }
-          if (!inputBadge.value || inputBadge.value === '24/7 Verified Taxi Partner') {
-            inputBadge.value = 'Verified Tour & Travel Specialist';
-          }
-          if (!customLogoDataUrl) {
-            logoPreviewImg.src = 'assets/logo-travel.svg';
-          }
-        }
-      } else {
-        templateCardTravel.classList.remove('active');
-        templateCardTaxi.classList.add('active');
-        if (isUserAction) {
-          if (!inputTagline.value || inputTagline.value === 'Curated holiday packages, custom tours & outstation travel.') {
-            inputTagline.value = 'Reliable rides for local, airport and outstation travel.';
-          }
-          if (!inputBadge.value || inputBadge.value === 'Verified Tour & Travel Specialist') {
-            inputBadge.value = '24/7 Verified Taxi Partner';
-          }
-          if (!customLogoDataUrl) {
-            logoPreviewImg.src = THEMES[currentThemeKey]?.logo || 'assets/logo-taxi.svg';
-          }
-        }
-      }
-    }
-    syncLivePreview();
-  }
-
-  if (templateCardTaxi) {
-    templateCardTaxi.addEventListener('click', () => setTemplate('taxi', true));
-  }
-  if (templateCardTravel) {
-    templateCardTravel.addEventListener('click', () => setTemplate('travel', true));
-  }
+  [checkFooterAltPhone, checkFooterAgency].forEach(elem => {
+    if (elem) elem.addEventListener('change', syncLivePreview);
+  });
 
   // Build Config Data Object
   function buildConfigObject() {
-    const isTravel = currentTemplate === 'travel';
-    const defaultName = isTravel ? 'Wanderlust Travels' : 'My Taxi Service';
+    const sections = window.AdminWidgets ? window.AdminWidgets.getSections() : [];
+    const isTaxiEnabled = sections.some(s => s.type === 'taxi-booking' && s.enabled);
+    const isTravelEnabled = sections.some(s => s.type === 'travel-booking' && s.enabled);
+    const computedTemplate = (isTravelEnabled && !isTaxiEnabled) ? 'travel' : 'taxi';
+
+    const defaultName = (computedTemplate === 'travel') ? 'Wanderlust Travels' : 'My Taxi Service';
     const name = inputBusinessName.value.trim() || defaultName;
     const city = inputCity.value.trim() || 'Surat, Gujarat';
     const phone = inputPhone.value.trim() || '+91 910 910 5155';
     const cleanWhatsapp = (inputWhatsapp.value.trim() || '919109105155').replace(/[^0-9]/g, '');
     const theme = THEMES[currentThemeKey] || THEMES.taxi;
 
-    const defaultShortName = isTravel ? (name.split(' ')[0] + ' Travels') : (name.split(' ')[0] + ' Taxi');
-    const defaultTagline = isTravel 
+    const defaultShortName = (computedTemplate === 'travel') ? (name.split(' ')[0] + ' Travels') : (name.split(' ')[0] + ' Taxi');
+    const defaultTagline = (computedTemplate === 'travel')
       ? 'Curated holiday packages, custom tours & outstation travel.'
       : 'Reliable rides for local, airport and outstation travel.';
-    const defaultBadge = isTravel
+    const defaultBadge = (computedTemplate === 'travel')
       ? 'Verified Tour & Travel Specialist'
       : '24/7 Verified Taxi Partner';
-    const defaultVcardTitle = isTravel ? 'Travel & Tour Agency' : 'Taxi Service';
-    const defaultLogo = isTravel ? 'assets/logo-travel.svg' : theme.logo;
+    const defaultVcardTitle = (computedTemplate === 'travel') ? 'Travel & Tour Agency' : 'Taxi Service';
+    const defaultLogo = (computedTemplate === 'travel') ? 'assets/logo-travel.svg' : theme.logo;
 
     const selectedVehicles = window.AdminFleet ? window.AdminFleet.getSelectedVehicles() : [];
 
@@ -247,7 +226,7 @@
       socialLinks.push({
         type: "review",
         label: "Write a Google Review",
-        subtitle: "5.0 ★★★★★ Verified Reviews",
+        subtitle: "5.0 Verified Reviews",
         url: inputGoogleReview.value.trim()
       });
     }
@@ -269,7 +248,8 @@
     }
 
     return {
-      template: currentTemplate,
+      template: computedTemplate,
+      sections: sections,
       brand: {
         name: name,
         shortName: defaultShortName,
@@ -287,7 +267,7 @@
           muted: theme.muted,
           border: theme.border,
           accent: theme.accent,
-          pattern: isTravel ? 'travel-gradient' : theme.pattern
+          pattern: (computedTemplate === 'travel') ? 'travel-gradient' : theme.pattern
         }
       },
       contact: {
@@ -331,6 +311,10 @@
         showPoweredBy: true,
         agencyName: "Davlabs",
         agencyLink: "https://davlabs.in"
+      },
+      pwa: {
+        title: (inputPwaTitle && inputPwaTitle.value.trim()) || 'Install App for Fast Booking',
+        desc: (inputPwaDesc && inputPwaDesc.value.trim()) || 'Add to your home screen for quick 1-tap bookings'
       }
     };
   }
@@ -339,11 +323,29 @@
   function syncLivePreview() {
     const configObj = buildConfigObject();
     try {
-      if (previewIframe && previewIframe.contentWindow && previewIframe.contentWindow.applyConfigPreview) {
-        previewIframe.contentWindow.applyConfigPreview(configObj);
+      if (previewIframe && previewIframe.contentWindow) {
+        if (typeof previewIframe.contentWindow.applyConfigPreview === 'function') {
+          previewIframe.contentWindow.applyConfigPreview(configObj);
+        }
+        previewIframe.contentWindow.postMessage({ type: 'APPLY_CONFIG_PREVIEW', config: configObj }, '*');
       }
-    } catch {}
+    } catch (err) {
+      console.warn('Live preview sync warning:', err);
+    }
   }
+
+  if (previewIframe) {
+    previewIframe.addEventListener('load', () => {
+      syncLivePreview();
+    });
+  }
+
+  // Handle preview iframe ready signal
+  window.addEventListener('message', (event) => {
+    if (event.data && event.data.type === 'PREVIEW_IFRAME_READY') {
+      syncLivePreview();
+    }
+  });
 
   // Save to server
   if (btnSaveClient) {
@@ -443,8 +445,8 @@
             const tr = document.createElement('tr');
             const isTrv = c.template === 'travel';
             const templateBadge = isTrv
-              ? `<span class="badge-template badge-travel">✈️ Travel</span>`
-              : `<span class="badge-template badge-taxi">🚖 Taxi</span>`;
+              ? `<span class="badge-template badge-travel"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" style="vertical-align:-1.5px; margin-right:4px;"><path d="m17.8 19.2-1.8-8.2 3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z"/></svg><span>Tour</span></span>`
+              : `<span class="badge-template badge-taxi"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" style="vertical-align:-1.5px; margin-right:4px;"><path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.5 2.8C2.1 11 2 11.3 2 11.6V16c0 .6.4 1 1 1h2"/><circle cx="7" cy="17" r="2"/><circle cx="17" cy="17" r="2"/></svg><span>Taxi</span></span>`;
 
             tr.innerHTML = `
               <td>
@@ -483,7 +485,9 @@
       if (!res.ok) throw new Error('Could not load client config');
       const data = await res.json();
 
-      setTemplate(data.template || 'taxi', false);
+      if (window.AdminWidgets) {
+        window.AdminWidgets.setSections(data.sections, data.template || 'taxi');
+      }
 
       inputBusinessName.value = data.brand?.name || '';
       inputSlug.value = slug;
@@ -527,6 +531,8 @@
       inputGoogleReview.value = reviewLink;
       inputInstagram.value = instaLink;
       inputWebsite.value = webLink;
+      if (inputPwaTitle) inputPwaTitle.value = data.pwa?.title || 'Install App for Fast Booking';
+      if (inputPwaDesc) inputPwaDesc.value = data.pwa?.desc || 'Add to your home screen for quick 1-tap bookings';
 
       tabCreate.innerHTML = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:4px; vertical-align:-1px;"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/><path d="m15 5 4 4"/></svg><span>Edit: ${data.brand?.name || slug}</span>`;
       btnCancelEdit.style.display = 'inline-flex';
@@ -547,22 +553,32 @@
     tabCreate.textContent = 'Create New Client';
     btnCancelEdit.style.display = 'none';
     clientForm.reset();
-    setTemplate('taxi', false);
     customLogoDataUrl = null;
     currentThemeKey = 'taxi';
     logoPreviewImg.src = THEMES.taxi?.logo || 'assets/logo-taxi.svg';
     btnResetLogo.style.display = 'none';
 
+    if (window.AdminWidgets) {
+      window.AdminWidgets.clearAll();
+    }
+
     if (window.AdminFleet) {
       window.AdminFleet.resetToDefault();
     }
+
+    if (inputTravelTitle) inputTravelTitle.value = 'Tour & Holiday Enquiry';
+    if (inputGoogleReviewQuote) inputGoogleReviewQuote.value = '';
+    if (inputPwaTitle) inputPwaTitle.value = 'Install App for Fast Booking';
+    if (inputPwaDesc) inputPwaDesc.value = 'Add to your home screen for quick 1-tap bookings';
+    if (checkFooterAltPhone) checkFooterAltPhone.checked = true;
+    if (checkFooterAgency) checkFooterAgency.checked = true;
 
     btnSaveClient.innerHTML = `
       <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
       <span>Save & Generate Client JSON</span>
     `;
     if (slugHint) slugHint.textContent = 'client-slug';
-    if (previewIframe) previewIframe.src = 'index.html';
+    if (previewIframe) previewIframe.src = 'index.html?preview=empty';
   }
 
   // Delete Client

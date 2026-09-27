@@ -158,3 +158,14 @@ body::before {
   width: 19px;
   height: 19px;
 }
+
+/* Live Preview Empty State: inactive widgets and nav remain completely hidden */
+html.is-preview-frame .top-nav:not(.is-active),
+html.is-preview-frame [data-section-id]:not(.is-active) {
+  display: none !important;
+}
+
+/* Safe-area clearance for iPhone 16 Pro Dynamic Island in preview */
+html.is-preview-frame .app-container {
+  padding-top: 42px;
+}
