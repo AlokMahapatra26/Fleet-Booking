@@ -2,26 +2,21 @@
   "template": "taxi",
   "sections": [
     {
-      "id": "social-links",
-      "type": "social-links",
-      "enabled": true
-    },
-    {
-      "id": "pwa-install",
-      "type": "pwa-install",
-      "enabled": true
-    },
-    {
       "id": "hero-header",
       "type": "hero-header",
+      "enabled": true
+    },
+    {
+      "id": "quick-actions",
+      "type": "quick-actions",
       "enabled": true
     }
   ],
   "brand": {
-    "name": "sdasd",
-    "shortName": "sdasd Taxi",
+    "name": "Alok",
+    "shortName": "Alok Taxi",
     "tagline": "Reliable rides for local, airport and outstation travel.",
-    "locationText": "Surat, Gujarat",
+    "locationText": "",
     "badge": "24/7 Verified Taxi Partner",
     "logoUrl": "assets/logo-taxi.svg",
     "theme": {
@@ -38,12 +33,12 @@
     }
   },
   "contact": {
-    "primaryPhone": "+919109105155",
-    "displayPhone": "+91 910 910 5155",
-    "whatsappPhone": "919109105155",
+    "primaryPhone": "+8844",
+    "displayPhone": "+8844",
+    "whatsappPhone": "8844",
     "secondaryPhone": "",
     "secondaryDisplayPhone": "",
-    "googleMapsUrl": "https://maps.google.com"
+    "googleMapsUrl": "asd"
   },
   "rides": [
     {
@@ -143,14 +138,59 @@
   ],
   "socialLinks": [],
   "vcard": {
-    "fn": "sdasd",
-    "org": "sdasd",
+    "fn": "Alok",
+    "org": "Alok",
     "title": "Taxi Service",
-    "note": "sdasd in Surat, Gujarat. Professional travel & transport bookings."
+    "note": "Alok. Professional travel & transport bookings."
   },
   "agencyBranding": {
     "showPoweredBy": true,
     "agencyName": "Davlabs",
     "agencyLink": "https://davlabs.in"
+  },
+  "pwa": {
+    "title": "Install App for Fast Booking",
+    "desc": "Add to your home screen for quick 1-tap bookings"
+  },
+  "travelTitle": "Tour & Holiday Enquiry",
+  "travelSubtitle": "Custom holiday packages, family trips & outstation travel with instant WhatsApp quotation.",
+  "travelDestinationLabel": "Destination / Places to Visit *",
+  "travelDestinationPlaceholder": "e.g. Goa, Manali, Kerala, Rajasthan, Udaipur",
+  "popularDestinations": [
+    {
+      "id": "goa",
+      "name": "Goa",
+      "query": "Goa Beach Vacation"
+    },
+    {
+      "id": "manali",
+      "name": "Manali",
+      "query": "Manali & Shimla Hills"
+    },
+    {
+      "id": "kerala",
+      "name": "Kerala",
+      "query": "Kerala Backwaters"
+    },
+    {
+      "id": "rajasthan",
+      "name": "Rajasthan",
+      "query": "Rajasthan Heritage Tour"
+    },
+    {
+      "id": "udaipur",
+      "name": "Udaipur",
+      "query": "Udaipur & Mount Abu"
+    }
+  ],
+  "gallery": {
+    "title": "Photo Gallery",
+    "subtitle": "Glimpses of our memorable tours & premium travel experiences.",
+    "images": []
+  },
+  "teamContacts": {
+    "title": "Contact Directory",
+    "subtitle": "Direct phone & WhatsApp contacts for our specialized desks",
+    "contacts": []
   }
 }

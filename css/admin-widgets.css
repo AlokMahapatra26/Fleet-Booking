@@ -437,6 +437,8 @@
 .widget-icon-box.travel { background: #EFF6FF; color: #1D4ED8; }
 .widget-icon-box.review { background: #FEF3C7; color: #B45309; }
 .widget-icon-box.pwa { background: #F0FDF4; color: #15803D; }
+.widget-icon-box.gallery { background: #F3E8FF; color: #7E22CE; }
+.widget-icon-box.team { background: #E0F2FE; color: #0369A1; }
 
 .widget-meta { flex: 1; min-width: 0; }
 .widget-meta-top { display: flex; align-items: center; gap: 5px; }

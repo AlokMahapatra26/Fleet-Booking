@@ -363,6 +363,12 @@
       if (DOM.agencyPhoneDivider) DOM.agencyPhoneDivider.style.display = 'none';
       if (DOM.agencyPhoneLink) DOM.agencyPhoneLink.style.display = 'none';
     }
+
+    // 9. Photo Gallery Component
+    renderGallery(cfg.gallery);
+
+    // 10. Team & Department Contacts Component
+    renderTeamContacts(cfg.teamContacts);
   }
 
   /**
@@ -384,7 +390,19 @@
       } else if (item.type === 'instagram') {
         iconSvg = `<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>`;
       } else if (item.type === 'facebook') {
-        iconSvg = `<svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg>`;
+        iconSvg = `<svg viewBox="0 0 24 24" width="22" height="22" fill="#1877F2"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>`;
+      } else if (item.type === 'youtube') {
+        iconSvg = `<svg viewBox="0 0 24 24" width="22" height="22" fill="#FF0000"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>`;
+      } else if (item.type === 'linkedin') {
+        iconSvg = `<svg viewBox="0 0 24 24" width="22" height="22" fill="#0A66C2"><path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.46 8.76a1.64 1.64 0 1 0 0-3.28 1.64 1.64 0 0 0 0 3.28m1.4 9.74v-8.37H5.06v8.37h2.8z"/></svg>`;
+      } else if (item.type === 'twitter' || item.type === 'x') {
+        iconSvg = `<svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>`;
+      } else if (item.type === 'tripadvisor') {
+        iconSvg = `<svg viewBox="0 0 24 24" width="22" height="22" fill="#00AF87"><circle cx="6.5" cy="14.5" r="2.5"/><circle cx="17.5" cy="14.5" r="2.5"/><path d="M12 4c-5.5 0-10 4-10 8.5 0 2.2 1.1 4.2 2.8 5.6l-1.3 3.4 3.7-1.3c1.5.5 3.1.8 4.8.8s3.3-.3 4.8-.8l3.7 1.3-1.3-3.4c1.7-1.4 2.8-3.4 2.8-5.6C22 8 17.5 4 12 4zm-5.5 15c-1.9 0-3.5-1.6-3.5-3.5S4.6 12 6.5 12s3.5 1.6 3.5 3.5-1.6 3.5-3.5 3.5zm11 0c-1.9 0-3.5-1.6-3.5-3.5s1.6-3.5 3.5-3.5 3.5 1.6 3.5 3.5-1.6 3.5-3.5 3.5zM12 9.5c-1.4 0-2.5-1.1-2.5-2.5s1.1-2.5 2.5-2.5 2.5 1.1 2.5 2.5-1.1 2.5-2.5 2.5z"/></svg>`;
+      } else if (item.type === 'telegram') {
+        iconSvg = `<svg viewBox="0 0 24 24" width="22" height="22" fill="#24A1DE"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>`;
+      } else if (item.type === 'email') {
+        iconSvg = `<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#2563EB" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>`;
       } else {
         iconSvg = `<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>`;
       }
@@ -402,6 +420,309 @@
       DOM.socialLinksContainer.appendChild(a);
     });
   }
+
+  /**
+   * Render Photo Gallery Component
+   */
+  function renderGallery(galleryData) {
+    const gallerySection = document.getElementById('gallerySection');
+    if (!gallerySection) return;
+
+    const titleEl = document.getElementById('gallerySectionTitle');
+    const subtitleEl = document.getElementById('gallerySectionSubtitle');
+    const gridEl = document.getElementById('galleryGrid');
+
+    const title = (galleryData && galleryData.title) || 'Photo Gallery';
+    const subtitle = (galleryData && galleryData.subtitle) !== undefined ? galleryData.subtitle : 'Moments captured across our journeys';
+    const images = (galleryData && Array.isArray(galleryData.images)) ? galleryData.images : [];
+
+    if (titleEl) titleEl.textContent = title;
+    if (subtitleEl) {
+      subtitleEl.textContent = subtitle;
+      subtitleEl.style.display = subtitle ? '' : 'none';
+    }
+
+    if (!gridEl) return;
+    gridEl.innerHTML = '';
+
+    if (images.length === 0) {
+      gridEl.innerHTML = `
+        <div style="grid-column: 1 / -1; padding: 22px 14px; text-align: center; color: var(--theme-muted, #64748B); font-size: 0.82rem; background: rgba(0,0,0,0.02); border-radius: 10px; border: 1px dashed var(--theme-border, #E2E8F0);">
+          No gallery photos uploaded yet.
+        </div>
+      `;
+      return;
+    }
+
+    images.forEach(item => {
+      const card = document.createElement('div');
+      card.className = 'gallery-card';
+      card.tabIndex = 0;
+      card.setAttribute('role', 'button');
+      card.setAttribute('aria-label', item.caption || 'View photo');
+
+      card.innerHTML = `
+        <img class="gallery-card-img" src="${item.url}" alt="${item.caption || 'Gallery photo'}" loading="lazy" onerror="this.src='assets/logo-travel.svg'" />
+        <div class="gallery-card-overlay">
+          <span class="gallery-card-caption">${item.caption || ''}</span>
+        </div>
+        <div class="gallery-card-zoom-icon">
+          <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="15 3 21 3 21 9"></polyline>
+            <polyline points="9 21 3 21 3 15"></polyline>
+            <line x1="21" y1="3" x2="14" y2="10"></line>
+            <line x1="3" y1="21" x2="10" y2="14"></line>
+          </svg>
+        </div>
+      `;
+
+      const openModal = () => openGalleryLightbox(item.url, item.caption);
+      card.addEventListener('click', openModal);
+      card.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          openModal();
+        }
+      });
+
+      gridEl.appendChild(card);
+    });
+  }
+
+  function openGalleryLightbox(url, caption) {
+    const modal = document.getElementById('galleryLightbox');
+    const img = document.getElementById('galleryLightboxImg');
+    const captionEl = document.getElementById('galleryLightboxCaption');
+    if (!modal || !img) return;
+
+    img.src = url;
+    img.alt = caption || 'Photo preview';
+    if (captionEl) {
+      captionEl.textContent = caption || '';
+      captionEl.style.display = caption ? '' : 'none';
+    }
+    modal.style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeGalleryLightbox() {
+    const modal = document.getElementById('galleryLightbox');
+    if (!modal) return;
+    modal.style.display = 'none';
+    document.body.style.overflow = '';
+    const img = document.getElementById('galleryLightboxImg');
+    if (img) img.src = '';
+  }
+
+  function initGalleryLightboxEvents() {
+    const closeBtn = document.getElementById('galleryLightboxClose');
+    const backdrop = document.getElementById('galleryLightboxBackdrop');
+    if (closeBtn) closeBtn.addEventListener('click', closeGalleryLightbox);
+    if (backdrop) backdrop.addEventListener('click', closeGalleryLightbox);
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeGalleryLightbox();
+    });
+  }
+
+  /**
+   * Render Team & Department Contacts Component (Ultra-Compact + Modal)
+   */
+  let activeTeamContactsList = [];
+
+  function createContactCardNode(contact, idx) {
+    const card = document.createElement('div');
+    card.className = 'team-contact-card';
+
+    const AVATAR_COLORS = [
+      { bg: '#EFF6FF', text: '#1D4ED8' },
+      { bg: '#F0FDF4', text: '#15803D' },
+      { bg: '#FDF2F8', text: '#BE185D' },
+      { bg: '#FFF7ED', text: '#C2410C' },
+      { bg: '#F5F3FF', text: '#6D28D9' },
+      { bg: '#ECFEFF', text: '#0E7490' }
+    ];
+
+    function getInitials(name) {
+      if (!name) return '??';
+      const parts = name.trim().split(/\s+/);
+      if (parts.length === 1) return parts[0].substring(0, 2).toUpperCase();
+      return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+    }
+
+    const color = AVATAR_COLORS[idx % AVATAR_COLORS.length];
+    const initials = getInitials(contact.name);
+    const cleanPhone = (contact.phone || '').replace(/[^0-9]/g, '');
+    const rawPhone = (contact.phone || '').trim();
+
+    const callHref = rawPhone ? `tel:${rawPhone.replace(/\s+/g, '')}` : '#';
+    const waHref = cleanPhone
+      ? `https://wa.me/${cleanPhone}?text=${encodeURIComponent(`Hi ${contact.name}, I would like to enquire about your services.`)}`
+      : '#';
+
+    card.innerHTML = `
+      <div class="team-contact-info-wrap">
+        <div class="team-contact-avatar" style="background: ${color.bg}; color: ${color.text};">
+          ${initials}
+        </div>
+        <div class="team-contact-meta">
+          <div class="team-contact-name-row">
+            <span class="team-contact-name" title="${contact.name}">${contact.name}</span>
+            ${contact.role ? `<span class="team-contact-role">${contact.role}</span>` : ''}
+          </div>
+          <div class="team-contact-sub-row">
+            <span class="team-contact-phone">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+              ${contact.phone}
+            </span>
+            ${contact.note ? `<span class="team-contact-note">• ${contact.note}</span>` : ''}
+          </div>
+        </div>
+      </div>
+      <div class="team-contact-actions">
+        ${rawPhone ? `
+          <a href="${callHref}" class="btn-team-contact call" title="Call ${contact.name}" aria-label="Call ${contact.name}">
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+            </svg>
+          </a>
+        ` : ''}
+        ${(contact.whatsapp !== false && cleanPhone) ? `
+          <a href="${waHref}" target="_blank" rel="noopener noreferrer" class="btn-team-contact whatsapp" title="WhatsApp ${contact.name}" aria-label="WhatsApp ${contact.name}">
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor">
+              <path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.816 9.816 0 0 0 12.04 2m.01 1.67c4.54 0 8.24 3.7 8.24 8.24 0 2.2-.86 4.27-2.42 5.82a8.18 8.18 0 0 1-5.82 2.42c-1.42 0-2.82-.37-4.06-1.07l-.29-.17-3.12.82.83-3.04-.19-.3a8.163 8.163 0 0 1-1.25-4.48c0-4.54 3.7-8.24 8.24-8.24m4.52 11.66c-.25-.12-1.47-.72-1.7-.81-.23-.08-.39-.12-.56.12-.17.25-.65.81-.8 1-.15.19-.29.21-.54.08-.25-.12-1.05-.39-2-1.23-.74-.66-1.23-1.47-1.38-1.72-.15-.25-.02-.38.11-.51.11-.11.25-.29.37-.43.12-.15.17-.25.25-.41.08-.17.04-.31-.02-.44-.06-.12-.56-1.35-.77-1.85-.2-.49-.41-.42-.56-.43h-.48c-.17 0-.44.06-.67.31-.23.25-.88.86-.88 2.1 0 1.24.9 2.44 1.03 2.61.12.17 1.77 2.7 4.29 3.78.6.26 1.07.41 1.44.53.6.19 1.15.16 1.58.1.48-.07 1.47-.6 1.68-1.18.21-.58.21-1.07.15-1.18-.07-.11-.23-.17-.48-.29z"/>
+            </svg>
+          </a>
+        ` : ''}
+      </div>
+    `;
+    return card;
+  }
+
+  function renderTeamContacts(teamData) {
+    const section = document.getElementById('teamContactsSection');
+    if (!section) return;
+
+    const titleEl = document.getElementById('teamContactsSectionTitle');
+    const subtitleEl = document.getElementById('teamContactsSectionSubtitle');
+    const listEl = document.getElementById('teamContactsList');
+    const btnSeeAll = document.getElementById('btnSeeAllContacts');
+    const btnSeeAllText = document.getElementById('btnSeeAllContactsText');
+
+    const title = (teamData && teamData.title) || 'Contact Directory';
+    const subtitle = (teamData && teamData.subtitle) !== undefined ? teamData.subtitle : 'Direct phone & WhatsApp contacts for our specialized desks';
+    const contacts = (teamData && Array.isArray(teamData.contacts)) ? teamData.contacts : [];
+    activeTeamContactsList = contacts;
+
+    if (titleEl) titleEl.textContent = title;
+    if (subtitleEl) {
+      subtitleEl.textContent = subtitle;
+      subtitleEl.style.display = subtitle ? '' : 'none';
+    }
+
+    if (!listEl) return;
+    listEl.innerHTML = '';
+
+    if (contacts.length === 0) {
+      listEl.innerHTML = `
+        <div style="padding: 12px 10px; text-align: center; color: var(--theme-muted, #64748B); font-size: 0.76rem; background: rgba(0,0,0,0.02); border-radius: 8px; border: 1px dashed var(--theme-border, #E2E8F0);">
+          No contact numbers added yet.
+        </div>
+      `;
+      if (btnSeeAll) btnSeeAll.style.display = 'none';
+      return;
+    }
+
+    // Show maximum 2 items on the main page for ultra-compact presentation
+    const visibleContacts = contacts.slice(0, 2);
+    visibleContacts.forEach((contact, idx) => {
+      listEl.appendChild(createContactCardNode(contact, idx));
+    });
+
+    // If more than 2 contacts exist, show "See All" button
+    if (contacts.length > 2) {
+      if (btnSeeAll) {
+        btnSeeAll.style.display = 'flex';
+        if (btnSeeAllText) {
+          btnSeeAllText.textContent = `See All Contacts (${contacts.length})`;
+        }
+      }
+    } else {
+      if (btnSeeAll) btnSeeAll.style.display = 'none';
+    }
+  }
+
+  function renderContactsModalList(filterQuery = '') {
+    const modalListEl = document.getElementById('teamContactsModalList');
+    if (!modalListEl) return;
+    modalListEl.innerHTML = '';
+
+    const q = filterQuery.toLowerCase().trim();
+    const filtered = q
+      ? activeTeamContactsList.filter(c =>
+          (c.name && c.name.toLowerCase().includes(q)) ||
+          (c.role && c.role.toLowerCase().includes(q)) ||
+          (c.phone && c.phone.includes(q))
+        )
+      : activeTeamContactsList;
+
+    if (filtered.length === 0) {
+      modalListEl.innerHTML = `
+        <div style="padding: 24px 12px; text-align: center; color: #94A3B8; font-size: 0.8rem;">
+          No matching contacts found.
+        </div>
+      `;
+      return;
+    }
+
+    filtered.forEach((contact, idx) => {
+      modalListEl.appendChild(createContactCardNode(contact, idx));
+    });
+  }
+
+  function openTeamContactsModal() {
+    const modal = document.getElementById('teamContactsModal');
+    if (!modal) return;
+    const titleEl = document.getElementById('contactsModalTitle');
+    const subtitleEl = document.getElementById('contactsModalSubtitle');
+    const mainTitle = document.getElementById('teamContactsSectionTitle');
+    if (titleEl && mainTitle) titleEl.textContent = mainTitle.textContent || 'Contact Directory';
+    if (subtitleEl) subtitleEl.textContent = `All (${activeTeamContactsList.length}) Department & Team Contacts`;
+
+    const searchInput = document.getElementById('contactsModalSearch');
+    if (searchInput) searchInput.value = '';
+
+    renderContactsModalList();
+    modal.style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeTeamContactsModal() {
+    const modal = document.getElementById('teamContactsModal');
+    if (!modal) return;
+    modal.style.display = 'none';
+    document.body.style.overflow = '';
+  }
+
+  function initTeamContactsModalEvents() {
+    const btnSeeAll = document.getElementById('btnSeeAllContacts');
+    const closeBtn = document.getElementById('teamContactsModalClose');
+    const backdrop = document.getElementById('teamContactsModalBackdrop');
+    const searchInput = document.getElementById('contactsModalSearch');
+
+    if (btnSeeAll) btnSeeAll.addEventListener('click', openTeamContactsModal);
+    if (closeBtn) closeBtn.addEventListener('click', closeTeamContactsModal);
+    if (backdrop) backdrop.addEventListener('click', closeTeamContactsModal);
+    if (searchInput) {
+      searchInput.addEventListener('input', (e) => {
+        renderContactsModalList(e.target.value);
+      });
+    }
+
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeTeamContactsModal();
+    });
+  }
+
 
   /**
    * Save Contact (.vcf) Generator (Universal Reused Component)
@@ -545,5 +866,7 @@
   });
 
   // Initialize Application
+  initGalleryLightboxEvents();
+  initTeamContactsModalEvents();
   loadConfiguration();
 })();

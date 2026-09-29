@@ -686,3 +686,493 @@ select.form-control {
   from { opacity: 0; transform: translateY(-4px); }
   to { opacity: 1; transform: translateY(0); }
 }
+
+/* ==========================================================================
+   Photo Gallery Component & Lightbox
+   ========================================================================== */
+.gallery-section {
+  display: block;
+}
+
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+
+@media (min-width: 480px) {
+  .gallery-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+  }
+}
+
+.gallery-card {
+  position: relative;
+  border-radius: var(--radius-md, 12px);
+  overflow: hidden;
+  background: var(--theme-card-bg, #ffffff);
+  border: 1px solid var(--theme-border, #E2E8F0);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  cursor: pointer;
+  aspect-ratio: 4 / 3;
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s ease, border-color 0.2s ease;
+  user-select: none;
+}
+
+.gallery-card:hover {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.12);
+  border-color: var(--theme-primary, #6366F1);
+}
+
+.gallery-card-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.35s ease;
+}
+
+.gallery-card:hover .gallery-card-img {
+  transform: scale(1.06);
+}
+
+.gallery-card-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.72) 0%, rgba(0, 0, 0, 0.1) 50%, transparent 100%);
+  display: flex;
+  align-items: flex-end;
+  padding: 8px 10px;
+  pointer-events: none;
+}
+
+.gallery-card-caption {
+  color: #FFFFFF;
+  font-size: 0.76rem;
+  font-weight: 600;
+  line-height: 1.25;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 100%;
+}
+
+.gallery-card-zoom-icon {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(4px);
+  color: #FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transform: scale(0.8);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.gallery-card:hover .gallery-card-zoom-icon {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* Lightbox Modal */
+.gallery-lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  animation: fadeIn 0.2s ease;
+}
+
+.gallery-lightbox-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.88);
+  backdrop-filter: blur(8px);
+}
+
+.gallery-lightbox-content {
+  position: relative;
+  z-index: 1;
+  max-width: 92vw;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.gallery-lightbox-img {
+  max-width: 100%;
+  max-height: 78vh;
+  border-radius: 12px;
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.5);
+  object-fit: contain;
+  background: #000;
+}
+
+.gallery-lightbox-caption {
+  color: #F8FAFC;
+  font-size: 0.95rem;
+  font-weight: 600;
+  text-align: center;
+  margin-top: 14px;
+  padding: 6px 14px;
+  background: rgba(0, 0, 0, 0.5);
+  border-radius: 20px;
+  max-width: 90%;
+  backdrop-filter: blur(4px);
+}
+
+.gallery-lightbox-close {
+  position: absolute;
+  top: -16px;
+  right: -16px;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #FFFFFF;
+  color: #1E293B;
+  border: none;
+  font-size: 22px;
+  line-height: 1;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  transition: transform 0.15s ease, background 0.15s ease;
+}
+
+.gallery-lightbox-close:hover {
+  transform: scale(1.1);
+  background: #F1F5F9;
+}
+
+/* ==========================================================================
+   Team & Department Contacts Component (Ultra-Compact + Popup Modal)
+   ========================================================================== */
+.team-contacts-section {
+  display: block;
+}
+
+.team-contacts-list {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.team-contact-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  background: var(--theme-card-bg, #FFFFFF);
+  border: 1px solid var(--theme-border, #E2E8F0);
+  border-radius: var(--radius-sm, 10px);
+  padding: 8px 10px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+  transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+}
+
+.team-contact-card:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.06);
+  border-color: #CBD5E1;
+}
+
+.team-contact-info-wrap {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  min-width: 0;
+  flex: 1;
+  overflow: hidden;
+}
+
+.team-contact-avatar {
+  width: 32px;
+  height: 32px;
+  min-width: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.72rem;
+  letter-spacing: -0.02em;
+  flex-shrink: 0;
+}
+
+.team-contact-meta {
+  min-width: 0;
+  flex: 1;
+  overflow: hidden;
+}
+
+.team-contact-name-row {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  line-height: 1.25;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.team-contact-name {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--theme-text, #1E293B);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.team-contact-role {
+  font-size: 0.62rem;
+  font-weight: 600;
+  padding: 1px 5px;
+  border-radius: 6px;
+  background: rgba(99, 102, 241, 0.08);
+  color: var(--theme-primary, #4F46E5);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.team-contact-sub-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 1px;
+  font-size: 0.72rem;
+  color: var(--theme-muted, #64748B);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.team-contact-phone {
+  font-family: monospace;
+  font-weight: 600;
+  color: #0284C7;
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 0.72rem;
+  flex-shrink: 0;
+}
+
+.team-contact-note {
+  font-size: 0.68rem;
+  color: var(--theme-muted, #64748B);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.team-contact-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.btn-team-contact {
+  width: 30px;
+  height: 30px;
+  min-width: 30px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  transition: transform 0.15s ease, background 0.15s ease, box-shadow 0.15s ease;
+  flex-shrink: 0;
+}
+
+.btn-team-contact.call {
+  background: #EFF6FF;
+  border: 1px solid #BFDBFE;
+  color: #1D4ED8;
+}
+
+.btn-team-contact.call:hover {
+  background: #DBEAFE;
+  transform: scale(1.08);
+  box-shadow: 0 2px 6px rgba(29, 78, 216, 0.18);
+}
+
+.btn-team-contact.whatsapp {
+  background: #F0FDF4;
+  border: 1px solid #BBF7D0;
+  color: #16A34A;
+}
+
+.btn-team-contact.whatsapp:hover {
+  background: #DCFCE7;
+  transform: scale(1.08);
+  box-shadow: 0 2px 6px rgba(22, 163, 74, 0.18);
+}
+
+/* See All Button on Main Page */
+.btn-see-all-contacts {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  width: 100%;
+  margin-top: 8px;
+  padding: 8px 12px;
+  background: #F8FAFC;
+  border: 1px dashed var(--theme-border, #CBD5E1);
+  border-radius: var(--radius-sm, 8px);
+  font-size: 0.76rem;
+  font-weight: 600;
+  color: var(--theme-primary, #2563EB);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.btn-see-all-contacts:hover {
+  background: #EFF6FF;
+  border-color: #93C5FD;
+}
+
+/* Team Contacts Popup Modal */
+.contacts-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  animation: fadeIn 0.2s ease;
+}
+
+.contacts-modal-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.75);
+  backdrop-filter: blur(8px);
+}
+
+.contacts-modal-sheet {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 440px;
+  max-height: 82vh;
+  background: #FFFFFF;
+  border-radius: 16px;
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.25);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.contacts-modal-header {
+  padding: 14px 16px 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #F1F5F9;
+  flex-shrink: 0;
+}
+
+.contacts-modal-title-wrap {
+  min-width: 0;
+  flex: 1;
+}
+
+.contacts-modal-title {
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: #1E293B;
+  margin: 0;
+}
+
+.contacts-modal-subtitle {
+  font-size: 0.72rem;
+  color: #64748B;
+  margin: 2px 0 0;
+}
+
+.contacts-modal-close {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: #F1F5F9;
+  border: none;
+  font-size: 18px;
+  line-height: 1;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #475569;
+  transition: all 0.15s ease;
+  flex-shrink: 0;
+}
+
+.contacts-modal-close:hover {
+  background: #E2E8F0;
+  color: #0F172A;
+}
+
+.contacts-modal-search-wrap {
+  position: relative;
+  padding: 8px 16px;
+  border-bottom: 1px solid #F1F5F9;
+  flex-shrink: 0;
+}
+
+.contacts-search-icon {
+  position: absolute;
+  left: 26px;
+  top: 17px;
+  color: #94A3B8;
+  pointer-events: none;
+}
+
+.contacts-search-input {
+  width: 100%;
+  padding: 6px 12px 6px 30px;
+  font-size: 0.78rem;
+  border: 1px solid #E2E8F0;
+  border-radius: 8px;
+  outline: none;
+  font-family: inherit;
+  background: #F8FAFC;
+  transition: all 0.15s ease;
+}
+
+.contacts-search-input:focus {
+  border-color: #3B82F6;
+  background: #FFFFFF;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
+}
+
+.contacts-modal-body {
+  padding: 12px 16px 16px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex: 1;
+}
+
+
+

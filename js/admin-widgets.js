@@ -80,6 +80,26 @@
       iconBoxClass: 'pwa',
       iconSvg: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="20" x="5" y="2" rx="2" ry="2"/><path d="M12 18h.01"/></svg>`
     },
+    'gallery': {
+      type: 'gallery',
+      title: 'Gallery',
+      badge: 'Media',
+      category: 'media',
+      keywords: 'gallery photo photos images fleet destinations showcase pictures portfolio travel media album gallary',
+      desc: 'Showcase destination photos, fleet vehicles & travel memories with an interactive lightbox',
+      iconBoxClass: 'gallery',
+      iconSvg: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/></svg>`
+    },
+    'team-contacts': {
+      type: 'team-contacts',
+      title: 'Contact Directory',
+      badge: 'Core',
+      category: 'core',
+      keywords: 'contact contacts numbers team directory phone member staff department call whatsapp helpline person desk support conatct',
+      desc: 'Directory of team members, departments & staff with direct Call and WhatsApp buttons',
+      iconBoxClass: 'team',
+      iconSvg: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>`
+    },
     'footer': {
       type: 'footer',
       title: 'Footer & Attribution',

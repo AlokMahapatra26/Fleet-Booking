@@ -413,6 +413,49 @@
       </form>
     </section>
 
+    <!-- Photo Gallery Component -->
+    <section class="booking-section gallery-section" id="gallerySection" data-section-id="gallery" style="display: none;">
+      <div class="section-header">
+        <h2 class="section-title">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <rect width="18" height="18" x="3" y="3" rx="2" ry="2"/>
+            <circle cx="9" cy="9" r="2"/>
+            <path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/>
+          </svg>
+          <span id="gallerySectionTitle">Photo Gallery</span>
+        </h2>
+        <p class="section-subtitle" id="gallerySectionSubtitle">Moments captured across our journeys</p>
+      </div>
+      <div class="gallery-grid" id="galleryGrid">
+        <!-- Rendered dynamically -->
+      </div>
+    </section>
+
+    <!-- Team & Department Contacts Component -->
+    <section class="booking-section team-contacts-section" id="teamContactsSection" data-section-id="team-contacts" style="display: none;">
+      <div class="section-header">
+        <h2 class="section-title">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
+            <circle cx="9" cy="7" r="4"/>
+            <path d="M22 21v-2a4 4 0 0 0-3-3.87"/>
+            <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+          </svg>
+          <span id="teamContactsSectionTitle">Contact Directory</span>
+        </h2>
+        <p class="section-subtitle" id="teamContactsSectionSubtitle">Direct phone &amp; WhatsApp contacts for our specialized desks</p>
+      </div>
+      <div class="team-contacts-list" id="teamContactsList">
+        <!-- Rendered dynamically: 1 or 2 compact items -->
+      </div>
+      <button type="button" class="btn-see-all-contacts" id="btnSeeAllContacts" style="display: none;">
+        <span id="btnSeeAllContactsText">See All Contacts</span>
+        <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="9 18 15 12 9 6"></polyline>
+        </svg>
+      </button>
+    </section>
+
     <!-- Google Reviews Widget Component -->
     <section class="reviews-widget-card" id="section-google-reviews" data-section-id="google-reviews">
       <div class="reviews-top-row">
@@ -492,6 +535,40 @@
     </footer>
 
   </main>
+
+  <!-- Gallery Lightbox Modal -->
+  <div class="gallery-lightbox" id="galleryLightbox" style="display: none;" role="dialog" aria-modal="true" aria-label="Photo Preview">
+    <div class="gallery-lightbox-backdrop" id="galleryLightboxBackdrop"></div>
+    <div class="gallery-lightbox-content">
+      <button type="button" class="gallery-lightbox-close" id="galleryLightboxClose" aria-label="Close photo preview">&times;</button>
+      <img src="" alt="" id="galleryLightboxImg" class="gallery-lightbox-img" />
+      <div class="gallery-lightbox-caption" id="galleryLightboxCaption"></div>
+    </div>
+  </div>
+
+  <!-- Team Contacts Directory Popup Modal -->
+  <div class="contacts-modal" id="teamContactsModal" style="display: none;" role="dialog" aria-modal="true" aria-label="All Contacts Directory">
+    <div class="contacts-modal-backdrop" id="teamContactsModalBackdrop"></div>
+    <div class="contacts-modal-sheet">
+      <div class="contacts-modal-header">
+        <div class="contacts-modal-title-wrap">
+          <h3 class="contacts-modal-title" id="contactsModalTitle">Contact Directory</h3>
+          <p class="contacts-modal-subtitle" id="contactsModalSubtitle">All department &amp; specialized team contacts</p>
+        </div>
+        <button type="button" class="contacts-modal-close" id="teamContactsModalClose" aria-label="Close directory">&times;</button>
+      </div>
+      <div class="contacts-modal-search-wrap" id="contactsModalSearchWrap">
+        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" class="contacts-search-icon">
+          <circle cx="11" cy="11" r="8"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+        <input type="text" id="contactsModalSearch" class="contacts-search-input" placeholder="Search by name, role or number..." />
+      </div>
+      <div class="contacts-modal-body" id="teamContactsModalList">
+        <!-- All contacts rendered dynamically -->
+      </div>
+    </div>
+  </div>
 
   <!-- Toast Notice -->
   <div id="toastNotice" class="toast-notice"></div>

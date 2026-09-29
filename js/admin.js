@@ -23,6 +23,13 @@
   const inputGoogleReview = document.getElementById('inputGoogleReview');
   const inputInstagram = document.getElementById('inputInstagram');
   const inputWebsite = document.getElementById('inputWebsite');
+  const inputFacebook = document.getElementById('inputFacebook');
+  const inputYoutube = document.getElementById('inputYoutube');
+  const inputLinkedin = document.getElementById('inputLinkedin');
+  const inputTwitter = document.getElementById('inputTwitter');
+  const inputTripadvisor = document.getElementById('inputTripadvisor');
+  const inputTelegram = document.getElementById('inputTelegram');
+  const inputEmail = document.getElementById('inputEmail');
   const btnSaveClient = document.getElementById('btnSaveClient');
   const btnDownloadJson = document.getElementById('btnDownloadJson');
   const resultBox = document.getElementById('resultBox');
@@ -74,6 +81,14 @@
 
   if (window.AdminWidgets) {
     window.AdminWidgets.init({ onSync: syncLivePreview });
+  }
+
+  if (window.AdminGallery) {
+    window.AdminGallery.init({ onSync: syncLivePreview });
+  }
+
+  if (window.AdminTeamContacts) {
+    window.AdminTeamContacts.init({ onSync: syncLivePreview });
   }
 
   // --- Authentication ---
@@ -196,9 +211,11 @@
   [
     inputBusinessName, inputTagline, inputCity, inputBadge, inputPhone,
     inputWhatsapp, inputAltPhone, inputMaps, inputGoogleReview,
-    inputGoogleReviewQuote, inputInstagram, inputWebsite, inputTravelTitle,
-    inputTravelSubtitle, inputTravelDestLabel, inputTravelDestPlaceholder,
-    inputPwaTitle, inputPwaDesc
+    inputGoogleReviewQuote, inputInstagram, inputWebsite,
+    inputFacebook, inputYoutube, inputLinkedin, inputTwitter,
+    inputTripadvisor, inputTelegram, inputEmail,
+    inputTravelTitle, inputTravelSubtitle, inputTravelDestLabel,
+    inputTravelDestPlaceholder, inputPwaTitle, inputPwaDesc
   ].forEach(elem => {
     if (elem) elem.addEventListener('input', syncLivePreview);
   });
@@ -244,12 +261,69 @@
         url: inputInstagram.value.trim()
       });
     }
-    if (inputWebsite.value.trim()) {
+    if (inputWebsite && inputWebsite.value.trim()) {
       socialLinks.push({
         type: "website",
         label: "Official Website",
         subtitle: "Visit main website",
         url: inputWebsite.value.trim()
+      });
+    }
+    if (inputFacebook && inputFacebook.value.trim()) {
+      socialLinks.push({
+        type: "facebook",
+        label: "Facebook Page",
+        subtitle: "Follow our updates",
+        url: inputFacebook.value.trim()
+      });
+    }
+    if (inputYoutube && inputYoutube.value.trim()) {
+      socialLinks.push({
+        type: "youtube",
+        label: "YouTube Channel",
+        subtitle: "Watch fleet & tour videos",
+        url: inputYoutube.value.trim()
+      });
+    }
+    if (inputLinkedin && inputLinkedin.value.trim()) {
+      socialLinks.push({
+        type: "linkedin",
+        label: "LinkedIn Profile",
+        subtitle: "Connect on LinkedIn",
+        url: inputLinkedin.value.trim()
+      });
+    }
+    if (inputTwitter && inputTwitter.value.trim()) {
+      socialLinks.push({
+        type: "twitter",
+        label: "X (Twitter)",
+        subtitle: "Follow on X",
+        url: inputTwitter.value.trim()
+      });
+    }
+    if (inputTripadvisor && inputTripadvisor.value.trim()) {
+      socialLinks.push({
+        type: "tripadvisor",
+        label: "TripAdvisor",
+        subtitle: "Read traveler reviews",
+        url: inputTripadvisor.value.trim()
+      });
+    }
+    if (inputTelegram && inputTelegram.value.trim()) {
+      socialLinks.push({
+        type: "telegram",
+        label: "Telegram Channel",
+        subtitle: "Join our official channel",
+        url: inputTelegram.value.trim()
+      });
+    }
+    if (inputEmail && inputEmail.value.trim()) {
+      const emailVal = inputEmail.value.trim().replace(/^mailto:/i, '');
+      socialLinks.push({
+        type: "email",
+        label: "Email Enquiries",
+        subtitle: emailVal,
+        url: `mailto:${emailVal}`
       });
     }
 
@@ -332,7 +406,17 @@
         { id: "kerala", name: "Kerala", query: "Kerala Backwaters" },
         { id: "rajasthan", name: "Rajasthan", query: "Rajasthan Heritage Tour" },
         { id: "udaipur", name: "Udaipur", query: "Udaipur & Mount Abu" }
-      ]
+      ],
+      gallery: window.AdminGallery ? window.AdminGallery.getData() : {
+        title: 'Photo Gallery',
+        subtitle: 'Moments captured across our journeys',
+        images: []
+      },
+      teamContacts: window.AdminTeamContacts ? window.AdminTeamContacts.getData() : {
+        title: 'Contact Directory',
+        subtitle: 'Direct phone & WhatsApp contacts for our specialized desks',
+        contacts: []
+      }
     };
   }
 
@@ -401,14 +485,25 @@
 
         const result = await res.json();
         if (result.success) {
-          createdFilePath.textContent = result.filePath;
-          createdClientUrl.textContent = window.location.origin + result.clientUrl;
-          btnOpenClient.href = result.clientUrl;
-          resultBox.classList.add('show');
-          resultBox.scrollIntoView({ behavior: 'smooth' });
+          if (createdFilePath) createdFilePath.textContent = result.filePath;
+          if (createdClientUrl) createdClientUrl.textContent = window.location.origin + result.clientUrl;
+          if (btnOpenClient) btnOpenClient.href = result.clientUrl;
+          if (resultBox) resultBox.classList.add('show');
 
           previewIframe.src = result.clientUrl;
           loadClientsList();
+
+          const isEditMode = btnCancelEdit && btnCancelEdit.style.display !== 'none';
+          btnSaveClient.innerHTML = `
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            <span style="color:#10B981; font-weight:700;">${isEditMode ? 'Updated Successfully!' : 'Saved Successfully!'}</span>
+          `;
+          setTimeout(() => {
+            btnSaveClient.innerHTML = `
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
+              <span>${isEditMode ? `Update Client (${slug})` : 'Save & Generate Client JSON'}</span>
+            `;
+          }, 2000);
         } else {
           alert('Error: ' + (result.error || 'Failed to save config'));
         }
@@ -417,10 +512,6 @@
         downloadJsonFile(slug, configData);
       } finally {
         btnSaveClient.disabled = false;
-        btnSaveClient.innerHTML = `
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
-          <span>Save & Generate Client JSON</span>
-        `;
       }
     });
   }
@@ -446,7 +537,7 @@
   }
 
   // Copy Link
-  if (btnCopyLink) {
+  if (btnCopyLink && createdClientUrl) {
     btnCopyLink.addEventListener('click', () => {
       navigator.clipboard.writeText(createdClientUrl.textContent).then(() => {
         btnCopyLink.textContent = '✓ Copied';
@@ -556,12 +647,35 @@
         window.AdminDestinations.populateDestinations(data.popularDestinations);
       }
 
+      if (window.AdminGallery) {
+        window.AdminGallery.setData(data.gallery || { title: 'Photo Gallery', subtitle: '', images: [] });
+      }
+
+      if (window.AdminTeamContacts) {
+        window.AdminTeamContacts.setData(data.teamContacts || { title: 'Contact Directory', subtitle: '', contacts: [] });
+      }
+
       const reviewLink = (data.socialLinks || []).find(s => s.type === 'review')?.url || '';
       const instaLink = (data.socialLinks || []).find(s => s.type === 'instagram')?.url || '';
       const webLink = (data.socialLinks || []).find(s => s.type === 'website')?.url || '';
-      inputGoogleReview.value = reviewLink;
-      inputInstagram.value = instaLink;
-      inputWebsite.value = webLink;
+      const fbLink = (data.socialLinks || []).find(s => s.type === 'facebook')?.url || '';
+      const ytLink = (data.socialLinks || []).find(s => s.type === 'youtube')?.url || '';
+      const liLink = (data.socialLinks || []).find(s => s.type === 'linkedin')?.url || '';
+      const twLink = (data.socialLinks || []).find(s => s.type === 'twitter' || s.type === 'x')?.url || '';
+      const tripLink = (data.socialLinks || []).find(s => s.type === 'tripadvisor')?.url || '';
+      const tgLink = (data.socialLinks || []).find(s => s.type === 'telegram')?.url || '';
+      const emailLink = (data.socialLinks || []).find(s => s.type === 'email')?.url || '';
+
+      if (inputGoogleReview) inputGoogleReview.value = reviewLink;
+      if (inputInstagram) inputInstagram.value = instaLink;
+      if (inputWebsite) inputWebsite.value = webLink;
+      if (inputFacebook) inputFacebook.value = fbLink;
+      if (inputYoutube) inputYoutube.value = ytLink;
+      if (inputLinkedin) inputLinkedin.value = liLink;
+      if (inputTwitter) inputTwitter.value = twLink;
+      if (inputTripadvisor) inputTripadvisor.value = tripLink;
+      if (inputTelegram) inputTelegram.value = tgLink;
+      if (inputEmail) inputEmail.value = emailLink.replace(/^mailto:/i, '');
       if (inputPwaTitle) inputPwaTitle.value = data.pwa?.title || 'Install App for Fast Booking';
       if (inputPwaDesc) inputPwaDesc.value = data.pwa?.desc || 'Add to your home screen for quick 1-tap bookings';
       if (inputTravelTitle) inputTravelTitle.value = data.travelTitle || data.tourBookingTitle || 'Tour & Holiday Enquiry';
@@ -607,6 +721,14 @@
 
     if (window.AdminDestinations) {
       window.AdminDestinations.resetToDefault();
+    }
+
+    if (window.AdminGallery) {
+      window.AdminGallery.reset();
+    }
+
+    if (window.AdminTeamContacts) {
+      window.AdminTeamContacts.reset();
     }
 
     if (inputTravelTitle) inputTravelTitle.value = 'Tour & Holiday Enquiry';

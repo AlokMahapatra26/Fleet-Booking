@@ -110,6 +110,7 @@
             <button type="button" class="btn-category-pill active" data-cat="all">All</button>
             <button type="button" class="btn-category-pill" data-cat="core">Core</button>
             <button type="button" class="btn-category-pill" data-cat="booking">Booking</button>
+            <button type="button" class="btn-category-pill" data-cat="media">Media</button>
             <button type="button" class="btn-category-pill" data-cat="social">Social</button>
             <button type="button" class="btn-category-pill" data-cat="utility">Utility</button>
           </div>
@@ -360,6 +361,146 @@
                   </div>
                 </div>
 
+                <!-- 9. GALLERY WIDGET PANE -->
+                <div class="widget-form-pane" id="pane-gallery" data-widget-type="gallery">
+                  <div class="form-row">
+                    <div class="form-group full-row">
+                      <label class="form-label" for="inputGalleryTitle">Gallery Section Headline</label>
+                      <input type="text" id="inputGalleryTitle" class="form-control" value="Photo Gallery" placeholder="e.g. Photo Gallery, Our Fleet, Trip Memories">
+                      <span class="form-hint">Headline displayed above the photos.</span>
+                    </div>
+                  </div>
+
+                  <div class="form-row">
+                    <div class="form-group full-row">
+                      <label class="form-label" for="inputGallerySubtitle">Gallery Subtitle / Description</label>
+                      <input type="text" id="inputGallerySubtitle" class="form-control" value="Glimpses of our memorable tours &amp; premium travel experiences." placeholder="e.g. Glimpses of our memorable tours &amp; premium travel experiences.">
+                      <span class="form-hint">Brief subtitle displayed below the headline.</span>
+                    </div>
+                  </div>
+
+                  <div class="form-row">
+                    <div class="form-group full-row">
+                      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                        <label class="form-label" style="margin-bottom: 0;">Gallery Photos (<span id="galleryPhotoCount">0</span>)</label>
+                        <div style="display: flex; gap: 8px;">
+                          <button type="button" id="btnLoadSampleGallery" class="btn-link" style="font-size: 0.76rem; color: #10B981; background: none; border: none; cursor: pointer; font-weight: 600;">+ Load Sample Photos</button>
+                          <button type="button" id="btnToggleAddPhoto" class="btn-link" style="font-size: 0.76rem; color: #1D4ED8; background: none; border: none; cursor: pointer; font-weight: 600;">+ Add Custom Photo</button>
+                        </div>
+                      </div>
+
+                      <!-- Photos thumbnails container -->
+                      <div class="gallery-admin-list" id="galleryAdminList" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 10px; margin-bottom: 12px;"></div>
+
+                      <!-- Add Photo Drawer -->
+                      <div id="addPhotoPanel" class="add-vehicle-panel" style="display: none;">
+                        <div class="add-vehicle-title">Add Image to Gallery</div>
+                        <div class="add-vehicle-form-row">
+                          <div class="form-group" style="flex: 2; min-width: 200px; margin-bottom: 0;">
+                            <label class="form-label" for="newPhotoUrl" style="font-size: 0.73rem;">Image URL *</label>
+                            <input type="text" id="newPhotoUrl" class="form-control" style="padding: 7px 10px; font-size: 0.82rem;" placeholder="https://images.unsplash.com/...">
+                          </div>
+                          <div class="form-group" style="flex: 2; min-width: 170px; margin-bottom: 0;">
+                            <label class="form-label" for="newPhotoCaption" style="font-size: 0.73rem;">Caption / Place Name (Optional)</label>
+                            <input type="text" id="newPhotoCaption" class="form-control" style="padding: 7px 10px; font-size: 0.82rem;" placeholder="e.g. Goa Sunset, Manali Snow">
+                          </div>
+                          <div class="add-vehicle-buttons">
+                            <button type="button" id="btnConfirmAddPhoto" class="btn btn-primary" style="padding: 7px 14px; font-size: 0.82rem;">
+                              <span>Add Photo</span>
+                            </button>
+                            <button type="button" id="btnCancelAddPhoto" class="btn btn-secondary" style="padding: 7px 12px; font-size: 0.82rem;">
+                              <span>Cancel</span>
+                            </button>
+                          </div>
+                        </div>
+                        <div style="margin-top: 10px; display: flex; align-items: center; gap: 10px;">
+                          <span style="font-size: 0.75rem; color: #71717A;">Or upload local image:</span>
+                          <label for="inputGalleryUploadFile" class="btn btn-secondary btn-sm" style="font-size: 0.75rem; padding: 4px 10px; cursor: pointer;">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                            <span>Upload File</span>
+                          </label>
+                          <input type="file" id="inputGalleryUploadFile" accept="image/*" style="display: none;">
+                        </div>
+                      </div>
+
+                      <span class="form-hint">Photos will be displayed in an interactive showcase grid with tap-to-enlarge lightbox.</span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- TEAM & DEPARTMENT CONTACTS WIDGET PANE -->
+                <div class="widget-form-pane" id="pane-team-contacts" data-widget-type="team-contacts">
+                  <div class="form-row">
+                    <div class="form-group full-row">
+                      <label class="form-label" for="inputTeamContactsTitle">Directory Headline</label>
+                      <input type="text" id="inputTeamContactsTitle" class="form-control" value="Contact Directory" placeholder="e.g. Contact Directory, Our Specialized Desks, Team Contacts">
+                      <span class="form-hint">Headline displayed above the contacts directory.</span>
+                    </div>
+                  </div>
+
+                  <div class="form-row">
+                    <div class="form-group full-row">
+                      <label class="form-label" for="inputTeamContactsSubtitle">Directory Subtitle / Note</label>
+                      <input type="text" id="inputTeamContactsSubtitle" class="form-control" value="Direct phone &amp; WhatsApp contacts for our specialized desks" placeholder="e.g. Direct phone &amp; WhatsApp contacts for our specialized desks">
+                      <span class="form-hint">Brief subtitle displayed below the headline.</span>
+                    </div>
+                  </div>
+
+                  <div class="form-row">
+                    <div class="form-group full-row">
+                      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                        <label class="form-label" style="margin-bottom: 0;">Contacts &amp; Phone Numbers (<span id="teamContactsCount">0</span>)</label>
+                        <div style="display: flex; gap: 8px;">
+                          <button type="button" id="btnLoadSampleTeamContacts" class="btn-link" style="font-size: 0.76rem; color: #10B981; background: none; border: none; cursor: pointer; font-weight: 600;">+ Load Sample Contacts</button>
+                          <button type="button" id="btnToggleAddTeamContact" class="btn-link" style="font-size: 0.76rem; color: #1D4ED8; background: none; border: none; cursor: pointer; font-weight: 600;">+ Add New Contact</button>
+                        </div>
+                      </div>
+
+                      <!-- Contact Cards List Container -->
+                      <div class="team-contacts-admin-list" id="teamContactsAdminList" style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 12px;"></div>
+
+                      <!-- Add Contact Drawer -->
+                      <div id="addTeamContactPanel" class="add-vehicle-panel" style="display: none;">
+                        <div class="add-vehicle-title">Add Contact Person / Desk</div>
+                        <div class="add-vehicle-form-row">
+                          <div class="form-group" style="flex: 2; min-width: 170px; margin-bottom: 0;">
+                            <label class="form-label" for="newContactPersonName" style="font-size: 0.73rem;">Person Name or Desk *</label>
+                            <input type="text" id="newContactPersonName" class="form-control" style="padding: 7px 10px; font-size: 0.82rem;" placeholder="e.g. Ramesh Sharma, Booking Desk">
+                          </div>
+                          <div class="form-group" style="flex: 2; min-width: 160px; margin-bottom: 0;">
+                            <label class="form-label" for="newContactPersonRole" style="font-size: 0.73rem;">Department / Role (Optional)</label>
+                            <input type="text" id="newContactPersonRole" class="form-control" style="padding: 7px 10px; font-size: 0.82rem;" placeholder="e.g. Reservations, Fleet Dispatch">
+                          </div>
+                          <div class="form-group" style="flex: 2; min-width: 160px; margin-bottom: 0;">
+                            <label class="form-label" for="newContactPersonPhone" style="font-size: 0.73rem;">Phone Number *</label>
+                            <input type="tel" id="newContactPersonPhone" class="form-control" style="padding: 7px 10px; font-size: 0.82rem;" placeholder="e.g. +91 98765 43210">
+                          </div>
+                          <div class="form-group" style="flex: 1.5; min-width: 140px; margin-bottom: 0;">
+                            <label class="form-label" for="newContactPersonNote" style="font-size: 0.73rem;">Timing / Note (Optional)</label>
+                            <input type="text" id="newContactPersonNote" class="form-control" style="padding: 7px 10px; font-size: 0.82rem;" placeholder="e.g. 24/7 Available, 9am-8pm">
+                          </div>
+                        </div>
+                        <div style="margin-top: 10px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px;">
+                          <label style="display: flex; align-items: center; gap: 6px; font-size: 0.76rem; color: #27272A; cursor: pointer;">
+                            <input type="checkbox" id="newContactPersonWhatsapp" checked style="accent-color: #10B981;">
+                            <span>Enable WhatsApp Chat button for this number</span>
+                          </label>
+                          <div class="add-vehicle-buttons" style="margin-left: auto;">
+                            <button type="button" id="btnConfirmAddTeamContact" class="btn btn-primary" style="padding: 7px 14px; font-size: 0.82rem;">
+                              <span>Add Contact</span>
+                            </button>
+                            <button type="button" id="btnCancelAddTeamContact" class="btn btn-secondary" style="padding: 7px 12px; font-size: 0.82rem;">
+                              <span>Cancel</span>
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+
+                      <span class="form-hint">Each contact will feature instant 1-tap Call and direct WhatsApp chat buttons.</span>
+                    </div>
+                  </div>
+                </div>
+
                 <!-- 4. TRAVEL BOOKING WIDGET PANE -->
                 <div class="widget-form-pane" id="pane-travel-booking" data-widget-type="travel-booking">
                   <div class="form-row">
@@ -503,6 +644,50 @@
                       <input type="text" id="inputWebsite" class="form-control" placeholder="https://rajtravels.com">
                     </div>
                   </div>
+
+                  <div class="form-row">
+                    <div class="form-group">
+                      <label class="form-label" for="inputFacebook">Facebook Page</label>
+                      <input type="text" id="inputFacebook" class="form-control" placeholder="https://facebook.com/rajtravels">
+                    </div>
+
+                    <div class="form-group">
+                      <label class="form-label" for="inputYoutube">YouTube Channel</label>
+                      <input type="text" id="inputYoutube" class="form-control" placeholder="https://youtube.com/@rajtravels">
+                    </div>
+                  </div>
+
+                  <div class="form-row">
+                    <div class="form-group">
+                      <label class="form-label" for="inputLinkedin">LinkedIn Profile / Page</label>
+                      <input type="text" id="inputLinkedin" class="form-control" placeholder="https://linkedin.com/company/rajtravels">
+                    </div>
+
+                    <div class="form-group">
+                      <label class="form-label" for="inputTwitter">X (Twitter) Profile</label>
+                      <input type="text" id="inputTwitter" class="form-control" placeholder="https://x.com/rajtravels">
+                    </div>
+                  </div>
+
+                  <div class="form-row">
+                    <div class="form-group">
+                      <label class="form-label" for="inputTripadvisor">TripAdvisor Listing</label>
+                      <input type="text" id="inputTripadvisor" class="form-control" placeholder="https://tripadvisor.com/...">
+                    </div>
+
+                    <div class="form-group">
+                      <label class="form-label" for="inputTelegram">Telegram Channel / Support</label>
+                      <input type="text" id="inputTelegram" class="form-control" placeholder="https://t.me/rajtravels">
+                    </div>
+                  </div>
+
+                  <div class="form-row">
+                    <div class="form-group full-row">
+                      <label class="form-label" for="inputEmail">Official Enquiry Email</label>
+                      <input type="email" id="inputEmail" class="form-control" placeholder="info@rajtravels.com">
+                      <span class="form-hint">Links will appear with official branded icons and 1-tap navigation on the customer portal.</span>
+                    </div>
+                  </div>
                 </div>
 
                 <!-- 7. PWA INSTALL WIDGET PANE -->
@@ -587,26 +772,6 @@
     <!-- Right Live Preview Column -->
     <aside class="preview-column">
 
-      <!-- Success Notification Box -->
-      <div id="resultBox" class="success-alert">
-        <div class="alert-header">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
-          <span>Client Config Successfully Created!</span>
-        </div>
-        <div class="alert-file">Saved to <code id="createdFilePath">configs/raj-travels.json</code></div>
-        <div class="alert-actions">
-          <span class="url-text" id="createdClientUrl">/?client=raj-travels</span>
-          <button type="button" id="btnCopyLink" class="btn btn-primary" style="padding:4px 10px; font-size:0.75rem;">
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:3px;"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
-            <span>Copy</span>
-          </button>
-          <a id="btnOpenClient" href="#" target="_blank" class="btn btn-secondary" style="padding:4px 10px; font-size:0.75rem;">
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:3px;"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"></line></svg>
-            <span>Open</span>
-          </a>
-        </div>
-      </div>
-
       <div class="device-preview-header">
         <div class="device-info">
           <span class="device-name">iPhone 16 Pro</span>
@@ -641,6 +806,8 @@
   <script defer src="js/admin-themes.js"></script>
   <script defer src="js/admin-fleet.js"></script>
   <script defer src="js/admin-tours.js"></script>
+  <script defer src="js/admin-gallery.js"></script>
+  <script defer src="js/admin-team-contacts.js"></script>
   <script defer src="js/admin-widgets.js"></script>
   <script defer src="js/admin.js"></script>
 </body>
