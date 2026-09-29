@@ -1,0 +1,191 @@
+{
+  "template": "travel",
+  "sections": [
+    {
+      "id": "hero-header",
+      "type": "hero-header",
+      "enabled": true
+    },
+    {
+      "id": "quick-actions",
+      "type": "quick-actions",
+      "enabled": true
+    },
+    {
+      "id": "travel-booking",
+      "type": "travel-booking",
+      "enabled": true
+    }
+  ],
+  "brand": {
+    "name": "DAVLabs",
+    "shortName": "DAVLabs Travels",
+    "tagline": "deva ho deva",
+    "locationText": "Vapi , Gujrat",
+    "badge": "DavLabs",
+    "logoUrl": "assets/logos/davlabs-logo.jpg",
+    "theme": {
+      "primary": "#FFD900",
+      "primaryHover": "#E6C200",
+      "primaryContrast": "#0A0A0A",
+      "background": "#F7F4E8",
+      "cardBg": "#FFFFFF",
+      "text": "#111111",
+      "muted": "#747168",
+      "border": "rgba(17, 17, 17, 0.08)",
+      "accent": "#22C55E",
+      "pattern": "travel-gradient"
+    }
+  },
+  "contact": {
+    "primaryPhone": "1234567890",
+    "displayPhone": "1234567890",
+    "whatsappPhone": "918849561649",
+    "secondaryPhone": "",
+    "secondaryDisplayPhone": "",
+    "googleMapsUrl": "sad"
+  },
+  "rides": [
+    {
+      "id": "local",
+      "label": "Local Taxi",
+      "default": true
+    },
+    {
+      "id": "airport",
+      "label": "Airport"
+    },
+    {
+      "id": "outstation",
+      "label": "Outstation"
+    },
+    {
+      "id": "oneway",
+      "label": "One Way"
+    },
+    {
+      "id": "roundtrip",
+      "label": "Round Trip"
+    },
+    {
+      "id": "hourly",
+      "label": "Hourly",
+      "hasHourlyPackages": true
+    }
+  ],
+  "tourTypes": [
+    {
+      "id": "holiday",
+      "label": "Holiday Package",
+      "default": true
+    },
+    {
+      "id": "family",
+      "label": "Family Vacation"
+    },
+    {
+      "id": "weekend",
+      "label": "Weekend Getaway"
+    },
+    {
+      "id": "sightseeing",
+      "label": "Sightseeing Tour"
+    },
+    {
+      "id": "custom",
+      "label": "Custom Itinerary"
+    },
+    {
+      "id": "honeymoon",
+      "label": "Honeymoon Special"
+    }
+  ],
+  "hourlyPackages": [
+    {
+      "id": "4h40k",
+      "hours": "4 Hours",
+      "km": "Up to 40 KM",
+      "default": true
+    },
+    {
+      "id": "8h80k",
+      "hours": "8 Hours",
+      "km": "Up to 80 KM"
+    },
+    {
+      "id": "12h120k",
+      "hours": "12 Hours",
+      "km": "Up to 120 KM"
+    }
+  ],
+  "vehicles": [
+    {
+      "id": "sedan",
+      "name": "Sedan (Dzire / Etios)",
+      "capacity": "4 Seater",
+      "default": true
+    },
+    {
+      "id": "ertiga",
+      "name": "Maruti Ertiga",
+      "capacity": "6 Seater"
+    },
+    {
+      "id": "innova",
+      "name": "Toyota Innova",
+      "capacity": "7 Seater"
+    },
+    {
+      "id": "crysta",
+      "name": "Innova Crysta",
+      "capacity": "7 Seater"
+    }
+  ],
+  "socialLinks": [],
+  "vcard": {
+    "fn": "DAVLabs",
+    "org": "DAVLabs",
+    "title": "Travel & Tour Agency",
+    "note": "DAVLabs in Vapi , Gujrat. Professional travel & transport bookings."
+  },
+  "agencyBranding": {
+    "showPoweredBy": true,
+    "agencyName": "Davlabs",
+    "agencyLink": "https://davlabs.in"
+  },
+  "pwa": {
+    "title": "Install App for Fast Booking",
+    "desc": "Add to your home screen for quick 1-tap bookings"
+  },
+  "travelTitle": "Tour & Holiday Enquiry",
+  "travelSubtitle": "Custom holiday packages, family trips & outstation travel with instant WhatsApp quotation.",
+  "travelDestinationLabel": "Destination / Places to Visit *",
+  "travelDestinationPlaceholder": "e.g. Goa, Manali, Kerala, Rajasthan, Udaipur",
+  "popularDestinations": [
+    {
+      "id": "goa",
+      "name": "Goa",
+      "query": "Goa Beach Vacation"
+    },
+    {
+      "id": "manali",
+      "name": "Manali",
+      "query": "Manali & Shimla Hills"
+    },
+    {
+      "id": "kerala",
+      "name": "Kerala",
+      "query": "Kerala Backwaters"
+    },
+    {
+      "id": "rajasthan",
+      "name": "Rajasthan",
+      "query": "Rajasthan Heritage Tour"
+    },
+    {
+      "id": "udaipur",
+      "name": "Udaipur",
+      "query": "Udaipur & Mount Abu"
+    }
+  ]
+}

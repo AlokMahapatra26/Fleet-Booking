@@ -12,9 +12,19 @@
   let kidsCount = 0;
   let gpsLocationUrl = null;
 
+  function getLocalDateString(d = new Date()) {
+    const year = d.getFullYear();
+    const month = String(d.getMonth() + 1).padStart(2, '0');
+    const day = String(d.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  }
+
   window.TravelPortal = {
     init(cfg, showToast) {
       const DOM = {
+        travelSectionTitle: document.getElementById('travelSectionTitle'),
+        travelSectionSubtitle: document.getElementById('travelSectionSubtitle'),
+        travelDestinationLabel: document.getElementById('travelDestinationLabel'),
         tourTypesContainer: document.getElementById('tourTypesContainer'),
         travelCustomerNameInput: document.getElementById('travelCustomerNameInput'),
         travelPickupInput: document.getElementById('travelPickupInput'),
@@ -32,11 +42,23 @@
         btnPlusKid: document.getElementById('btnPlusKid'),
         kidCountDisplay: document.getElementById('kidCountDisplay'),
         passengerSummaryBadge: document.getElementById('passengerSummaryBadge'),
-        travelVehicleSelect: document.getElementById('travelVehicleSelect'),
-        travelPackageTypeSelect: document.getElementById('travelPackageTypeSelect'),
         travelNotesInput: document.getElementById('travelNotesInput'),
         travelWhatsAppBtn: document.getElementById('travelWhatsAppBtn')
       };
+
+      // Dynamic Section Title & Subtitle from Config
+      if (DOM.travelSectionTitle && (cfg.travelTitle || cfg.tourBookingTitle)) {
+        DOM.travelSectionTitle.textContent = cfg.travelTitle || cfg.tourBookingTitle;
+      }
+      if (DOM.travelSectionSubtitle && (cfg.travelSubtitle || cfg.tourBookingSubtitle)) {
+        DOM.travelSectionSubtitle.textContent = cfg.travelSubtitle || cfg.tourBookingSubtitle;
+      }
+      if (DOM.travelDestinationLabel && cfg.travelDestinationLabel) {
+        DOM.travelDestinationLabel.textContent = cfg.travelDestinationLabel;
+      }
+      if (DOM.travelDestinationInput && cfg.travelDestinationPlaceholder) {
+        DOM.travelDestinationInput.placeholder = cfg.travelDestinationPlaceholder;
+      }
 
       // 1. Render Tour Category Chips
       function renderTourTypes(tourTypes) {
@@ -64,24 +86,6 @@
         });
       }
 
-      // 2. Render Travel Vehicles
-      function renderTravelVehicles(vehicles) {
-        if (!DOM.travelVehicleSelect) return;
-        DOM.travelVehicleSelect.innerHTML = '';
-
-        const anyOpt = document.createElement('option');
-        anyOpt.value = "Recommend Best Vehicle for Group";
-        anyOpt.textContent = "Recommend Best Vehicle for Group";
-        DOM.travelVehicleSelect.appendChild(anyOpt);
-
-        vehicles.forEach(veh => {
-          const opt = document.createElement('option');
-          opt.value = veh.name;
-          opt.textContent = `${veh.name} (${veh.capacity || 'Comfortable'})`;
-          DOM.travelVehicleSelect.appendChild(opt);
-        });
-      }
-
       renderTourTypes(cfg.tourTypes || [
         { id: "holiday", label: "Holiday Package", default: true },
         { id: "family", label: "Family Vacation" },
@@ -91,8 +95,6 @@
         { id: "honeymoon", label: "Honeymoon Special" }
       ]);
 
-      renderTravelVehicles(cfg.vehicles || []);
-
       // 3. Travel Dates & Duration
       function updateTripDuration() {
         if (!DOM.departureDateInput || !DOM.returnDateInput || !DOM.tripDurationTag) return;
@@ -101,13 +103,17 @@
 
         if (depVal) {
           DOM.returnDateInput.min = depVal;
+          if (retVal && retVal < depVal) {
+            DOM.returnDateInput.value = depVal;
+          }
         }
 
-        if (depVal && retVal) {
-          const depDate = new Date(depVal);
-          const retDate = new Date(retVal);
-          const diffTime = retDate - depDate;
-          const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
+        const updatedRetVal = DOM.returnDateInput.value;
+        if (depVal && updatedRetVal) {
+          const depDate = new Date(depVal + 'T00:00:00');
+          const retDate = new Date(updatedRetVal + 'T00:00:00');
+          const diffTime = retDate.getTime() - depDate.getTime();
+          const diffDays = Math.round(diffTime / (1000 * 60 * 60 * 24)) + 1;
           if (diffDays >= 1) {
             const nights = diffDays - 1;
             DOM.tripDurationTag.textContent = `${diffDays}D / ${nights}N`;
@@ -120,7 +126,7 @@
         DOM.tripDurationTag.style.display = 'none';
       }
 
-      const today = new Date().toISOString().split('T')[0];
+      const today = getLocalDateString(new Date());
       if (DOM.departureDateInput) {
         DOM.departureDateInput.min = today;
         if (!DOM.departureDateInput.value) {
@@ -152,9 +158,9 @@
 
         const total = adultsCount + kidsCount;
         if (kidsCount > 0) {
-          DOM.passengerSummaryBadge.textContent = `${adultsCount} Adult${adultsCount > 1 ? 's' : ''}, ${kidsCount} Kid${kidsCount > 1 ? 's' : ''} (${total} Persons)`;
+          DOM.passengerSummaryBadge.textContent = `${total} Persons (${adultsCount}A + ${kidsCount}K)`;
         } else {
-          DOM.passengerSummaryBadge.textContent = `${adultsCount} Adult${adultsCount > 1 ? 's' : ''} (${total} Person${total > 1 ? 's' : ''})`;
+          DOM.passengerSummaryBadge.textContent = `${adultsCount} Adult${adultsCount > 1 ? 's' : ''}`;
         }
       }
 
@@ -200,16 +206,82 @@
         });
       }
 
-      // 5. Popular Destination Quick Chips
-      if (DOM.popularDestChips && !DOM.popularDestChips._hasHandler) {
-        DOM.popularDestChips._hasHandler = true;
-        DOM.popularDestChips.querySelectorAll('.dest-pill').forEach(btn => {
+      // 5. Popular Destination Quick Chips with Dynamic Rendering & Active State Highlight
+      function renderPopularDestinations(destinations) {
+        if (!DOM.popularDestChips) return;
+        DOM.popularDestChips.innerHTML = '';
+
+        if (destinations !== undefined && Array.isArray(destinations) && destinations.length === 0) {
+          DOM.popularDestChips.style.display = 'none';
+          return;
+        }
+
+        const list = (Array.isArray(destinations) && destinations.length > 0)
+          ? destinations
+          : [
+            { id: "goa", name: "Goa", query: "Goa Beach Vacation" },
+            { id: "manali", name: "Manali", query: "Manali & Shimla Hills" },
+            { id: "kerala", name: "Kerala", query: "Kerala Backwaters" },
+            { id: "rajasthan", name: "Rajasthan", query: "Rajasthan Heritage Tour" },
+            { id: "udaipur", name: "Udaipur", query: "Udaipur & Mount Abu" }
+          ];
+
+        const activeList = list.filter(d => d.enabled !== false);
+        if (activeList.length === 0) {
+          DOM.popularDestChips.style.display = 'none';
+          return;
+        }
+
+        DOM.popularDestChips.style.display = 'flex';
+        const label = document.createElement('span');
+        label.className = 'dest-chip-label';
+        label.textContent = 'Popular:';
+        DOM.popularDestChips.appendChild(label);
+
+        activeList.forEach(dest => {
+          const name = typeof dest === 'string' ? dest : (dest.name || dest.label || dest.query || dest.id);
+          const query = typeof dest === 'string' ? dest : (dest.query || dest.name || dest.label || name);
+
+          const btn = document.createElement('button');
+          btn.type = 'button';
+          btn.className = 'dest-pill';
+          btn.textContent = name;
+          btn.dataset.dest = query;
+
           btn.addEventListener('click', () => {
+            DOM.popularDestChips.querySelectorAll('.dest-pill').forEach(p => p.classList.remove('active'));
+            btn.classList.add('active');
             if (DOM.travelDestinationInput) {
-              DOM.travelDestinationInput.value = btn.dataset.dest || btn.textContent.trim();
+              DOM.travelDestinationInput.value = query;
               DOM.travelDestinationInput.focus();
+              DOM.travelDestinationInput.dispatchEvent(new Event('input'));
             }
           });
+
+          DOM.popularDestChips.appendChild(btn);
+        });
+
+        if (DOM.travelDestinationInput && DOM.travelDestinationInput.value) {
+          const currentVal = DOM.travelDestinationInput.value.trim().toLowerCase();
+          DOM.popularDestChips.querySelectorAll('.dest-pill').forEach(p => {
+            const dest = (p.dataset.dest || p.textContent).trim().toLowerCase();
+            p.classList.toggle('active', !!currentVal && (dest === currentVal || dest.startsWith(currentVal)));
+          });
+        }
+      }
+
+      renderPopularDestinations(cfg.popularDestinations);
+
+      if (DOM.travelDestinationInput && !DOM.travelDestinationInput._destPillHandlerAttached) {
+        DOM.travelDestinationInput._destPillHandlerAttached = true;
+        DOM.travelDestinationInput.addEventListener('input', () => {
+          const currentVal = DOM.travelDestinationInput.value.trim().toLowerCase();
+          if (DOM.popularDestChips) {
+            DOM.popularDestChips.querySelectorAll('.dest-pill').forEach(p => {
+              const dest = (p.dataset.dest || p.textContent).trim().toLowerCase();
+              p.classList.toggle('active', !!currentVal && (dest === currentVal || dest.startsWith(currentVal)));
+            });
+          }
         });
       }
 
@@ -277,6 +349,14 @@
             return;
           }
 
+          if (DOM.returnDateInput.value && DOM.departureDateInput.value) {
+            if (DOM.returnDateInput.value < DOM.departureDateInput.value) {
+              DOM.returnDateInput.focus();
+              showToast('Return date cannot be earlier than departure date.');
+              return;
+            }
+          }
+
           let formattedDepDate = 'Not specified';
           const depParts = DOM.departureDateInput.value.split('-');
           if (depParts.length === 3) {
@@ -290,9 +370,9 @@
             if (retParts.length === 3) {
               formattedRetDate = `${retParts[2]}/${retParts[1]}/${retParts[0]}`;
             }
-            const depDate = new Date(DOM.departureDateInput.value);
-            const retDate = new Date(DOM.returnDateInput.value);
-            const diffDays = Math.ceil((retDate - depDate) / (1000 * 60 * 60 * 24)) + 1;
+            const depDate = new Date(DOM.departureDateInput.value + 'T00:00:00');
+            const retDate = new Date(DOM.returnDateInput.value + 'T00:00:00');
+            const diffDays = Math.round((retDate.getTime() - depDate.getTime()) / (1000 * 60 * 60 * 24)) + 1;
             if (diffDays >= 1) {
               durationText = ` (${diffDays} Days / ${diffDays - 1} Nights)`;
             }
@@ -307,9 +387,11 @@
             ? `${pickup} (${gpsLocationUrl})`
             : pickup;
 
+          const companyName = cfg.brand?.name || 'Travel Specialist';
+
           const messageLines = [
             `*✈️ TOUR & TRAVEL BOOKING ENQUIRY*`,
-            `*Company:* ${cfg.brand.name}`,
+            `*Company:* ${companyName}`,
             `---------------------------------`,
             `👤 *Customer Name:* ${customerName}`,
             `📍 *Pickup City:* ${pickupValue}`,
@@ -317,9 +399,7 @@
             `🏷️ *Trip Type:* ${selectedTourType || 'Holiday Package'}`,
             `📅 *Departure Date:* ${formattedDepDate}`,
             `🔄 *Return Date:* ${formattedRetDate}${durationText}`,
-            `👥 *Travelers:* ${passengersText}`,
-            `🚘 *Preferred Vehicle:* ${DOM.travelVehicleSelect.value || 'Recommend Best'}`,
-            `🎒 *Package Preference:* ${DOM.travelPackageTypeSelect.value}`
+            `👥 *Travelers:* ${passengersText}`
           ];
 
           const notes = DOM.travelNotesInput.value.trim();
@@ -332,8 +412,19 @@
             `Please provide the best tour itinerary & package quotation.`
           );
 
+          const rawPhone = cfg.contact?.whatsappPhone || cfg.contact?.primaryPhone || '';
+          const cleanPhone = String(rawPhone).replace(/[^0-9]/g, '');
+          const isPreview = window.self !== window.top || document.body.classList.contains('is-iframe-preview');
+
+          if (!cleanPhone) {
+            showToast(isPreview 
+              ? '⚠️ Please enter a WhatsApp Number in Admin Settings to enable dispatch.' 
+              : 'WhatsApp contact phone number is not configured.');
+            return;
+          }
+
           const fullMessage = messageLines.join('\n');
-          const waUrl = `https://wa.me/${cfg.contact.whatsappPhone}?text=${encodeURIComponent(fullMessage)}`;
+          const waUrl = `https://wa.me/${cleanPhone}?text=${encodeURIComponent(fullMessage)}`;
           window.open(waUrl, '_blank', 'noopener,noreferrer');
         });
       }

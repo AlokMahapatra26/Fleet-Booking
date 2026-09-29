@@ -372,16 +372,102 @@
 
                   <div class="form-row">
                     <div class="form-group full-row">
-                      <label class="form-label">Available Tour Types</label>
-                      <div class="preset-tag-list">
-                        <span class="preset-tag">Holiday Package</span>
-                        <span class="preset-tag">Family Vacation</span>
-                        <span class="preset-tag">Weekend Getaway</span>
-                        <span class="preset-tag">Sightseeing Tour</span>
-                        <span class="preset-tag">Custom Itinerary</span>
-                        <span class="preset-tag">Honeymoon Special</span>
+                      <label class="form-label" for="inputTravelSubtitle">Travel Module Subtitle / Description</label>
+                      <input type="text" id="inputTravelSubtitle" class="form-control" value="Custom holiday packages, family trips &amp; outstation travel with instant WhatsApp quotation." placeholder="e.g. Custom holiday packages, family trips &amp; outstation travel with instant WhatsApp quotation.">
+                      <span class="form-hint">Brief subtitle / description displayed below the travel module headline.</span>
+                    </div>
+                  </div>
+
+                  <div class="form-row">
+                    <div class="form-group full-row">
+                      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                        <label class="form-label" style="margin-bottom: 0;">Available Tour Types</label>
+                        <button type="button" id="btnToggleAddTourType" class="btn-link" style="font-size: 0.76rem; color: #1D4ED8; background: none; border: none; cursor: pointer; font-weight: 600;">+ Add New Tour Type</button>
                       </div>
-                      <span class="form-hint">Includes interactive adult &amp; child counters and 1-tap WhatsApp booking dispatch.</span>
+
+                      <div class="preset-tag-list" id="tourTypesSelector">
+                        <!-- Badges rendered dynamically by AdminTourTypes -->
+                        <button type="button" id="btnAddTourTypeChipBtn" class="vehicle-badge-add-btn" title="Add another tour package type">
+                          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                          <span>Add Tour Type</span>
+                        </button>
+                      </div>
+
+                      <!-- Expandable Add Tour Type Drawer -->
+                      <div id="addTourTypePanel" class="add-vehicle-panel" style="display: none;">
+                        <div class="add-vehicle-title">Add Tour Package Category</div>
+                        <div class="add-vehicle-form-row">
+                          <div class="form-group" style="flex: 2; min-width: 200px; margin-bottom: 0;">
+                            <label class="form-label" for="newTourTypeLabel" style="font-size: 0.73rem;">Category / Tour Name *</label>
+                            <input type="text" id="newTourTypeLabel" class="form-control" style="padding: 7px 10px; font-size: 0.82rem;" placeholder="e.g. Pilgrimage Tour, Wildlife Safari, Adventure Trek, Corporate Tour">
+                          </div>
+                          <div class="add-vehicle-buttons">
+                            <button type="button" id="btnConfirmAddTourType" class="btn btn-primary" style="padding: 7px 14px; font-size: 0.82rem;">
+                              <span>Add Category</span>
+                            </button>
+                            <button type="button" id="btnCancelAddTourType" class="btn btn-secondary" style="padding: 7px 12px; font-size: 0.82rem;">
+                              <span>Cancel</span>
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+
+                      <span class="form-hint" style="margin-top: 8px;">Select active categories or add custom ones. Passengers pick from these chips when booking.</span>
+                    </div>
+                  </div>
+
+                  <div class="form-row">
+                    <div class="form-group" style="flex: 1; min-width: 220px;">
+                      <label class="form-label" for="inputTravelDestLabel">Destination Field Label</label>
+                      <input type="text" id="inputTravelDestLabel" class="form-control" value="Destination / Places to Visit *" placeholder="e.g. Destination / Places to Visit *">
+                      <span class="form-hint">Label displayed above destination input.</span>
+                    </div>
+                    <div class="form-group" style="flex: 1; min-width: 220px;">
+                      <label class="form-label" for="inputTravelDestPlaceholder">Destination Input Placeholder</label>
+                      <input type="text" id="inputTravelDestPlaceholder" class="form-control" value="e.g. Goa, Manali, Kerala, Rajasthan, Udaipur" placeholder="e.g. Goa, Manali, Kerala, Rajasthan, Udaipur">
+                      <span class="form-hint">Hint placeholder text inside destination box.</span>
+                    </div>
+                  </div>
+
+                  <div class="form-row">
+                    <div class="form-group full-row">
+                      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                        <label class="form-label" style="margin-bottom: 0;">Popular Destinations (Quick Suggestions)</label>
+                        <button type="button" id="btnToggleAddDest" class="btn-link" style="font-size: 0.76rem; color: #1D4ED8; background: none; border: none; cursor: pointer; font-weight: 600;">+ Add Destination</button>
+                      </div>
+
+                      <div class="preset-tag-list" id="popularDestSelector">
+                        <!-- Badges rendered dynamically by AdminDestinations -->
+                        <button type="button" id="btnAddDestChipBtn" class="vehicle-badge-add-btn" title="Add another destination pill">
+                          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                          <span>Add Destination</span>
+                        </button>
+                      </div>
+
+                      <!-- Expandable Add Destination Drawer -->
+                      <div id="addDestPanel" class="add-vehicle-panel" style="display: none;">
+                        <div class="add-vehicle-title">Add Popular Destination Suggestion</div>
+                        <div class="add-vehicle-form-row">
+                          <div class="form-group" style="flex: 2; min-width: 170px; margin-bottom: 0;">
+                            <label class="form-label" for="newDestName" style="font-size: 0.73rem;">Destination Name *</label>
+                            <input type="text" id="newDestName" class="form-control" style="padding: 7px 10px; font-size: 0.82rem;" placeholder="e.g. Kashmir, Varanasi, Ayodhya, Ooty">
+                          </div>
+                          <div class="form-group" style="flex: 2; min-width: 170px; margin-bottom: 0;">
+                            <label class="form-label" for="newDestQuery" style="font-size: 0.73rem;">Autofill Value (Optional)</label>
+                            <input type="text" id="newDestQuery" class="form-control" style="padding: 7px 10px; font-size: 0.82rem;" placeholder="e.g. Kashmir Paradise (defaults to name)">
+                          </div>
+                          <div class="add-vehicle-buttons">
+                            <button type="button" id="btnConfirmAddDest" class="btn btn-primary" style="padding: 7px 14px; font-size: 0.82rem;">
+                              <span>Add Pill</span>
+                            </button>
+                            <button type="button" id="btnCancelAddDest" class="btn btn-secondary" style="padding: 7px 12px; font-size: 0.82rem;">
+                              <span>Cancel</span>
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+
+                      <span class="form-hint" style="margin-top: 8px;">Quick-tap destination pills displayed directly beneath the destination input.</span>
                     </div>
                   </div>
                 </div>
@@ -554,6 +640,7 @@
 
   <script defer src="js/admin-themes.js"></script>
   <script defer src="js/admin-fleet.js"></script>
+  <script defer src="js/admin-tours.js"></script>
   <script defer src="js/admin-widgets.js"></script>
   <script defer src="js/admin.js"></script>
 </body>

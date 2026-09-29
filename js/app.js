@@ -139,37 +139,110 @@
     }
 
     // 3. Document Head & Brand Information
-    const fullBrandName = cfg.brand?.name || 'Travel & Transport Service';
+    const fullBrandName = (cfg.brand?.name || '').trim();
     const tagWord = isTravel ? 'Tours & Travel' : 'Taxi Service';
-    if (DOM.pageTitle) DOM.pageTitle.textContent = `${fullBrandName} — ${tagWord}`;
+    if (DOM.pageTitle) DOM.pageTitle.textContent = fullBrandName ? `${fullBrandName} — ${tagWord}` : tagWord;
     if (DOM.metaDescription) {
-      DOM.metaDescription.setAttribute('content', cfg.brand?.tagline || `Book rides and travel with ${fullBrandName}`);
+      const metaTagline = (cfg.brand?.tagline || '').trim();
+      DOM.metaDescription.setAttribute('content', metaTagline || (fullBrandName ? `Book rides and travel with ${fullBrandName}` : ''));
     }
 
-    if (DOM.badgeText) DOM.badgeText.textContent = cfg.brand?.badge || (isTravel ? 'Verified Tour Specialist' : '24/7 Verified Taxi Partner');
-    if (DOM.brandName) DOM.brandName.textContent = fullBrandName;
-    if (DOM.brandTagline) DOM.brandTagline.textContent = cfg.brand?.tagline || '';
-    if (DOM.locationText) DOM.locationText.textContent = cfg.brand?.locationText || '';
+    // Badge Pill (hide if empty)
+    const badgeVal = (cfg.brand?.badge || '').trim();
+    const badgePill = document.querySelector('.brand-badge-pill');
+    if (DOM.badgeText) DOM.badgeText.textContent = badgeVal;
+    if (badgePill) {
+      badgePill.style.display = badgeVal ? 'inline-flex' : 'none';
+    }
+
+    // Brand Name (hide if empty)
+    if (DOM.brandName) {
+      DOM.brandName.textContent = fullBrandName;
+      DOM.brandName.style.display = fullBrandName ? '' : 'none';
+    }
+
+    // Brand Tagline (hide if empty)
+    const taglineVal = (cfg.brand?.tagline || '').trim();
+    if (DOM.brandTagline) {
+      DOM.brandTagline.textContent = taglineVal;
+      DOM.brandTagline.style.display = taglineVal ? '' : 'none';
+    }
+
+    // Location Badge (hide if empty)
+    const locVal = (cfg.brand?.locationText || '').trim();
+    const locBadge = document.getElementById('locationBadge') || document.querySelector('.location-badge');
+    if (DOM.locationText) DOM.locationText.textContent = locVal;
+    if (locBadge) {
+      locBadge.style.display = locVal ? 'inline-flex' : 'none';
+    }
+
+    const travelTitleElem = document.getElementById('travelSectionTitle');
+    if (travelTitleElem) {
+      const trTitle = (cfg.travelTitle || cfg.tourBookingTitle || '').trim();
+      if (trTitle) {
+        travelTitleElem.textContent = trTitle;
+        travelTitleElem.style.display = '';
+      } else {
+        travelTitleElem.style.display = 'none';
+      }
+    }
+    const travelSubtitleElem = document.getElementById('travelSectionSubtitle');
+    if (travelSubtitleElem) {
+      const trSub = (cfg.travelSubtitle || cfg.tourBookingSubtitle || '').trim();
+      if (trSub) {
+        travelSubtitleElem.textContent = trSub;
+        travelSubtitleElem.style.display = '';
+      } else {
+        travelSubtitleElem.style.display = 'none';
+      }
+    }
 
     // Brand Logo
     const defaultLogo = isTravel ? 'assets/logo-travel.svg' : 'assets/logo-taxi.svg';
     const logoUrl = cfg.brand?.logoUrl || defaultLogo;
     if (DOM.brandLogo) {
       DOM.brandLogo.src = logoUrl;
-      DOM.brandLogo.alt = `${fullBrandName} Logo`;
+      DOM.brandLogo.alt = fullBrandName ? `${fullBrandName} Logo` : 'Logo';
     }
     if (DOM.faviconLink) DOM.faviconLink.href = logoUrl;
     if (DOM.appleTouchIcon) DOM.appleTouchIcon.href = logoUrl;
 
     // 4. Primary Quick Action Buttons (Reused Universal Component)
-    if (DOM.callNowLink) DOM.callNowLink.href = `tel:${cfg.contact.primaryPhone}`;
-    if (DOM.whatsappChatLink) {
-      const chatGreeting = isTravel
-        ? `Hello ${cfg.brand.shortName || cfg.brand.name}, I would like to enquire about your tour packages and travel itineraries.`
-        : `Hello ${cfg.brand.shortName || cfg.brand.name}, I would like to book a taxi.`;
-      DOM.whatsappChatLink.href = `https://wa.me/${cfg.contact.whatsappPhone}?text=${encodeURIComponent(chatGreeting)}`;
+    const primaryPhone = (cfg.contact?.primaryPhone || '').trim();
+    const whatsappPhone = (cfg.contact?.whatsappPhone || '').trim();
+    const mapUrl = (cfg.contact?.googleMapsUrl || '').trim();
+
+    if (DOM.callNowLink) {
+      if (primaryPhone) {
+        DOM.callNowLink.href = `tel:${primaryPhone}`;
+        DOM.callNowLink.style.display = '';
+      } else {
+        DOM.callNowLink.href = 'javascript:void(0)';
+        DOM.callNowLink.style.display = 'none';
+      }
     }
-    if (DOM.locationMapLink) DOM.locationMapLink.href = cfg.contact.googleMapsUrl || '#';
+    if (DOM.whatsappChatLink) {
+      if (whatsappPhone) {
+        const brandGreetingName = cfg.brand?.shortName || fullBrandName;
+        const chatGreeting = isTravel
+          ? `Hello${brandGreetingName ? ' ' + brandGreetingName : ''}, I would like to enquire about your tour packages and travel itineraries.`
+          : `Hello${brandGreetingName ? ' ' + brandGreetingName : ''}, I would like to book a taxi.`;
+        DOM.whatsappChatLink.href = `https://wa.me/${whatsappPhone}?text=${encodeURIComponent(chatGreeting)}`;
+        DOM.whatsappChatLink.style.display = '';
+      } else {
+        DOM.whatsappChatLink.href = 'javascript:void(0)';
+        DOM.whatsappChatLink.style.display = 'none';
+      }
+    }
+    if (DOM.locationMapLink) {
+      if (mapUrl && mapUrl !== '#') {
+        DOM.locationMapLink.href = mapUrl;
+        DOM.locationMapLink.style.display = '';
+      } else {
+        DOM.locationMapLink.href = 'javascript:void(0)';
+        DOM.locationMapLink.style.display = 'none';
+      }
+    }
 
     // 5. Dynamic Section Orchestration & Widget Reordering
     const appMain = document.getElementById('appMain') || document.querySelector('main.app-container') || document.querySelector('.app-container');

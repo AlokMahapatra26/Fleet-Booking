@@ -64,6 +64,14 @@
     window.AdminFleet.init({ onSync: syncLivePreview });
   }
 
+  if (window.AdminTourTypes) {
+    window.AdminTourTypes.init({ onSync: syncLivePreview });
+  }
+
+  if (window.AdminDestinations) {
+    window.AdminDestinations.init({ onSync: syncLivePreview });
+  }
+
   if (window.AdminWidgets) {
     window.AdminWidgets.init({ onSync: syncLivePreview });
   }
@@ -175,6 +183,9 @@
 
   // Additional widget inputs
   const inputTravelTitle = document.getElementById('inputTravelTitle');
+  const inputTravelSubtitle = document.getElementById('inputTravelSubtitle');
+  const inputTravelDestLabel = document.getElementById('inputTravelDestLabel');
+  const inputTravelDestPlaceholder = document.getElementById('inputTravelDestPlaceholder');
   const inputGoogleReviewQuote = document.getElementById('inputGoogleReviewQuote');
   const inputPwaTitle = document.getElementById('inputPwaTitle');
   const inputPwaDesc = document.getElementById('inputPwaDesc');
@@ -186,6 +197,7 @@
     inputBusinessName, inputTagline, inputCity, inputBadge, inputPhone,
     inputWhatsapp, inputAltPhone, inputMaps, inputGoogleReview,
     inputGoogleReviewQuote, inputInstagram, inputWebsite, inputTravelTitle,
+    inputTravelSubtitle, inputTravelDestLabel, inputTravelDestPlaceholder,
     inputPwaTitle, inputPwaDesc
   ].forEach(elem => {
     if (elem) elem.addEventListener('input', syncLivePreview);
@@ -202,21 +214,15 @@
     const isTravelEnabled = sections.some(s => s.type === 'travel-booking' && s.enabled);
     const computedTemplate = (isTravelEnabled && !isTaxiEnabled) ? 'travel' : 'taxi';
 
-    const defaultName = (computedTemplate === 'travel') ? 'Wanderlust Travels' : 'My Taxi Service';
-    const name = inputBusinessName.value.trim() || defaultName;
-    const city = inputCity.value.trim() || 'Surat, Gujarat';
-    const phone = inputPhone.value.trim() || '+91 910 910 5155';
-    const cleanWhatsapp = (inputWhatsapp.value.trim() || '919109105155').replace(/[^0-9]/g, '');
+    const rawName = inputBusinessName.value.trim();
+    const city = inputCity.value.trim();
+    const cleanWhatsapp = inputWhatsapp.value.trim().replace(/[^0-9]/g, '');
+    const phone = inputPhone.value.trim() || (cleanWhatsapp ? `+${cleanWhatsapp}` : '');
     const theme = THEMES[currentThemeKey] || THEMES.taxi;
 
-    const defaultShortName = (computedTemplate === 'travel') ? (name.split(' ')[0] + ' Travels') : (name.split(' ')[0] + ' Taxi');
-    const defaultTagline = (computedTemplate === 'travel')
-      ? 'Curated holiday packages, custom tours & outstation travel.'
-      : 'Reliable rides for local, airport and outstation travel.';
-    const defaultBadge = (computedTemplate === 'travel')
-      ? 'Verified Tour & Travel Specialist'
-      : '24/7 Verified Taxi Partner';
-    const defaultVcardTitle = (computedTemplate === 'travel') ? 'Travel & Tour Agency' : 'Taxi Service';
+    const defaultShortName = rawName
+      ? (rawName.split(' ')[0] + (computedTemplate === 'travel' ? ' Travels' : ' Taxi'))
+      : '';
     const defaultLogo = (computedTemplate === 'travel') ? 'assets/logo-travel.svg' : theme.logo;
 
     const selectedVehicles = window.AdminFleet ? window.AdminFleet.getSelectedVehicles() : [];
@@ -251,11 +257,11 @@
       template: computedTemplate,
       sections: sections,
       brand: {
-        name: name,
+        name: rawName,
         shortName: defaultShortName,
-        tagline: inputTagline.value.trim() || defaultTagline,
+        tagline: inputTagline.value.trim(),
         locationText: city,
-        badge: inputBadge.value.trim() || defaultBadge,
+        badge: inputBadge.value.trim(),
         logoUrl: customLogoDataUrl || defaultLogo,
         theme: {
           primary: theme.primary,
@@ -271,12 +277,12 @@
         }
       },
       contact: {
-        primaryPhone: phone.replace(/\s+/g, ''),
+        primaryPhone: phone ? phone.replace(/\s+/g, '') : '',
         displayPhone: phone,
         whatsappPhone: cleanWhatsapp,
         secondaryPhone: inputAltPhone.value.trim() || '',
         secondaryDisplayPhone: inputAltPhone.value.trim() || '',
-        googleMapsUrl: inputMaps.value.trim() || 'https://maps.google.com'
+        googleMapsUrl: inputMaps.value.trim() || ''
       },
       rides: [
         { id: "local", label: "Local Taxi", default: true },
@@ -286,7 +292,7 @@
         { id: "roundtrip", label: "Round Trip" },
         { id: "hourly", label: "Hourly", hasHourlyPackages: true }
       ],
-      tourTypes: [
+      tourTypes: window.AdminTourTypes ? window.AdminTourTypes.getSelectedTourTypes() : [
         { id: "holiday", label: "Holiday Package", default: true },
         { id: "family", label: "Family Vacation" },
         { id: "weekend", label: "Weekend Getaway" },
@@ -302,10 +308,10 @@
       vehicles: selectedVehicles,
       socialLinks: socialLinks,
       vcard: {
-        fn: name,
-        org: name,
-        title: defaultVcardTitle,
-        note: `${name} in ${city}. Professional travel & transport bookings.`
+        fn: rawName,
+        org: rawName,
+        title: (computedTemplate === 'travel') ? 'Travel & Tour Agency' : 'Taxi Service',
+        note: rawName ? `${rawName}${city ? ' in ' + city : ''}. Professional travel & transport bookings.` : ''
       },
       agencyBranding: {
         showPoweredBy: true,
@@ -315,7 +321,18 @@
       pwa: {
         title: (inputPwaTitle && inputPwaTitle.value.trim()) || 'Install App for Fast Booking',
         desc: (inputPwaDesc && inputPwaDesc.value.trim()) || 'Add to your home screen for quick 1-tap bookings'
-      }
+      },
+      travelTitle: (inputTravelTitle && inputTravelTitle.value.trim()) || 'Plan & Book Your Tour',
+      travelSubtitle: (inputTravelSubtitle && inputTravelSubtitle.value.trim()) || 'Custom holiday packages, family trips & outstation travel with instant WhatsApp quotation.',
+      travelDestinationLabel: (inputTravelDestLabel && inputTravelDestLabel.value.trim()) || 'Destination / Places to Visit *',
+      travelDestinationPlaceholder: (inputTravelDestPlaceholder && inputTravelDestPlaceholder.value.trim()) || 'e.g. Goa, Manali, Kerala, Rajasthan, Udaipur',
+      popularDestinations: window.AdminDestinations ? window.AdminDestinations.getSelectedDestinations() : [
+        { id: "goa", name: "Goa", query: "Goa Beach Vacation" },
+        { id: "manali", name: "Manali", query: "Manali & Shimla Hills" },
+        { id: "kerala", name: "Kerala", query: "Kerala Backwaters" },
+        { id: "rajasthan", name: "Rajasthan", query: "Rajasthan Heritage Tour" },
+        { id: "udaipur", name: "Udaipur", query: "Udaipur & Mount Abu" }
+      ]
     };
   }
 
@@ -353,6 +370,12 @@
       if (!inputBusinessName.value.trim()) {
         alert('Please enter a Business Name');
         inputBusinessName.focus();
+        return;
+      }
+
+      if (!inputWhatsapp.value.trim()) {
+        alert('Please enter a WhatsApp Number (e.g. 919876543210) for customer bookings');
+        inputWhatsapp.focus();
         return;
       }
 
@@ -525,6 +548,14 @@
         window.AdminFleet.populateVehicles(data.vehicles);
       }
 
+      if (window.AdminTourTypes && data.tourTypes) {
+        window.AdminTourTypes.populateTourTypes(data.tourTypes);
+      }
+
+      if (window.AdminDestinations && data.popularDestinations) {
+        window.AdminDestinations.populateDestinations(data.popularDestinations);
+      }
+
       const reviewLink = (data.socialLinks || []).find(s => s.type === 'review')?.url || '';
       const instaLink = (data.socialLinks || []).find(s => s.type === 'instagram')?.url || '';
       const webLink = (data.socialLinks || []).find(s => s.type === 'website')?.url || '';
@@ -533,6 +564,10 @@
       inputWebsite.value = webLink;
       if (inputPwaTitle) inputPwaTitle.value = data.pwa?.title || 'Install App for Fast Booking';
       if (inputPwaDesc) inputPwaDesc.value = data.pwa?.desc || 'Add to your home screen for quick 1-tap bookings';
+      if (inputTravelTitle) inputTravelTitle.value = data.travelTitle || data.tourBookingTitle || 'Tour & Holiday Enquiry';
+      if (inputTravelSubtitle) inputTravelSubtitle.value = data.travelSubtitle || data.tourBookingSubtitle || 'Custom holiday packages, family trips & outstation travel with instant WhatsApp quotation.';
+      if (inputTravelDestLabel) inputTravelDestLabel.value = data.travelDestinationLabel || 'Destination / Places to Visit *';
+      if (inputTravelDestPlaceholder) inputTravelDestPlaceholder.value = data.travelDestinationPlaceholder || 'e.g. Goa, Manali, Kerala, Rajasthan, Udaipur';
 
       tabCreate.innerHTML = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:4px; vertical-align:-1px;"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/><path d="m15 5 4 4"/></svg><span>Edit: ${data.brand?.name || slug}</span>`;
       btnCancelEdit.style.display = 'inline-flex';
@@ -566,7 +601,18 @@
       window.AdminFleet.resetToDefault();
     }
 
+    if (window.AdminTourTypes) {
+      window.AdminTourTypes.resetToDefault();
+    }
+
+    if (window.AdminDestinations) {
+      window.AdminDestinations.resetToDefault();
+    }
+
     if (inputTravelTitle) inputTravelTitle.value = 'Tour & Holiday Enquiry';
+    if (inputTravelSubtitle) inputTravelSubtitle.value = 'Custom holiday packages, family trips & outstation travel with instant WhatsApp quotation.';
+    if (inputTravelDestLabel) inputTravelDestLabel.value = 'Destination / Places to Visit *';
+    if (inputTravelDestPlaceholder) inputTravelDestPlaceholder.value = 'e.g. Goa, Manali, Kerala, Rajasthan, Udaipur';
     if (inputGoogleReviewQuote) inputGoogleReviewQuote.value = '';
     if (inputPwaTitle) inputPwaTitle.value = 'Install App for Fast Booking';
     if (inputPwaDesc) inputPwaDesc.value = 'Add to your home screen for quick 1-tap bookings';

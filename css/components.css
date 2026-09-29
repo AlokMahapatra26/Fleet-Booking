@@ -264,6 +264,67 @@ select.form-control {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 10px;
+  min-width: 0;
+}
+
+.form-row > * {
+  min-width: 0;
+}
+
+.form-row .input-container {
+  min-width: 0;
+}
+
+.form-row .form-label {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 20px;
+  margin-bottom: 6px;
+}
+
+/* Compact date & time inputs without layout explosion */
+.form-row .form-control[type="date"],
+.form-row .form-control[type="time"] {
+  padding: 11px 6px 11px 32px;
+  font-size: 0.82rem;
+  letter-spacing: -0.01em;
+  min-width: 0;
+  max-width: 100%;
+}
+
+.form-row .input-container .input-icon {
+  left: 9px;
+  width: 15px;
+  height: 15px;
+}
+
+/* WebKit native calendar icon normalization */
+.form-control[type="date"]::-webkit-calendar-picker-indicator,
+.form-control[type="time"]::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+  margin: 0;
+  padding: 0;
+  width: 15px;
+  height: 15px;
+  opacity: 0.65;
+  transition: opacity 0.15s ease;
+}
+
+.form-control[type="date"]::-webkit-calendar-picker-indicator:hover,
+.form-control[type="time"]::-webkit-calendar-picker-indicator:hover {
+  opacity: 1;
+}
+
+.form-control[type="date"]::-webkit-datetime-edit {
+  padding: 0;
+}
+
+@media (max-width: 340px) {
+  .form-row {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
 }
 
 /* WhatsApp Dispatcher Button */

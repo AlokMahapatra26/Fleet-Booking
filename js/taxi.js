@@ -205,8 +205,19 @@
             `Please confirm driver availability and fare estimate.`
           );
 
+          const rawPhone = cfg.contact?.whatsappPhone || cfg.contact?.primaryPhone || '';
+          const cleanPhone = String(rawPhone).replace(/[^0-9]/g, '');
+          const isPreview = window.self !== window.top || document.body.classList.contains('is-iframe-preview');
+
+          if (!cleanPhone) {
+            showToast(isPreview 
+              ? '⚠️ Please enter a WhatsApp Number in Admin Settings to enable dispatch.' 
+              : 'WhatsApp contact phone number is not configured.');
+            return;
+          }
+
           const fullMessage = messageLines.join('\n');
-          const waUrl = `https://wa.me/${cfg.contact.whatsappPhone}?text=${encodeURIComponent(fullMessage)}`;
+          const waUrl = `https://wa.me/${cleanPhone}?text=${encodeURIComponent(fullMessage)}`;
           window.open(waUrl, '_blank', 'noopener,noreferrer');
         });
       }
