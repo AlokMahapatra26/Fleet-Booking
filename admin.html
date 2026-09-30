@@ -693,15 +693,30 @@
                 <!-- 7. PWA INSTALL WIDGET PANE -->
                 <div class="widget-form-pane" id="pane-pwa-install" data-widget-type="pwa-install">
                   <div class="form-row">
-                    <div class="form-group full-row">
+                    <div class="form-group">
                       <label class="form-label" for="inputPwaTitle">PWA Install Button Title</label>
-                      <input type="text" id="inputPwaTitle" class="form-control" value="Install App for Fast Booking" placeholder="Install App">
+                      <input type="text" id="inputPwaTitle" class="form-control" value="Install App for Fast Booking" placeholder="e.g. Install GoTravel App">
+                    </div>
+                    <div class="form-group">
+                      <label class="form-label" for="inputPwaBadge">Pill Badge (Optional)</label>
+                      <input type="text" id="inputPwaBadge" class="form-control" value="" placeholder="e.g. 1-Tap Access, Fast & Free">
                     </div>
                   </div>
                   <div class="form-row">
                     <div class="form-group full-row">
                       <label class="form-label" for="inputPwaDesc">PWA Description Subtext</label>
-                      <input type="text" id="inputPwaDesc" class="form-control" value="Add to your home screen for quick 1-tap bookings" placeholder="Subtext">
+                      <input type="text" id="inputPwaDesc" class="form-control" value="Add to your home screen for quick 1-tap bookings" placeholder="e.g. Add to home screen for 1-tap tour bookings">
+                    </div>
+                  </div>
+                  <div class="form-row">
+                    <div class="form-group full-row">
+                      <label class="form-label" for="selectPwaIconStyle">App Icon Style</label>
+                      <select id="selectPwaIconStyle" class="form-control">
+                        <option value="app-logo">App Brand Logo (Dynamic with Brand Logo)</option>
+                        <option value="template">Template Icon (Tour Airplane for Travel / Cab for Taxi)</option>
+                        <option value="download">Download Arrow Icon</option>
+                      </select>
+                      <span class="field-hint">Dynamically adapts to your active brand logo and template design.</span>
                     </div>
                   </div>
                 </div>

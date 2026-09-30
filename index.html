@@ -238,11 +238,25 @@
         <p class="section-subtitle" id="travelSectionSubtitle">Custom holiday packages, family trips &amp; outstation travel with instant WhatsApp quotation.</p>
       </div>
 
-      <!-- Tour Category Chips -->
-      <div class="tour-type-chips" id="tourTypesContainer"></div>
-
       <!-- Travel Booking Form -->
       <form id="travelBookingForm" onsubmit="return false;">
+        <!-- Tour Package / Trip Type Selection -->
+        <div class="form-group" id="tourTypeGroup">
+          <label class="form-label" for="tourTypeSelect">Tour Package / Trip Type *</label>
+          <div class="input-container">
+            <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
+            </svg>
+            <select id="tourTypeSelect" class="form-control" required>
+              <option value="Holiday Package" selected>Holiday Package</option>
+              <option value="Family Vacation">Family Vacation</option>
+              <option value="Weekend Getaway">Weekend Getaway</option>
+              <option value="Sightseeing Tour">Sightseeing Tour</option>
+              <option value="Custom Itinerary">Custom Itinerary</option>
+              <option value="Honeymoon Special">Honeymoon Special</option>
+            </select>
+          </div>
+        </div>
         <!-- Customer Name -->
         <div class="form-group">
           <label class="form-label" for="travelCustomerNameInput">Customer Name *</label>
@@ -279,23 +293,20 @@
 
         <!-- Destination / Places to Visit -->
         <div class="form-group">
-          <label class="form-label" for="travelDestinationInput" id="travelDestinationLabel">Destination / Places to Visit *</label>
+          <label class="form-label" for="travelDestinationSelect" id="travelDestinationLabel">Destination / Places to Visit *</label>
           <div class="input-container">
             <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"></polygon>
               <line x1="8" y1="2" x2="8" y2="18"></line>
               <line x1="16" y1="6" x2="16" y2="22"></line>
             </svg>
-            <input type="text" id="travelDestinationInput" class="form-control" placeholder="e.g. Goa, Manali, Kerala, Rajasthan, Udaipur" required>
-          </div>
-          <!-- Quick Popular Destination Pills -->
-          <div class="popular-dest-chips" id="popularDestChips">
-            <span class="dest-chip-label">Popular:</span>
-            <button type="button" class="dest-pill" data-dest="Goa Beach Vacation">Goa</button>
-            <button type="button" class="dest-pill" data-dest="Manali &amp; Shimla Hills">Manali</button>
-            <button type="button" class="dest-pill" data-dest="Kerala Backwaters">Kerala</button>
-            <button type="button" class="dest-pill" data-dest="Rajasthan Heritage Tour">Rajasthan</button>
-            <button type="button" class="dest-pill" data-dest="Udaipur &amp; Mount Abu">Udaipur</button>
+            <select id="travelDestinationSelect" class="form-control" required>
+              <option value="Goa Beach Vacation" selected>Goa Beach Vacation</option>
+              <option value="Manali & Shimla Hills">Manali &amp; Shimla Hills</option>
+              <option value="Kerala Backwaters">Kerala Backwaters</option>
+              <option value="Rajasthan Heritage Tour">Rajasthan Heritage Tour</option>
+              <option value="Udaipur & Mount Abu">Udaipur &amp; Mount Abu</option>
+            </select>
           </div>
         </div>
 
@@ -341,42 +352,45 @@
                 <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
                 <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
               </svg>
-              Number of Persons
+              Passengers
             </span>
-            <span class="passenger-summary-badge" id="passengerSummaryBadge">2 Adults (2 Persons)</span>
+            <span class="passenger-summary-badge" id="passengerSummaryBadge">2 Adults</span>
           </div>
 
-          <div class="steppers-grid">
+          <div class="steppers-list">
             <!-- Adults Counter -->
-            <div class="stepper-item">
+            <div class="stepper-row">
               <div class="stepper-meta">
                 <span class="stepper-label">Adults</span>
                 <span class="stepper-subtext">Age 12+ years</span>
               </div>
               <div class="stepper-controls">
                 <button type="button" class="stepper-btn" id="btnMinusAdult" aria-label="Decrease Adults">
-                  <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                  <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"></line></svg>
                 </button>
                 <span class="stepper-value" id="adultCountDisplay">2</span>
                 <button type="button" class="stepper-btn" id="btnPlusAdult" aria-label="Increase Adults">
-                  <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                  <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
                 </button>
               </div>
             </div>
 
+            <!-- Hairline Divider -->
+            <div class="stepper-divider"></div>
+
             <!-- Kids Counter -->
-            <div class="stepper-item">
+            <div class="stepper-row">
               <div class="stepper-meta">
                 <span class="stepper-label">Children / Kids</span>
                 <span class="stepper-subtext">Below 12 years</span>
               </div>
               <div class="stepper-controls">
                 <button type="button" class="stepper-btn" id="btnMinusKid" aria-label="Decrease Kids">
-                  <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                  <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"></line></svg>
                 </button>
                 <span class="stepper-value" id="kidCountDisplay">0</span>
                 <button type="button" class="stepper-btn" id="btnPlusKid" aria-label="Increase Kids">
-                  <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                  <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
                 </button>
               </div>
             </div>
@@ -502,21 +516,29 @@
 
     <!-- Install PWA Button Card -->
     <div class="pwa-install-wrapper" id="section-pwa-install" data-section-id="pwa-install">
-      <button class="install-app-card" id="installAppBtn" type="button">
-        <div class="install-icon-wrap">
-          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-            <polyline points="7 10 12 15 17 10"></polyline>
-            <line x1="12" y1="15" x2="12" y2="3"></line>
-          </svg>
+      <button class="install-app-card" id="installAppBtn" type="button" aria-label="Install App">
+        <div class="install-icon-wrap" id="pwaAppIconWrap">
+          <img id="pwaAppLogoImg" class="pwa-app-logo-img" src="" alt="App Icon" style="display:none;" />
+          <div id="pwaAppIconSvg" class="pwa-app-icon-svg">
+            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="7 10 12 15 17 10"></polyline>
+              <line x1="12" y1="15" x2="12" y2="3"></line>
+            </svg>
+          </div>
         </div>
         <div class="install-text">
-          <span class="title" id="installBtnTitle">Install App</span>
-          <span class="desc" id="installBtnDesc">Add to home screen for 1-tap bookings</span>
+          <div class="install-title-row">
+            <span class="title" id="installBtnTitle">Install App</span>
+            <span class="install-pill" id="installBtnPill" style="display:none;">1-Tap Access</span>
+          </div>
+          <span class="desc" id="installBtnDesc">Add to home screen for quick 1-tap bookings</span>
         </div>
-        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-          <polyline points="9 18 15 12 9 6"></polyline>
-        </svg>
+        <div class="install-action-icon">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="9 18 15 12 9 6"></polyline>
+          </svg>
+        </div>
       </button>
     </div>
 

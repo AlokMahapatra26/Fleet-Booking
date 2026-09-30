@@ -25,9 +25,11 @@
         travelSectionTitle: document.getElementById('travelSectionTitle'),
         travelSectionSubtitle: document.getElementById('travelSectionSubtitle'),
         travelDestinationLabel: document.getElementById('travelDestinationLabel'),
+        tourTypeSelect: document.getElementById('tourTypeSelect'),
         tourTypesContainer: document.getElementById('tourTypesContainer'),
         travelCustomerNameInput: document.getElementById('travelCustomerNameInput'),
         travelPickupInput: document.getElementById('travelPickupInput'),
+        travelDestinationSelect: document.getElementById('travelDestinationSelect'),
         travelDestinationInput: document.getElementById('travelDestinationInput'),
         travelUseGpsBtn: document.getElementById('travelUseGpsBtn'),
         travelGpsBtnText: document.getElementById('travelGpsBtnText'),
@@ -60,30 +62,41 @@
         DOM.travelDestinationInput.placeholder = cfg.travelDestinationPlaceholder;
       }
 
-      // 1. Render Tour Category Chips
+      // 1. Render Tour Category Dropdown Selection
       function renderTourTypes(tourTypes) {
-        if (!DOM.tourTypesContainer) return;
-        DOM.tourTypesContainer.innerHTML = '';
-        tourTypes.forEach((tour, index) => {
-          const btn = document.createElement('button');
-          btn.type = 'button';
-          btn.className = `chip-btn ${tour.default || index === 0 ? 'active' : ''}`;
-          btn.textContent = tour.label;
-          btn.dataset.id = tour.id;
-          btn.dataset.label = tour.label;
+        const selectElem = document.getElementById('tourTypeSelect');
+        const list = (Array.isArray(tourTypes) && tourTypes.length > 0) ? tourTypes : [
+          { id: "holiday", label: "Holiday Package", default: true },
+          { id: "family", label: "Family Vacation" },
+          { id: "weekend", label: "Weekend Getaway" },
+          { id: "sightseeing", label: "Sightseeing Tour" },
+          { id: "custom", label: "Custom Itinerary" },
+          { id: "honeymoon", label: "Honeymoon Special" }
+        ];
 
-          if (tour.default || index === 0) {
-            selectedTourType = tour.label;
-          }
-
-          btn.addEventListener('click', () => {
-            DOM.tourTypesContainer.querySelectorAll('.chip-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            selectedTourType = tour.label;
+        if (selectElem) {
+          DOM.tourTypeSelect = selectElem;
+          selectElem.innerHTML = '';
+          list.forEach((tour, index) => {
+            const opt = document.createElement('option');
+            opt.value = tour.label;
+            opt.textContent = tour.label;
+            if (tour.default || index === 0) {
+              opt.selected = true;
+              selectedTourType = tour.label;
+            }
+            selectElem.appendChild(opt);
           });
 
-          DOM.tourTypesContainer.appendChild(btn);
-        });
+          selectElem.onchange = () => {
+            selectedTourType = selectElem.value;
+          };
+        }
+
+        const chipsContainer = document.getElementById('tourTypesContainer');
+        if (chipsContainer) {
+          chipsContainer.style.display = 'none';
+        }
       }
 
       renderTourTypes(cfg.tourTypes || [
@@ -206,84 +219,38 @@
         });
       }
 
-      // 5. Popular Destination Quick Chips with Dynamic Rendering & Active State Highlight
+      // 5. Destination Dropdown Rendering
       function renderPopularDestinations(destinations) {
-        if (!DOM.popularDestChips) return;
-        DOM.popularDestChips.innerHTML = '';
+        const selectElem = document.getElementById('travelDestinationSelect') || DOM.travelDestinationSelect;
+        const chipsContainer = document.getElementById('popularDestChips') || DOM.popularDestChips;
+        if (chipsContainer) chipsContainer.style.display = 'none';
 
-        if (destinations !== undefined && Array.isArray(destinations) && destinations.length === 0) {
-          DOM.popularDestChips.style.display = 'none';
-          return;
-        }
+        if (!selectElem) return;
 
         const list = (Array.isArray(destinations) && destinations.length > 0)
-          ? destinations
+          ? destinations.filter(d => d.enabled !== false)
           : [
-            { id: "goa", name: "Goa", query: "Goa Beach Vacation" },
-            { id: "manali", name: "Manali", query: "Manali & Shimla Hills" },
-            { id: "kerala", name: "Kerala", query: "Kerala Backwaters" },
-            { id: "rajasthan", name: "Rajasthan", query: "Rajasthan Heritage Tour" },
-            { id: "udaipur", name: "Udaipur", query: "Udaipur & Mount Abu" }
+            { id: "goa", name: "Goa Beach Vacation" },
+            { id: "manali", name: "Manali & Shimla Hills" },
+            { id: "kerala", name: "Kerala Backwaters" },
+            { id: "rajasthan", name: "Rajasthan Heritage Tour" },
+            { id: "udaipur", name: "Udaipur & Mount Abu" }
           ];
 
-        const activeList = list.filter(d => d.enabled !== false);
-        if (activeList.length === 0) {
-          DOM.popularDestChips.style.display = 'none';
-          return;
-        }
-
-        DOM.popularDestChips.style.display = 'flex';
-        const label = document.createElement('span');
-        label.className = 'dest-chip-label';
-        label.textContent = 'Popular:';
-        DOM.popularDestChips.appendChild(label);
-
-        activeList.forEach(dest => {
-          const name = typeof dest === 'string' ? dest : (dest.name || dest.label || dest.query || dest.id);
-          const query = typeof dest === 'string' ? dest : (dest.query || dest.name || dest.label || name);
-
-          const btn = document.createElement('button');
-          btn.type = 'button';
-          btn.className = 'dest-pill';
-          btn.textContent = name;
-          btn.dataset.dest = query;
-
-          btn.addEventListener('click', () => {
-            DOM.popularDestChips.querySelectorAll('.dest-pill').forEach(p => p.classList.remove('active'));
-            btn.classList.add('active');
-            if (DOM.travelDestinationInput) {
-              DOM.travelDestinationInput.value = query;
-              DOM.travelDestinationInput.focus();
-              DOM.travelDestinationInput.dispatchEvent(new Event('input'));
-            }
-          });
-
-          DOM.popularDestChips.appendChild(btn);
-        });
-
-        if (DOM.travelDestinationInput && DOM.travelDestinationInput.value) {
-          const currentVal = DOM.travelDestinationInput.value.trim().toLowerCase();
-          DOM.popularDestChips.querySelectorAll('.dest-pill').forEach(p => {
-            const dest = (p.dataset.dest || p.textContent).trim().toLowerCase();
-            p.classList.toggle('active', !!currentVal && (dest === currentVal || dest.startsWith(currentVal)));
+        if (list.length > 0) {
+          selectElem.innerHTML = '';
+          list.forEach((dest, index) => {
+            const name = typeof dest === 'string' ? dest : (dest.query || dest.name || dest.label || dest.id);
+            const opt = document.createElement('option');
+            opt.value = name;
+            opt.textContent = name;
+            if (index === 0) opt.selected = true;
+            selectElem.appendChild(opt);
           });
         }
       }
 
       renderPopularDestinations(cfg.popularDestinations);
-
-      if (DOM.travelDestinationInput && !DOM.travelDestinationInput._destPillHandlerAttached) {
-        DOM.travelDestinationInput._destPillHandlerAttached = true;
-        DOM.travelDestinationInput.addEventListener('input', () => {
-          const currentVal = DOM.travelDestinationInput.value.trim().toLowerCase();
-          if (DOM.popularDestChips) {
-            DOM.popularDestChips.querySelectorAll('.dest-pill').forEach(p => {
-              const dest = (p.dataset.dest || p.textContent).trim().toLowerCase();
-              p.classList.toggle('active', !!currentVal && (dest === currentVal || dest.startsWith(currentVal)));
-            });
-          }
-        });
-      }
 
       // 6. Travel GPS Geolocation Handler
       if (DOM.travelUseGpsBtn && !DOM.travelUseGpsBtn._hasHandler) {
@@ -323,7 +290,8 @@
         DOM.travelWhatsAppBtn.addEventListener('click', () => {
           const customerName = DOM.travelCustomerNameInput.value.trim();
           const pickup = DOM.travelPickupInput.value.trim();
-          const destination = DOM.travelDestinationInput.value.trim();
+          const destElem = document.getElementById('travelDestinationSelect') || DOM.travelDestinationSelect || DOM.travelDestinationInput;
+          const destination = destElem ? destElem.value.trim() : '';
 
           if (!customerName) {
             DOM.travelCustomerNameInput.focus();
@@ -338,8 +306,8 @@
           }
 
           if (!destination) {
-            DOM.travelDestinationInput.focus();
-            showToast('Please enter the destination / places to visit.');
+            if (destElem) destElem.focus();
+            showToast('Please select a destination / places to visit.');
             return;
           }
 
@@ -396,7 +364,7 @@
             `👤 *Customer Name:* ${customerName}`,
             `📍 *Pickup City:* ${pickupValue}`,
             `🏁 *Destination:* ${destination}`,
-            `🏷️ *Trip Type:* ${selectedTourType || 'Holiday Package'}`,
+            `🏷️ *Trip Type:* ${(DOM.tourTypeSelect && DOM.tourTypeSelect.value) || selectedTourType || 'Holiday Package'}`,
             `📅 *Departure Date:* ${formattedDepDate}`,
             `🔄 *Return Date:* ${formattedRetDate}${durationText}`,
             `👥 *Travelers:* ${passengersText}`

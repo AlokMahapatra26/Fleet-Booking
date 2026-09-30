@@ -449,7 +449,7 @@
       this.selectWidget(selectedWidgetType);
       this.render();
       this.renderLibrary();
-      if (syncCallback) syncCallback();
+      if (syncCallback) syncCallback(presetKey);
     },
 
     render() {

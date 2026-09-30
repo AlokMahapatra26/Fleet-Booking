@@ -5,6 +5,19 @@
 
 (function () {
   window.ADMIN_THEMES = {
+    travel: {
+      primary: '#0284C7',
+      primaryHover: '#0369A1',
+      primaryContrast: '#FFFFFF',
+      background: '#F8FAFC',
+      cardBg: '#FFFFFF',
+      text: '#0F172A',
+      muted: '#64748B',
+      border: 'rgba(2, 132, 199, 0.15)',
+      accent: '#0EA5E9',
+      pattern: 'travel-gradient',
+      logo: 'assets/logo-travel.svg'
+    },
     taxi: {
       primary: '#FFD900',
       primaryHover: '#E6C200',

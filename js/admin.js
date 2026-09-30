@@ -79,8 +79,37 @@
     window.AdminDestinations.init({ onSync: syncLivePreview });
   }
 
+  function handleWidgetsSync(presetKey) {
+    if (presetKey === 'travel') {
+      currentThemeKey = 'travel';
+      if (!customLogoDataUrl && logoPreviewImg) {
+        logoPreviewImg.src = THEMES.travel?.logo || 'assets/logo-travel.svg';
+      }
+      if (inputPwaTitle && (!inputPwaTitle.value.trim() || inputPwaTitle.value === 'Install App for Fast Booking' || inputPwaTitle.value.includes('Taxi'))) {
+        const bName = inputBusinessName.value.trim();
+        inputPwaTitle.value = bName ? `Install ${bName.split(' ')[0]} Travel App` : 'Install Tour & Travel App';
+      }
+      if (inputPwaDesc && (!inputPwaDesc.value.trim() || inputPwaDesc.value === 'Add to your home screen for quick 1-tap bookings')) {
+        inputPwaDesc.value = 'Add to home screen for 1-tap tour bookings';
+      }
+    } else if (presetKey === 'taxi') {
+      currentThemeKey = 'taxi';
+      if (!customLogoDataUrl && logoPreviewImg) {
+        logoPreviewImg.src = THEMES.taxi?.logo || 'assets/logo-taxi.svg';
+      }
+      if (inputPwaTitle && (!inputPwaTitle.value.trim() || inputPwaTitle.value.includes('Travel'))) {
+        const bName = inputBusinessName.value.trim();
+        inputPwaTitle.value = bName ? `Install ${bName.split(' ')[0]} Taxi App` : 'Install Taxi App';
+      }
+      if (inputPwaDesc && (!inputPwaDesc.value.trim() || inputPwaDesc.value.includes('tour'))) {
+        inputPwaDesc.value = 'Add to your home screen for quick 1-tap bookings';
+      }
+    }
+    syncLivePreview();
+  }
+
   if (window.AdminWidgets) {
-    window.AdminWidgets.init({ onSync: syncLivePreview });
+    window.AdminWidgets.init({ onSync: handleWidgetsSync });
   }
 
   if (window.AdminGallery) {
@@ -94,7 +123,7 @@
   // --- Authentication ---
   function checkAuth() {
     const token = sessionStorage.getItem(AUTH_KEY);
-    if (token === MASTER_PASSWORD) {
+    if (token) {
       if (authOverlay) authOverlay.style.display = 'none';
       return true;
     } else {
@@ -108,8 +137,28 @@
     }
   }
 
-  function handleUnlock() {
+  async function handleUnlock() {
     const val = adminPasswordInput.value.trim();
+    if (!val) return;
+
+    try {
+      const res = await fetch('/api/verify-auth', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password: val })
+      });
+      const data = await res.json();
+      if (res.ok && data.success) {
+        sessionStorage.setItem(AUTH_KEY, data.token || val);
+        authErrorMsg.style.display = 'none';
+        authOverlay.style.display = 'none';
+        loadClientsList();
+        return;
+      }
+    } catch (e) {
+      console.warn('API verify fallback:', e);
+    }
+
     if (val === MASTER_PASSWORD) {
       sessionStorage.setItem(AUTH_KEY, MASTER_PASSWORD);
       authErrorMsg.style.display = 'none';
@@ -204,6 +253,8 @@
   const inputGoogleReviewQuote = document.getElementById('inputGoogleReviewQuote');
   const inputPwaTitle = document.getElementById('inputPwaTitle');
   const inputPwaDesc = document.getElementById('inputPwaDesc');
+  const inputPwaBadge = document.getElementById('inputPwaBadge');
+  const selectPwaIconStyle = document.getElementById('selectPwaIconStyle');
   const checkFooterAltPhone = document.getElementById('checkFooterAltPhone');
   const checkFooterAgency = document.getElementById('checkFooterAgency');
 
@@ -215,12 +266,12 @@
     inputFacebook, inputYoutube, inputLinkedin, inputTwitter,
     inputTripadvisor, inputTelegram, inputEmail,
     inputTravelTitle, inputTravelSubtitle, inputTravelDestLabel,
-    inputTravelDestPlaceholder, inputPwaTitle, inputPwaDesc
+    inputTravelDestPlaceholder, inputPwaTitle, inputPwaDesc, inputPwaBadge
   ].forEach(elem => {
     if (elem) elem.addEventListener('input', syncLivePreview);
   });
 
-  [checkFooterAltPhone, checkFooterAgency].forEach(elem => {
+  [checkFooterAltPhone, checkFooterAgency, selectPwaIconStyle].forEach(elem => {
     if (elem) elem.addEventListener('change', syncLivePreview);
   });
 
@@ -235,7 +286,14 @@
     const city = inputCity.value.trim();
     const cleanWhatsapp = inputWhatsapp.value.trim().replace(/[^0-9]/g, '');
     const phone = inputPhone.value.trim() || (cleanWhatsapp ? `+${cleanWhatsapp}` : '');
-    const theme = THEMES[currentThemeKey] || THEMES.taxi;
+
+    let effectiveThemeKey = currentThemeKey;
+    if (computedTemplate === 'travel' && (currentThemeKey === 'taxi' || !currentThemeKey)) {
+      effectiveThemeKey = 'travel';
+    } else if (computedTemplate === 'taxi' && currentThemeKey === 'travel') {
+      effectiveThemeKey = 'taxi';
+    }
+    const theme = THEMES[effectiveThemeKey] || (computedTemplate === 'travel' ? THEMES.travel : THEMES.taxi);
 
     const defaultShortName = rawName
       ? (rawName.split(' ')[0] + (computedTemplate === 'travel' ? ' Travels' : ' Taxi'))
@@ -393,8 +451,10 @@
         agencyLink: "https://davlabs.in"
       },
       pwa: {
-        title: (inputPwaTitle && inputPwaTitle.value.trim()) || 'Install App for Fast Booking',
-        desc: (inputPwaDesc && inputPwaDesc.value.trim()) || 'Add to your home screen for quick 1-tap bookings'
+        title: (inputPwaTitle && inputPwaTitle.value.trim()) || (computedTemplate === 'travel' ? `Install ${defaultShortName || 'Travel'} App` : `Install ${defaultShortName || 'Taxi'} App`),
+        desc: (inputPwaDesc && inputPwaDesc.value.trim()) || (computedTemplate === 'travel' ? 'Add to home screen for 1-tap tour bookings' : 'Add to home screen for quick 1-tap bookings'),
+        badge: (inputPwaBadge && inputPwaBadge.value.trim()) || '',
+        iconStyle: (selectPwaIconStyle && selectPwaIconStyle.value) || 'app-logo'
       },
       travelTitle: (inputTravelTitle && inputTravelTitle.value.trim()) || 'Plan & Book Your Tour',
       travelSubtitle: (inputTravelSubtitle && inputTravelSubtitle.value.trim()) || 'Custom holiday packages, family trips & outstation travel with instant WhatsApp quotation.',
@@ -676,8 +736,21 @@
       if (inputTripadvisor) inputTripadvisor.value = tripLink;
       if (inputTelegram) inputTelegram.value = tgLink;
       if (inputEmail) inputEmail.value = emailLink.replace(/^mailto:/i, '');
-      if (inputPwaTitle) inputPwaTitle.value = data.pwa?.title || 'Install App for Fast Booking';
-      if (inputPwaDesc) inputPwaDesc.value = data.pwa?.desc || 'Add to your home screen for quick 1-tap bookings';
+      const isClientTravel = data.template === 'travel' || (Array.isArray(data.sections) && data.sections.some(s => s.type === 'travel-booking' && s.enabled) && !data.sections.some(s => s.type === 'taxi-booking' && s.enabled));
+      
+      let pwaTitleVal = data.pwa?.title || '';
+      if (!pwaTitleVal || (isClientTravel && pwaTitleVal === 'Install App for Fast Booking')) {
+        pwaTitleVal = isClientTravel ? `Install ${data.brand?.shortName || data.brand?.name || 'Travel'} App` : (pwaTitleVal || 'Install App');
+      }
+      if (inputPwaTitle) inputPwaTitle.value = pwaTitleVal;
+
+      let pwaDescVal = data.pwa?.desc || '';
+      if (!pwaDescVal || (isClientTravel && pwaDescVal === 'Add to your home screen for quick 1-tap bookings')) {
+        pwaDescVal = isClientTravel ? 'Add to home screen for 1-tap tour bookings' : (pwaDescVal || 'Add to your home screen for quick 1-tap bookings');
+      }
+      if (inputPwaDesc) inputPwaDesc.value = pwaDescVal;
+      if (inputPwaBadge) inputPwaBadge.value = data.pwa?.badge || '';
+      if (selectPwaIconStyle) selectPwaIconStyle.value = data.pwa?.iconStyle || 'app-logo';
       if (inputTravelTitle) inputTravelTitle.value = data.travelTitle || data.tourBookingTitle || 'Tour & Holiday Enquiry';
       if (inputTravelSubtitle) inputTravelSubtitle.value = data.travelSubtitle || data.tourBookingSubtitle || 'Custom holiday packages, family trips & outstation travel with instant WhatsApp quotation.';
       if (inputTravelDestLabel) inputTravelDestLabel.value = data.travelDestinationLabel || 'Destination / Places to Visit *';
@@ -738,12 +811,14 @@
     if (inputGoogleReviewQuote) inputGoogleReviewQuote.value = '';
     if (inputPwaTitle) inputPwaTitle.value = 'Install App for Fast Booking';
     if (inputPwaDesc) inputPwaDesc.value = 'Add to your home screen for quick 1-tap bookings';
+    if (inputPwaBadge) inputPwaBadge.value = '';
+    if (selectPwaIconStyle) selectPwaIconStyle.value = 'app-logo';
     if (checkFooterAltPhone) checkFooterAltPhone.checked = true;
     if (checkFooterAgency) checkFooterAgency.checked = true;
 
     btnSaveClient.innerHTML = `
       <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
-      <span>Save & Generate Client JSON</span>
+      <span>Save & Publish Client Page</span>
     `;
     if (slugHint) slugHint.textContent = 'client-slug';
     if (previewIframe) previewIframe.src = 'index.html?preview=empty';
@@ -751,7 +826,7 @@
 
   // Delete Client
   async function deleteClient(slug, name) {
-    if (!confirm(`Are you sure you want to delete "${name}" (${slug})? This will delete configs/${slug}.json.`)) {
+    if (!confirm(`Are you sure you want to delete "${name}" (${slug})? This will permanently delete this client from the database.`)) {
       return;
     }
 
