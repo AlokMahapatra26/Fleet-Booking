@@ -38,6 +38,30 @@ function isAuthorized(req) {
   return token === ADMIN_PASSWORD || token === 'davlabs@123';
 }
 
+// Live Reload SSE Clients & File Watcher for Instant Dev Feedback
+const liveReloadClients = [];
+let reloadDebounce = null;
+function notifyLiveReload() {
+  clearTimeout(reloadDebounce);
+  reloadDebounce = setTimeout(() => {
+    liveReloadClients.forEach(client => {
+      try { client.write('data: reload\n\n'); } catch {}
+    });
+  }, 120);
+}
+
+try {
+  fs.watch(ROOT_DIR, { recursive: true }, (eventType, filename) => {
+    if (!filename) return;
+    if (filename.includes('node_modules') || filename.includes('.git') || filename.includes('.gemini') || filename.includes('configs/')) return;
+    if (filename.endsWith('.css') || filename.endsWith('.js') || filename.endsWith('.html') || filename.endsWith('.json')) {
+      notifyLiveReload();
+    }
+  });
+} catch (e) {
+  console.warn('Live reload watcher note:', e.message);
+}
+
 const server = http.createServer(async (req, res) => {
   const parsedUrl = url.parse(req.url, true);
   const pathname = parsedUrl.pathname;
@@ -50,6 +74,22 @@ const server = http.createServer(async (req, res) => {
   if (req.method === 'OPTIONS') {
     res.writeHead(204);
     res.end();
+    return;
+  }
+
+  // --- Live Reload SSE Endpoint ---
+  if (pathname === '/__livereload') {
+    res.writeHead(200, {
+      'Content-Type': 'text/event-stream',
+      'Cache-Control': 'no-cache',
+      'Connection': 'keep-alive'
+    });
+    res.write('data: connected\n\n');
+    liveReloadClients.push(res);
+    req.on('close', () => {
+      const idx = liveReloadClients.indexOf(res);
+      if (idx !== -1) liveReloadClients.splice(idx, 1);
+    });
     return;
   }
 
@@ -238,7 +278,39 @@ const server = http.createServer(async (req, res) => {
     const ext = path.extname(filePath).toLowerCase();
     const contentType = MIME_TYPES[ext] || 'application/octet-stream';
 
-    res.writeHead(200, { 'Content-Type': contentType });
+    // Inject live-reload client script into HTML responses on localhost
+    if (ext === '.html') {
+      let htmlStr = data.toString('utf8');
+      const lrSnippet = `
+<script id="__lrScript">
+(() => {
+  if (location.hostname === 'localhost' || location.hostname === '127.0.0.1') {
+    try {
+      const es = new EventSource('/__livereload');
+      es.onmessage = (e) => {
+        if (e.data === 'reload') {
+          console.log('[LiveReload] File modified, auto-refreshing...');
+          location.reload();
+        }
+      };
+    } catch {}
+  }
+})();
+</script>`;
+      if (htmlStr.includes('</body>')) {
+        htmlStr = htmlStr.replace('</body>', `${lrSnippet}\n</body>`);
+      } else {
+        htmlStr += lrSnippet;
+      }
+      data = Buffer.from(htmlStr, 'utf8');
+    }
+
+    res.writeHead(200, {
+      'Content-Type': contentType,
+      'Cache-Control': 'no-cache, no-store, must-revalidate',
+      'Pragma': 'no-cache',
+      'Expires': '0'
+    });
     res.end(data);
   });
 });

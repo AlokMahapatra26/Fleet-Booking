@@ -8,6 +8,9 @@
     "locationText": "Vapi, Gujarat",
     "badge": "Verified Digital Solutions Partner",
     "logoUrl": "assets/logo-taxi.svg",
+    "logoShape": "circle",
+    "logoRadius": "50%",
+    "logoGlow": true,
     "theme": {
       "primary": "#FFD900",
       "primaryHover": "#E6C200",

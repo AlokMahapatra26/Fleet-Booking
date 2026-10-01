@@ -209,19 +209,72 @@
                 <div class="widget-form-pane" id="pane-hero-header" data-widget-type="hero-header">
                   <!-- Logo Upload Card -->
                   <div class="logo-uploader-card">
-                    <div class="logo-avatar-wrap">
-                      <img id="logoPreviewImg" src="assets/logo-taxi.svg" alt="Company Logo Preview">
+                    <div class="logo-uploader-top">
+                      <div class="logo-avatar-wrap" id="logoAvatarWrap">
+                        <img id="logoPreviewImg" src="assets/logo-taxi.svg" alt="Company Logo Preview">
+                      </div>
+                      <div class="logo-meta">
+                        <div class="logo-label">Business Logo</div>
+                        <div class="logo-subtext">Upload PNG, JPG, SVG, or WEBP (Square recommended)</div>
+                        <div class="logo-btn-row">
+                          <label for="inputLogoFile" class="btn btn-secondary btn-sm">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+                            <span>Upload Logo</span>
+                          </label>
+                          <input type="file" id="inputLogoFile" accept="image/*" style="display:none;">
+                          <button type="button" id="btnResetLogo" class="btn-text-muted" style="display:none;">Remove Custom Logo</button>
+                        </div>
+                      </div>
                     </div>
-                    <div class="logo-meta">
-                      <div class="logo-label">Business Logo</div>
-                      <div class="logo-subtext">Upload PNG, JPG, SVG, or WEBP (Square recommended)</div>
-                      <div class="logo-btn-row">
-                        <label for="inputLogoFile" class="btn btn-secondary btn-sm">
-                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
-                          <span>Upload Logo</span>
+
+                    <!-- Shape & Radius Controls -->
+                    <div class="logo-shape-controls">
+                      <div class="logo-shape-row">
+                        <span class="logo-shape-label">
+                          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path></svg>
+                          <span>Shape Preset</span>
+                        </span>
+                        <div class="logo-shape-pill-group" role="radiogroup" aria-label="Logo Shape Presets">
+                          <button type="button" class="btn-shape-pill" data-shape="square" data-radius="0" title="Square (0% radius)">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="3" width="18" height="18" rx="0"></rect></svg>
+                            <span>Square</span>
+                          </button>
+                          <button type="button" class="btn-shape-pill" data-shape="rounded" data-radius="18" title="Rounded / Smooth (18% radius)">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="3" width="18" height="18" rx="5"></rect></svg>
+                            <span>Rounded</span>
+                          </button>
+                          <button type="button" class="btn-shape-pill active" data-shape="circle" data-radius="50" title="Circle (50% radius)">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="9"></circle></svg>
+                            <span>Circle</span>
+                          </button>
+                        </div>
+                      </div>
+
+                      <div class="logo-radius-row">
+                        <div class="logo-radius-header">
+                          <label for="inputLogoRadius" class="logo-shape-label">
+                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M12 2a10 10 0 0 1 10 10"></path></svg>
+                            <span>Border Radius</span>
+                          </label>
+                          <span class="logo-radius-badge" id="logoRadiusBadge">50%</span>
+                        </div>
+                        <div class="logo-slider-track-wrap">
+                          <span class="slider-bound-label">0%</span>
+                          <input type="range" id="inputLogoRadius" min="0" max="50" value="50" step="1" class="logo-radius-range" aria-label="Logo border radius slider">
+                          <span class="slider-bound-label">50%</span>
+                        </div>
+                      </div>
+
+                      <div class="logo-glow-row">
+                        <span class="logo-shape-label">
+                          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"></path></svg>
+                          <span>Animated Glow Halo</span>
+                        </span>
+                        <label class="glow-switch-wrap">
+                          <input type="checkbox" id="checkLogoGlow" checked>
+                          <span class="glow-slider-pill"></span>
+                          <span class="glow-label-text" id="logoGlowStateText">Enabled</span>
                         </label>
-                        <input type="file" id="inputLogoFile" accept="image/*" style="display:none;">
-                        <button type="button" id="btnResetLogo" class="btn-text-muted" style="display:none;">Remove Custom Logo</button>
                       </div>
                     </div>
                   </div>
@@ -808,7 +861,7 @@
           <span class="camera-lens"></span>
           <span class="speaker-sensor"></span>
         </div>
-        <iframe id="previewIframe" class="phone-screen" src="index.html?preview=empty"></iframe>
+        <iframe id="previewIframe" class="phone-screen" src="index.html?preview=empty&_t=1"></iframe>
         <!-- iOS Home Indicator -->
         <div class="home-indicator"></div>
       </div>

@@ -51,7 +51,14 @@
   const inputLogoFile = document.getElementById('inputLogoFile');
   const logoPreviewImg = document.getElementById('logoPreviewImg');
   const btnResetLogo = document.getElementById('btnResetLogo');
+  const logoAvatarWrap = document.getElementById('logoAvatarWrap');
+  const inputLogoRadius = document.getElementById('inputLogoRadius');
+  const logoRadiusBadge = document.getElementById('logoRadiusBadge');
+  const checkLogoGlow = document.getElementById('checkLogoGlow');
+  const logoGlowStateText = document.getElementById('logoGlowStateText');
   let customLogoDataUrl = null;
+  let currentLogoRadius = 50;
+  let currentLogoShape = 'circle';
 
   // Admin Lock & Password State
   const authOverlay = document.getElementById('authOverlay');
@@ -229,6 +236,92 @@
     });
   }
 
+  // --- Logo Shape & Border Radius Slider ---
+  function applyRadiusToIframeDirectly(radiusPercent) {
+    if (!previewIframe) return;
+    try {
+      const iDoc = previewIframe.contentDocument || (previewIframe.contentWindow && previewIframe.contentWindow.document);
+      if (iDoc) {
+        const radiusVal = `${radiusPercent}%`;
+        iDoc.documentElement.style.setProperty('--theme-logo-radius', radiusVal);
+        const bLogo = iDoc.getElementById('brandLogo');
+        if (bLogo) bLogo.style.borderRadius = radiusVal;
+        const lRing = iDoc.getElementById('logoRing') || iDoc.querySelector('.logo-ring');
+        if (lRing) {
+          const isGlow = checkLogoGlow ? checkLogoGlow.checked : true;
+          lRing.style.display = isGlow ? '' : 'none';
+          lRing.style.borderRadius = radiusVal;
+          if (radiusPercent < 45) {
+            lRing.classList.add('is-non-circular');
+          } else {
+            lRing.classList.remove('is-non-circular');
+          }
+        }
+      }
+    } catch (e) {
+      // Handled via IPC fallback
+    }
+  }
+
+  function updateLogoRadiusUI(val, explicitShape = null) {
+    const num = Math.max(0, Math.min(50, parseInt(val, 10) || 0));
+    currentLogoRadius = num;
+
+    if (inputLogoRadius) inputLogoRadius.value = num;
+    if (logoRadiusBadge) logoRadiusBadge.textContent = `${num}%`;
+    if (logoAvatarWrap) logoAvatarWrap.style.borderRadius = `${num}%`;
+
+    let shape = explicitShape;
+    if (!shape) {
+      if (num === 0) shape = 'square';
+      else if (num === 50) shape = 'circle';
+      else if (num >= 15 && num <= 22) shape = 'rounded';
+      else shape = 'custom';
+    }
+    currentLogoShape = shape;
+
+    document.querySelectorAll('.btn-shape-pill').forEach(btn => {
+      if (btn.dataset.shape === shape) {
+        btn.classList.add('active');
+      } else {
+        btn.classList.remove('active');
+      }
+    });
+
+    // Instant real-time preview DOM reflection
+    applyRadiusToIframeDirectly(num);
+  }
+
+  function setLogoRadius(val, shape = null) {
+    updateLogoRadiusUI(val, shape);
+    syncLivePreview();
+  }
+
+  document.querySelectorAll('.btn-shape-pill').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const radius = parseInt(btn.dataset.radius, 10);
+      const shape = btn.dataset.shape;
+      setLogoRadius(radius, shape);
+    });
+  });
+
+  if (inputLogoRadius) {
+    inputLogoRadius.addEventListener('input', (e) => {
+      const val = parseInt(e.target.value, 10);
+      updateLogoRadiusUI(val);
+      syncLivePreview();
+    });
+  }
+
+  if (checkLogoGlow) {
+    checkLogoGlow.addEventListener('change', () => {
+      const isGlow = checkLogoGlow.checked;
+      if (logoGlowStateText) logoGlowStateText.textContent = isGlow ? 'Enabled' : 'Disabled';
+      applyRadiusToIframeDirectly(currentLogoRadius);
+      syncLivePreview();
+    });
+  }
+
   // Auto Slug Generator
   if (inputBusinessName && inputSlug) {
     inputBusinessName.addEventListener('input', () => {
@@ -258,22 +351,19 @@
   const checkFooterAltPhone = document.getElementById('checkFooterAltPhone');
   const checkFooterAgency = document.getElementById('checkFooterAgency');
 
-  // Form inputs triggering live preview
-  [
-    inputBusinessName, inputTagline, inputCity, inputBadge, inputPhone,
-    inputWhatsapp, inputAltPhone, inputMaps, inputGoogleReview,
-    inputGoogleReviewQuote, inputInstagram, inputWebsite,
-    inputFacebook, inputYoutube, inputLinkedin, inputTwitter,
-    inputTripadvisor, inputTelegram, inputEmail,
-    inputTravelTitle, inputTravelSubtitle, inputTravelDestLabel,
-    inputTravelDestPlaceholder, inputPwaTitle, inputPwaDesc, inputPwaBadge
-  ].forEach(elem => {
-    if (elem) elem.addEventListener('input', syncLivePreview);
-  });
-
-  [checkFooterAltPhone, checkFooterAgency, selectPwaIconStyle].forEach(elem => {
-    if (elem) elem.addEventListener('change', syncLivePreview);
-  });
+  // Universal Form Auto-Sync via Event Delegation
+  if (clientForm) {
+    clientForm.addEventListener('input', (e) => {
+      if (e.target && !e.target.dataset.noSync) {
+        syncLivePreview();
+      }
+    });
+    clientForm.addEventListener('change', (e) => {
+      if (e.target && !e.target.dataset.noSync) {
+        syncLivePreview();
+      }
+    });
+  }
 
   // Build Config Data Object
   function buildConfigObject() {
@@ -395,6 +485,9 @@
         locationText: city,
         badge: inputBadge.value.trim(),
         logoUrl: customLogoDataUrl || defaultLogo,
+        logoRadius: `${currentLogoRadius}%`,
+        logoShape: currentLogoShape,
+        logoGlow: checkLogoGlow ? checkLogoGlow.checked : true,
         theme: {
           primary: theme.primary,
           primaryHover: theme.primaryHover,
@@ -482,8 +575,8 @@
 
   // Live preview synchronization
   function syncLivePreview() {
-    const configObj = buildConfigObject();
     try {
+      const configObj = buildConfigObject();
       if (previewIframe && previewIframe.contentWindow) {
         if (typeof previewIframe.contentWindow.applyConfigPreview === 'function') {
           previewIframe.contentWindow.applyConfigPreview(configObj);
@@ -493,6 +586,7 @@
     } catch (err) {
       console.warn('Live preview sync warning:', err);
     }
+    applyRadiusToIframeDirectly(currentLogoRadius);
   }
 
   if (previewIframe) {
@@ -695,6 +789,28 @@
         }
       }
 
+      // Logo Shape & Radius
+      if (data.brand?.logoRadius !== undefined || data.brand?.logoShape) {
+        let r = 50;
+        let s = data.brand?.logoShape || 'circle';
+        if (data.brand?.logoRadius !== undefined) {
+          r = parseInt(data.brand.logoRadius, 10);
+          if (isNaN(r)) r = 50;
+        } else if (s === 'square') {
+          r = 0;
+        } else if (s === 'rounded') {
+          r = 18;
+        }
+        updateLogoRadiusUI(r, s);
+      } else {
+        updateLogoRadiusUI(50, 'circle');
+      }
+
+      if (checkLogoGlow) {
+        checkLogoGlow.checked = data.brand?.logoGlow !== false;
+        if (logoGlowStateText) logoGlowStateText.textContent = checkLogoGlow.checked ? 'Enabled' : 'Disabled';
+      }
+
       if (window.AdminFleet) {
         window.AdminFleet.populateVehicles(data.vehicles);
       }
@@ -779,6 +895,11 @@
     currentThemeKey = 'taxi';
     logoPreviewImg.src = THEMES.taxi?.logo || 'assets/logo-taxi.svg';
     btnResetLogo.style.display = 'none';
+    updateLogoRadiusUI(50, 'circle');
+    if (checkLogoGlow) {
+      checkLogoGlow.checked = true;
+      if (logoGlowStateText) logoGlowStateText.textContent = 'Enabled';
+    }
 
     if (window.AdminWidgets) {
       window.AdminWidgets.clearAll();
@@ -897,7 +1018,15 @@
 
   if (btnReloadPreview) {
     btnReloadPreview.addEventListener('click', () => {
-      if (previewIframe) previewIframe.src = previewIframe.src;
+      if (previewIframe) {
+        try {
+          const u = new URL(previewIframe.src, window.location.href);
+          u.searchParams.set('_t', Date.now());
+          previewIframe.src = u.toString();
+        } catch {
+          previewIframe.src = previewIframe.src;
+        }
+      }
     });
   }
 

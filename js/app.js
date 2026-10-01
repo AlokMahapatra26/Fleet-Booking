@@ -20,6 +20,7 @@
     appleTouchIcon: document.getElementById('appleTouchIcon'),
     badgeText: document.getElementById('badgeText'),
     brandLogo: document.getElementById('brandLogo'),
+    logoRing: document.getElementById('logoRing'),
     brandName: document.getElementById('brandName'),
     brandTagline: document.getElementById('brandTagline'),
     locationText: document.getElementById('locationText'),
@@ -210,6 +211,48 @@
     }
     if (DOM.faviconLink) DOM.faviconLink.href = logoUrl;
     if (DOM.appleTouchIcon) DOM.appleTouchIcon.href = logoUrl;
+
+    // Logo Border Radius & Shape
+    const rawRadius = cfg.brand?.logoRadius;
+    const rawShape = cfg.brand?.logoShape;
+    let effectiveRadius = '50%';
+    let isNonCircular = false;
+
+    if (rawRadius !== undefined && rawRadius !== null && rawRadius !== '') {
+      effectiveRadius = typeof rawRadius === 'number' ? `${rawRadius}%` : String(rawRadius).trim();
+      if (!effectiveRadius.endsWith('%') && !effectiveRadius.endsWith('px')) {
+        effectiveRadius = `${effectiveRadius}%`;
+      }
+      const numVal = parseFloat(effectiveRadius);
+      isNonCircular = !isNaN(numVal) && numVal < 45;
+    } else if (rawShape) {
+      if (rawShape === 'square') {
+        effectiveRadius = '0%';
+        isNonCircular = true;
+      } else if (rawShape === 'rounded') {
+        effectiveRadius = '18%';
+        isNonCircular = true;
+      } else {
+        effectiveRadius = '50%';
+        isNonCircular = false;
+      }
+    }
+
+    root.style.setProperty('--theme-logo-radius', effectiveRadius);
+    if (DOM.brandLogo) {
+      DOM.brandLogo.style.borderRadius = effectiveRadius;
+    }
+    const showGlow = cfg.brand?.logoGlow !== false;
+    const ringElem = DOM.logoRing || document.getElementById('logoRing') || document.querySelector('.logo-ring');
+    if (ringElem) {
+      ringElem.style.display = showGlow ? '' : 'none';
+      ringElem.style.borderRadius = effectiveRadius;
+      if (isNonCircular) {
+        ringElem.classList.add('is-non-circular');
+      } else {
+        ringElem.classList.remove('is-non-circular');
+      }
+    }
 
     // 4. Primary Quick Action Buttons (Reused Universal Component)
     const primaryPhone = (cfg.contact?.primaryPhone || '').trim();
@@ -908,14 +951,22 @@
   }
 
   /**
-   * Register Service Worker
+   * Service Worker: Only register on production domains, unregister completely on localhost/dev
    */
+  const isDevHost = location.hostname === 'localhost' || location.hostname === '127.0.0.1';
+  const isPreviewContext = window.self !== window.top || window.location.search.includes('preview=');
   if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-      navigator.serviceWorker.register('./service-worker.js', { scope: './' })
-        .then(reg => console.log('Service Worker registered with scope:', reg.scope))
-        .catch(err => console.warn('Service Worker registration failed:', err));
-    });
+    if (isDevHost || isPreviewContext) {
+      navigator.serviceWorker.getRegistrations().then(registrations => {
+        registrations.forEach(r => r.unregister());
+      }).catch(() => {});
+    } else {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./service-worker.js', { scope: './' })
+          .then(reg => console.log('Service Worker registered with scope:', reg.scope))
+          .catch(err => console.warn('Service Worker registration failed:', err));
+      });
+    }
   }
 
   // If embedded inside an iframe (like Admin preview), mark body class

@@ -23,11 +23,21 @@
 .logo-ring {
   position: absolute;
   inset: -6px;
-  border-radius: 50%;
+  border-radius: var(--theme-logo-radius, 50%);
   background: conic-gradient(from 180deg at 50% 50%, var(--theme-primary) 0deg, var(--theme-accent) 180deg, var(--theme-primary) 360deg);
   opacity: 0.85;
   filter: blur(1px);
   animation: rotateRing 14s linear infinite;
+  transition: border-radius 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.logo-ring.is-non-circular {
+  animation: pulseNonCircularRing 3.5s ease-in-out infinite alternate;
+}
+
+@keyframes pulseNonCircularRing {
+  0% { opacity: 0.65; transform: scale(0.99); }
+  100% { opacity: 0.92; transform: scale(1.02); }
 }
 
 @keyframes rotateRing {
@@ -39,11 +49,12 @@
   position: relative;
   width: 100%;
   height: 100%;
-  border-radius: 50%;
+  border-radius: var(--theme-logo-radius, 50%);
   background: var(--theme-card-bg);
   object-fit: cover;
   border: 4px solid var(--theme-card-bg);
   box-shadow: 0 12px 28px rgba(0, 0, 0, 0.14);
+  transition: border-radius 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .brand-title {

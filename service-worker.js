@@ -1,4 +1,4 @@
-const CACHE_NAME = 'travel-pwa-v7';
+const CACHE_NAME = 'travel-pwa-v8';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
@@ -46,6 +46,12 @@ self.addEventListener('activate', (event) => {
 
 self.addEventListener('fetch', (event) => {
   if (event.request.method !== 'GET') return;
+
+  const reqUrl = event.request.url;
+  // Never intercept preview frames, admin routes, or local development traffic
+  if (reqUrl.includes('localhost') || reqUrl.includes('127.0.0.1') || reqUrl.includes('preview=') || reqUrl.includes('admin') || reqUrl.includes('/api/')) {
+    return;
+  }
   
   event.respondWith(
     caches.match(event.request).then((cachedResponse) => {
