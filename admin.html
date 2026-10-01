@@ -129,8 +129,19 @@
       <section class="editor-card">
         <div class="editor-tabs-bar">
           <div class="nav-tabs">
-            <button type="button" class="tab-link active" id="tabCreate">Create New Client</button>
-            <button type="button" class="tab-link" id="tabList">Saved Clients (<span id="clientsCount">0</span>)</button>
+            <button type="button" class="tab-link active" id="tabCreate">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" style="vertical-align:-1.5px; margin-right:4px;"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+              <span>Create New Client</span>
+            </button>
+            <button type="button" class="tab-link" id="tabTheme">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" style="vertical-align:-1.5px; margin-right:4px;"><circle cx="13.5" cy="6.5" r=".5" fill="currentColor"/><circle cx="17.5" cy="10.5" r=".5" fill="currentColor"/><circle cx="8.5" cy="7.5" r=".5" fill="currentColor"/><circle cx="6.5" cy="12.5" r=".5" fill="currentColor"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"/></svg>
+              <span>Theme &amp; Colors</span>
+            </button>
+            <button type="button" class="tab-link" id="tabList">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" style="vertical-align:-1.5px; margin-right:4px;"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+              <span>Saved Clients</span>
+              <span class="clients-badge-pill" id="clientsCount">0</span>
+            </button>
           </div>
           <button type="button" id="btnCancelEdit" class="btn btn-secondary btn-sm" style="display:none;">+ New Client</button>
         </div>
@@ -412,6 +423,211 @@
                       </div>
                     </div>
                   </div>
+                </div>
+
+                <!-- HERO IMAGE SLIDER WIDGET PANE (Configurable A to Z) -->
+                <div class="widget-form-pane" id="pane-hero-slider" data-widget-type="hero-slider">
+                  
+                  <!-- Section Headline / Subtitle (Optional) -->
+                  <div class="form-row">
+                    <div class="form-group half-col">
+                      <label class="form-label" for="inputSliderTitle">Section Title (Optional)</label>
+                      <input type="text" id="inputSliderTitle" class="form-control" placeholder="e.g. Featured Highlights, Top Tours">
+                      <span class="form-hint">Leave blank to show slider as full hero.</span>
+                    </div>
+                    <div class="form-group half-col">
+                      <label class="form-label" for="inputSliderSubtitle">Section Subtitle (Optional)</label>
+                      <input type="text" id="inputSliderSubtitle" class="form-control" placeholder="e.g. Best experiences tailored for you">
+                      <span class="form-hint">Secondary helper caption.</span>
+                    </div>
+                  </div>
+
+                  <!-- A to Z Slider Visual Settings Card -->
+                  <div class="slider-settings-card">
+                    <div class="slider-settings-header">
+                      <span class="slider-settings-title">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+                        <span>Slider Engine &amp; Display Controls</span>
+                      </span>
+                    </div>
+
+                    <div class="slider-settings-grid">
+                      <!-- AutoPlay & Speed -->
+                      <div class="slider-setting-item">
+                        <label class="form-label" style="margin-bottom:6px;">Auto Slide</label>
+                        <div style="display:flex; align-items:center; gap:8px;">
+                          <input type="checkbox" id="checkSliderAutoPlay" checked class="form-checkbox" style="width:16px; height:16px; cursor:pointer;">
+                          <label for="checkSliderAutoPlay" id="sliderAutoPlayLabel" style="font-size:0.78rem; font-weight:600; color:#27272A; cursor:pointer;">Enabled (Auto Advance)</label>
+                        </div>
+                      </div>
+
+                      <div class="slider-setting-item">
+                        <label class="form-label" style="margin-bottom:6px;">Slide Interval</label>
+                        <div class="sass-segmented-row" id="sliderIntervalRow" style="padding:2px;">
+                          <button type="button" class="sass-seg-btn" data-interval="3">3s</button>
+                          <button type="button" class="sass-seg-btn active" data-interval="4">4s</button>
+                          <button type="button" class="sass-seg-btn" data-interval="5">5s</button>
+                          <button type="button" class="sass-seg-btn" data-interval="7">7s</button>
+                        </div>
+                      </div>
+
+                      <!-- Height Presets -->
+                      <div class="slider-setting-item">
+                        <label class="form-label" style="margin-bottom:6px;">Slider Height</label>
+                        <div class="sass-segmented-row" id="sliderHeightRow" style="padding:2px;">
+                          <button type="button" class="sass-seg-btn" data-height="compact">Compact (260px)</button>
+                          <button type="button" class="sass-seg-btn active" data-height="standard">Standard (340px)</button>
+                          <button type="button" class="sass-seg-btn" data-height="grand">Hero Grand (420px)</button>
+                        </div>
+                      </div>
+
+                      <!-- Transition Animation -->
+                      <div class="slider-setting-item">
+                        <label class="form-label" style="margin-bottom:6px;">Slide Animation</label>
+                        <div class="sass-segmented-row" id="sliderEffectRow" style="padding:2px;">
+                          <button type="button" class="sass-seg-btn active" data-effect="slide">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="m9 18 6-6-6-6"/></svg>
+                            <span>Left-to-Right Slide</span>
+                          </button>
+                          <button type="button" class="sass-seg-btn" data-effect="fade">
+                            <span>Smooth Cross-Fade</span>
+                          </button>
+                        </div>
+                      </div>
+
+                      <!-- Text Contrast Backdrop -->
+                      <div class="slider-setting-item">
+                        <label class="form-label" style="margin-bottom:6px;">Text Overlay Contrast</label>
+                        <div class="sass-segmented-row" id="sliderOverlayRow" style="padding:2px;">
+                          <button type="button" class="sass-seg-btn active" data-overlay="gradient">Dark Gradient</button>
+                          <button type="button" class="sass-seg-btn" data-overlay="glass">Frosted Glass</button>
+                          <button type="button" class="sass-seg-btn" data-overlay="vignette">Cinematic</button>
+                          <button type="button" class="sass-seg-btn" data-overlay="minimal">Minimal</button>
+                        </div>
+                      </div>
+
+                      <!-- Navigation Elements & Layout -->
+                      <div class="slider-setting-item">
+                        <label class="form-label" style="margin-bottom:6px;">Navigation Controls</label>
+                        <div style="display:flex; gap:16px; align-items:center;">
+                          <label style="display:inline-flex; align-items:center; gap:6px; font-size:0.78rem; color:#3F3F46; cursor:pointer;">
+                            <input type="checkbox" id="checkSliderArrows" checked style="cursor:pointer;">
+                            <span>Side Arrows</span>
+                          </label>
+                          <label style="display:inline-flex; align-items:center; gap:6px; font-size:0.78rem; color:#3F3F46; cursor:pointer;">
+                            <input type="checkbox" id="checkSliderDots" checked style="cursor:pointer;">
+                            <span>Indicator Dots</span>
+                          </label>
+                        </div>
+                      </div>
+
+                      <!-- Card Edge / Border Radius -->
+                      <div class="slider-setting-item">
+                        <label class="form-label" style="margin-bottom:6px;">Edge Framing</label>
+                        <div class="sass-segmented-row" id="sliderRadiusRow" style="padding:2px;">
+                          <button type="button" class="sass-seg-btn active" data-radius="rounded">Rounded Card</button>
+                          <button type="button" class="sass-seg-btn" data-radius="full">Full Bleed (Edge-to-Edge)</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Slides Management Section -->
+                  <div class="slider-slides-header-bar">
+                    <div style="display:flex; align-items:baseline; gap:8px;">
+                      <h4 style="font-size:0.84rem; font-weight:700; color:#18181B; margin:0;">Slides Deck</h4>
+                      <span class="badge" id="heroSliderCountBadge" style="font-size:0.7rem; background:#E4E4E7; color:#18181B;">3 slides</span>
+                    </div>
+                    <div style="display:flex; gap:8px;">
+                      <button type="button" id="btnLoadSampleSlides" class="btn btn-secondary btn-sm" style="font-size:0.75rem; padding:4px 10px;">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" style="margin-right:4px;"><path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16"/><path d="M16 21h5v-5"/></svg>
+                        <span>Load Sample Slides</span>
+                      </button>
+                      <button type="button" id="btnToggleAddSlide" class="btn btn-primary btn-sm" style="font-size:0.75rem; padding:4px 12px;">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="margin-right:4px;"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                        <span>+ Add Slide</span>
+                      </button>
+                    </div>
+                  </div>
+
+                  <!-- Add / Edit Slide Slideover/Panel (Hidden by default) -->
+                  <div class="slider-edit-panel" id="heroSliderAddPanel" style="display:none;">
+                    <div class="slider-edit-header">
+                      <strong id="slideFormTitle" style="font-size:0.84rem; color:#09090B;">Add New Slide</strong>
+                      <span style="font-size:0.72rem; color:#71717A;">Enter photo &amp; text overlay details</span>
+                    </div>
+
+                    <div class="slider-edit-body">
+                      <!-- Image Source -->
+                      <div class="form-group full-row">
+                        <label class="form-label" for="inputSlideImageUrl">Image URL or Local Upload</label>
+                        <div style="display:flex; gap:8px;">
+                          <input type="text" id="inputSlideImageUrl" class="form-control" placeholder="https://images.unsplash.com/... or paste link">
+                          <label class="btn btn-secondary btn-sm" for="inputSlideImageFile" style="cursor:pointer; white-space:nowrap; display:inline-flex; align-items:center; gap:4px; padding:6px 12px;">
+                            <input type="file" id="inputSlideImageFile" accept="image/*" style="display:none;">
+                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                            <span>Browse File</span>
+                          </label>
+                        </div>
+                        <div style="margin-top:8px;">
+                          <img id="slideFormImgPreview" src="" alt="Slide Preview" style="display:none; max-height:120px; border-radius:6px; border:1px solid #E4E4E7; object-fit:cover;">
+                        </div>
+                      </div>
+
+                      <!-- Badge & Title -->
+                      <div class="form-row">
+                        <div class="form-group half-col">
+                          <label class="form-label" for="inputSlideBadge">Top Tag / Badge</label>
+                          <input type="text" id="inputSlideBadge" class="form-control" placeholder="e.g. Special Offer, Luxury Fleet">
+                        </div>
+                        <div class="form-group half-col">
+                          <label class="form-label" for="inputSlideTitle">Main Headline Text</label>
+                          <input type="text" id="inputSlideTitle" class="form-control" placeholder="e.g. Explore Royal Rajasthan">
+                        </div>
+                      </div>
+
+                      <!-- Subtitle Description -->
+                      <div class="form-group full-row">
+                        <label class="form-label" for="inputSlideSubtitle">Slide Subtitle / Description</label>
+                        <textarea id="inputSlideSubtitle" class="form-control" rows="2" placeholder="e.g. Sanitized cabs, experienced drivers, transparent pricing."></textarea>
+                      </div>
+
+                      <!-- Action Button Text & Destination -->
+                      <div class="form-row">
+                        <div class="form-group half-col">
+                          <label class="form-label" for="inputSlideBtnText">CTA Button Label</label>
+                          <input type="text" id="inputSlideBtnText" class="form-control" value="Book Now" placeholder="e.g. Book Now, Inquire, WhatsApp Us">
+                        </div>
+                        <div class="form-group half-col">
+                          <label class="form-label" for="selectSlideAction">Button Click Action</label>
+                          <select id="selectSlideAction" class="form-control">
+                            <option value="booking">Scroll To Booking Form</option>
+                            <option value="whatsapp">Direct WhatsApp Chat</option>
+                            <option value="call">Instant Phone Call</option>
+                            <option value="custom">Custom Web Link / Anchor</option>
+                          </select>
+                        </div>
+                      </div>
+
+                      <!-- Custom URL (Conditional) -->
+                      <div class="form-group full-row" id="wrapSlideCustomUrl" style="display:none;">
+                        <label class="form-label" for="inputSlideCustomUrl">Custom Destination URL</label>
+                        <input type="text" id="inputSlideCustomUrl" class="form-control" placeholder="https://example.com or #section">
+                      </div>
+
+                      <!-- Actions -->
+                      <div style="display:flex; justify-content:flex-end; gap:8px; margin-top:12px; padding-top:10px; border-top:1px solid #F0F0F3;">
+                        <button type="button" id="btnCancelSlide" class="btn btn-secondary btn-sm">Cancel</button>
+                        <button type="button" id="btnSaveSlide" class="btn btn-primary btn-sm">Save Slide to Deck</button>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Slides Deck List Container -->
+                  <div id="heroSliderAdminList" class="slider-deck-list">
+                    <!-- Rendered dynamically by AdminHeroSlider -->
+                  </div>
+
                 </div>
 
                 <!-- 9. GALLERY WIDGET PANE -->
@@ -817,8 +1033,308 @@
           </form>
         </div>
 
-      <!-- LIST OF SAVED CLIENTS -->
-      <div class="tab-content" id="listSection" style="display:none;">
+        <!-- THEME & COLORS TAB (Minimal Tasteful SaaS Design) -->
+        <div class="tab-content" id="themeSection" style="display:none;">
+          <div class="sass-theme-view">
+            
+            <!-- Minimal SaaS Top Bar -->
+            <div class="sass-theme-bar">
+              <div class="sass-theme-bar-left">
+                <div class="sass-theme-icon-box">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"/>
+                    <path d="M12 2a10 10 0 0 1 10 10c0 4.418-3.582 8-8 8a3 3 0 0 1-3-3v-1a2 2 0 0 0-2-2h-1"/>
+                    <circle cx="8" cy="10" r="1" fill="currentColor"/>
+                    <circle cx="12" cy="7" r="1" fill="currentColor"/>
+                    <circle cx="16" cy="10" r="1" fill="currentColor"/>
+                  </svg>
+                </div>
+                <div>
+                  <div class="sass-theme-title-line">
+                    <h3 class="sass-theme-title">Theme &amp; Appearance</h3>
+                    <span class="sass-active-tag" id="activeThemeBadge">Taxi Gold</span>
+                  </div>
+                  <p class="sass-theme-caption">Configure global palette, surface contrast, and branding colors</p>
+                </div>
+              </div>
+              <div class="sass-theme-bar-right">
+                <button type="button" class="btn-sass-back" id="btnThemeApplyDone">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+                  <span>Back to Editor</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Section 1: Presets Cards -->
+            <div class="sass-theme-group">
+              <div class="sass-group-header">
+                <h4 class="sass-group-title">Curated Palettes</h4>
+                <span class="sass-group-hint">Select a unified color scheme</span>
+              </div>
+              
+              <div class="sass-presets-grid" id="themePresetsRow">
+                <!-- 1. Taxi Gold -->
+                <button type="button" class="sass-preset-card active" data-theme="taxi">
+                  <div class="sass-card-top">
+                    <div class="sass-swatch-combo">
+                      <span class="swatch-bg-pill" style="background: #F7F4E8;"></span>
+                      <span class="swatch-dot" style="background: #FFD900;"></span>
+                    </div>
+                    <span class="sass-card-badge">Light</span>
+                  </div>
+                  <div class="sass-card-meta">
+                    <span class="sass-card-name">Taxi Gold</span>
+                    <span class="sass-card-sub">Warm Yellow &amp; Cream</span>
+                  </div>
+                  <div class="sass-check-mark">
+                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2"><polyline points="20 6 9 17 4 12"/></svg>
+                  </div>
+                </button>
+
+                <!-- 2. Sky Blue -->
+                <button type="button" class="sass-preset-card" data-theme="travel">
+                  <div class="sass-card-top">
+                    <div class="sass-swatch-combo">
+                      <span class="swatch-bg-pill" style="background: #F8FAFC;"></span>
+                      <span class="swatch-dot" style="background: #0284C7;"></span>
+                    </div>
+                    <span class="sass-card-badge">Light</span>
+                  </div>
+                  <div class="sass-card-meta">
+                    <span class="sass-card-name">Sky Blue</span>
+                    <span class="sass-card-sub">Sky Cyan &amp; Slate</span>
+                  </div>
+                  <div class="sass-check-mark">
+                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2"><polyline points="20 6 9 17 4 12"/></svg>
+                  </div>
+                </button>
+
+                <!-- 3. Royal Dark -->
+                <button type="button" class="sass-preset-card" data-theme="royal">
+                  <div class="sass-card-top">
+                    <div class="sass-swatch-combo">
+                      <span class="swatch-bg-pill" style="background: #0B0E14; border: 1px solid #1E2433;"></span>
+                      <span class="swatch-dot" style="background: #E2B755;"></span>
+                    </div>
+                    <span class="sass-card-badge dark">Dark</span>
+                  </div>
+                  <div class="sass-card-meta">
+                    <span class="sass-card-name">Royal Dark</span>
+                    <span class="sass-card-sub">Gold &amp; Midnight Black</span>
+                  </div>
+                  <div class="sass-check-mark">
+                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2"><polyline points="20 6 9 17 4 12"/></svg>
+                  </div>
+                </button>
+
+                <!-- 4. Emerald -->
+                <button type="button" class="sass-preset-card" data-theme="eco">
+                  <div class="sass-card-top">
+                    <div class="sass-swatch-combo">
+                      <span class="swatch-bg-pill" style="background: #0F172A; border: 1px solid #1E293B;"></span>
+                      <span class="swatch-dot" style="background: #10B981;"></span>
+                    </div>
+                    <span class="sass-card-badge dark">Dark</span>
+                  </div>
+                  <div class="sass-card-meta">
+                    <span class="sass-card-name">Emerald Slate</span>
+                    <span class="sass-card-sub">Mint Green &amp; Slate</span>
+                  </div>
+                  <div class="sass-check-mark">
+                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2"><polyline points="20 6 9 17 4 12"/></svg>
+                  </div>
+                </button>
+
+                <!-- 5. Ocean Light -->
+                <button type="button" class="sass-preset-card" data-theme="blue">
+                  <div class="sass-card-top">
+                    <div class="sass-swatch-combo">
+                      <span class="swatch-bg-pill" style="background: #F0F9FF;"></span>
+                      <span class="swatch-dot" style="background: #3B82F6;"></span>
+                    </div>
+                    <span class="sass-card-badge">Light</span>
+                  </div>
+                  <div class="sass-card-meta">
+                    <span class="sass-card-name">Ocean Light</span>
+                    <span class="sass-card-sub">Cobalt &amp; Ice Blue</span>
+                  </div>
+                  <div class="sass-check-mark">
+                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2"><polyline points="20 6 9 17 4 12"/></svg>
+                  </div>
+                </button>
+
+                <!-- 6. Crimson Dark -->
+                <button type="button" class="sass-preset-card" data-theme="red">
+                  <div class="sass-card-top">
+                    <div class="sass-swatch-combo">
+                      <span class="swatch-bg-pill" style="background: #181111; border: 1px solid #281D1D;"></span>
+                      <span class="swatch-dot" style="background: #EF4444;"></span>
+                    </div>
+                    <span class="sass-card-badge dark">Dark</span>
+                  </div>
+                  <div class="sass-card-meta">
+                    <span class="sass-card-name">Crimson Dark</span>
+                    <span class="sass-card-sub">Ruby Red &amp; Charcoal</span>
+                  </div>
+                  <div class="sass-check-mark">
+                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.2"><polyline points="20 6 9 17 4 12"/></svg>
+                  </div>
+                </button>
+              </div>
+            </div>
+
+            <!-- Section 2: Fine-Tune Tokens -->
+            <div class="sass-theme-group">
+              <div class="sass-group-header">
+                <h4 class="sass-group-title">Color Overrides</h4>
+                <span class="sass-group-hint">Click swatch or edit hex to customize</span>
+              </div>
+
+              <div class="sass-tokens-table">
+                <!-- Row 1: Primary Accent -->
+                <div class="sass-token-row">
+                  <div class="sass-token-info">
+                    <span class="sass-token-title">Primary Accent</span>
+                    <span class="sass-token-desc">Interactive buttons, highlighted tabs &amp; call-to-actions</span>
+                  </div>
+                  <label class="sass-color-control" for="themePrimaryColor">
+                    <input type="color" id="themePrimaryColor" class="sass-native-color" value="#FFD900">
+                    <span class="sass-color-preview" id="themePrimaryPreview"></span>
+                    <span class="sass-hex-code" id="themePrimaryHex">#FFD900</span>
+                  </label>
+                </div>
+
+                <!-- Row 2: Page Background -->
+                <div class="sass-token-row">
+                  <div class="sass-token-info">
+                    <span class="sass-token-title">Canvas Background</span>
+                    <span class="sass-token-desc">Base page wallpaper and frame ambient background</span>
+                  </div>
+                  <label class="sass-color-control" for="themeBgColor">
+                    <input type="color" id="themeBgColor" class="sass-native-color" value="#F7F4E8">
+                    <span class="sass-color-preview" id="themeBgPreview"></span>
+                    <span class="sass-hex-code" id="themeBgHex">#F7F4E8</span>
+                  </label>
+                </div>
+
+                <!-- Row 3: Card Background -->
+                <div class="sass-token-row">
+                  <div class="sass-token-info">
+                    <span class="sass-token-title">Surface &amp; Cards</span>
+                    <span class="sass-token-desc">Component containers, quick action tiles &amp; modals</span>
+                  </div>
+                  <label class="sass-color-control" for="themeCardBgColor">
+                    <input type="color" id="themeCardBgColor" class="sass-native-color" value="#FFFFFF">
+                    <span class="sass-color-preview" id="themeCardBgPreview"></span>
+                    <span class="sass-hex-code" id="themeCardBgHex">#FFFFFF</span>
+                  </label>
+                </div>
+
+                <!-- Row 4: Text Color -->
+                <div class="sass-token-row">
+                  <div class="sass-token-info">
+                    <span class="sass-token-title">Typography &amp; Headings</span>
+                    <span class="sass-token-desc">Brand name, section headings, and primary body text</span>
+                  </div>
+                  <label class="sass-color-control" for="themeTextColor">
+                    <input type="color" id="themeTextColor" class="sass-native-color" value="#111111">
+                    <span class="sass-color-preview" id="themeTextPreview"></span>
+                    <span class="sass-hex-code" id="themeTextHex">#111111</span>
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <!-- Section 3: Background Atmosphere & Wallpaper -->
+            <div class="sass-theme-group">
+              <div class="sass-group-header">
+                <h4 class="sass-group-title">Background Atmosphere</h4>
+                <span class="sass-group-hint">Ambient wallpaper, custom backdrop, or brand logo watermark</span>
+              </div>
+
+              <div class="sass-backdrop-box">
+                <!-- Source Selector Segmented Buttons -->
+                <div class="sass-segmented-row" id="bgSourceRow">
+                  <button type="button" class="sass-seg-btn active" data-bg-type="none">
+                    <span>None (Solid)</span>
+                  </button>
+                  <button type="button" class="sass-seg-btn" data-bg-type="logo">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v8"/><path d="M8 12h8"/></svg>
+                    <span>Brand Logo</span>
+                  </button>
+                  <button type="button" class="sass-seg-btn" data-bg-type="custom">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="18" height="18" x="3" y="3" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                    <span>Custom Image</span>
+                  </button>
+                </div>
+
+                <!-- Custom Image Upload Area (Shown when 'custom' is selected) -->
+                <div class="sass-upload-pane" id="bgCustomUploadPane" style="display: none;">
+                  <label class="sass-upload-dropzone" for="inputBgImageFile">
+                    <input type="file" id="inputBgImageFile" accept="image/*" class="sass-hidden-file">
+                    <div class="sass-dropzone-content">
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                      <span class="sass-dropzone-text">Click to choose image or photo</span>
+                      <span class="sass-dropzone-sub">PNG, JPG, WebP</span>
+                    </div>
+                  </label>
+                  <div class="sass-uploaded-preview" id="bgCustomPreviewWrap" style="display: none;">
+                    <img id="bgCustomPreviewImg" src="" alt="Background preview">
+                    <button type="button" class="btn-sass-remove-img" id="btnRemoveBgImage">Remove</button>
+                  </div>
+                </div>
+
+                <!-- Sliders & Styling Pane (Shown when source is NOT none) -->
+                <div class="sass-sliders-pane" id="bgSlidersPane" style="display: none;">
+                  
+                  <!-- Opacity Slider -->
+                  <div class="sass-slider-row">
+                    <div class="sass-slider-info">
+                      <span class="sass-slider-name">Opacity</span>
+                      <span class="sass-slider-val" id="bgOpacityBadge">20%</span>
+                    </div>
+                    <input type="range" id="inputBgOpacity" min="5" max="100" value="20" class="sass-slider-track">
+                  </div>
+
+                  <!-- Blur Slider -->
+                  <div class="sass-slider-row">
+                    <div class="sass-slider-info">
+                      <span class="sass-slider-name">Backdrop Blur</span>
+                      <span class="sass-slider-val" id="bgBlurBadge">12px</span>
+                    </div>
+                    <input type="range" id="inputBgBlur" min="0" max="40" value="12" class="sass-slider-track">
+                  </div>
+
+                  <!-- Placement and Tint Controls -->
+                  <div class="sass-options-grid">
+                    <div class="sass-option-group">
+                      <label class="sass-option-label">Placement</label>
+                      <div class="sass-sub-segmented" id="bgSizeRow">
+                        <button type="button" class="sass-sub-btn active" data-bg-size="contain">Watermark</button>
+                        <button type="button" class="sass-sub-btn" data-bg-size="cover">Cover Wallpaper</button>
+                      </div>
+                    </div>
+
+                    <div class="sass-option-group">
+                      <label class="sass-option-label">Color Tint Effect</label>
+                      <div class="sass-sub-segmented" id="bgTintRow">
+                        <button type="button" class="sass-sub-btn active" data-bg-tint="none">Natural</button>
+                        <button type="button" class="sass-sub-btn" data-bg-tint="primary">Theme Tint (Blue/Accent)</button>
+                        <button type="button" class="sass-sub-btn" data-bg-tint="monochrome">Monochrome</button>
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+    <!-- LIST OF SAVED CLIENTS -->
+    <div class="tab-content" id="listSection" style="display:none;">
         <div class="clients-table-wrap">
           <table class="minimal-table">
             <thead>
@@ -874,6 +1390,7 @@
   <script defer src="js/admin-themes.js"></script>
   <script defer src="js/admin-fleet.js"></script>
   <script defer src="js/admin-tours.js"></script>
+  <script defer src="js/admin-hero-slider.js"></script>
   <script defer src="js/admin-gallery.js"></script>
   <script defer src="js/admin-team-contacts.js"></script>
   <script defer src="js/admin-widgets.js"></script>

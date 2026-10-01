@@ -1266,5 +1266,329 @@ select.form-control option {
   flex: 1;
 }
 
+/* ==========================================================================
+   HERO SECTION IMAGE SLIDER COMPONENT
+   ========================================================================== */
+
+.hero-slider-section {
+  width: 100%;
+  position: relative;
+  margin-bottom: 20px;
+}
+
+.hero-slider-header {
+  margin-bottom: 12px;
+  padding: 0 4px;
+}
+
+.hero-slider-section-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--theme-text, #111111);
+  margin: 0 0 2px 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.hero-slider-section-subtitle {
+  font-size: 0.78rem;
+  color: #71717A;
+  margin: 0;
+}
+
+.hero-slider-container {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  background: #18181B;
+  user-select: none;
+  touch-action: pan-y pinch-zoom;
+}
+
+/* Heights */
+.hero-slider-container.height-compact {
+  height: 260px;
+}
+
+.hero-slider-container.height-standard {
+  height: 340px;
+}
+
+.hero-slider-container.height-grand {
+  height: 420px;
+}
+
+/* Border Radius Options */
+.hero-slider-container.radius-rounded {
+  border-radius: var(--theme-card-radius, 16px);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.14);
+}
+
+.hero-slider-container.radius-full {
+  border-radius: 0;
+}
+
+/* Sliding Track */
+.hero-slider-track {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform;
+}
+
+/* Fade Effect Mode */
+.hero-slider-container.effect-fade .hero-slider-track {
+  display: block;
+  position: relative;
+  transform: none !important;
+}
+
+.hero-slider-container.effect-fade .hero-slide-item {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.6s ease, visibility 0.6s ease;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.hero-slider-container.effect-fade .hero-slide-item.is-active {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  z-index: 2;
+}
+
+/* Slide Item */
+.hero-slide-item {
+  flex: 0 0 100%;
+  width: 100%;
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-slide-media {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+
+.hero-slide-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.hero-slide-backdrop {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  transition: background 0.3s ease;
+}
+
+/* Overlay Styles */
+.hero-slider-container.overlay-gradient .hero-slide-backdrop {
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.1) 0%, rgba(0, 0, 0, 0.35) 45%, rgba(0, 0, 0, 0.88) 100%);
+}
+
+.hero-slider-container.overlay-glass .hero-slide-backdrop {
+  background: rgba(0, 0, 0, 0.28);
+}
+
+.hero-slider-container.overlay-glass .hero-slide-inner {
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  background: rgba(18, 18, 22, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 14px;
+  padding: 16px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+.hero-slider-container.overlay-vignette .hero-slide-backdrop {
+  background: radial-gradient(circle at center, rgba(0, 0, 0, 0.2) 0%, rgba(0, 0, 0, 0.85) 100%);
+}
+
+.hero-slider-container.overlay-minimal .hero-slide-backdrop {
+  background: linear-gradient(0deg, rgba(0, 0, 0, 0.65) 0%, rgba(0, 0, 0, 0.2) 40%, transparent 80%);
+}
+
+/* Slide Content */
+.hero-slide-content {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 22px 20px 24px;
+  color: #FFFFFF;
+}
+
+.hero-slide-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  max-width: 100%;
+}
+
+.hero-slide-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 0.70rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  background: rgba(255, 255, 255, 0.22);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: #FFFFFF;
+  margin-bottom: 8px;
+}
+
+.hero-slide-badge .badge-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--theme-primary, #FFD900);
+}
+
+.hero-slide-title {
+  font-size: 1.25rem;
+  font-weight: 800;
+  line-height: 1.25;
+  margin: 0 0 6px 0;
+  color: #FFFFFF;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+  letter-spacing: -0.01em;
+}
+
+.hero-slide-sub {
+  font-size: 0.80rem;
+  line-height: 1.4;
+  color: rgba(255, 255, 255, 0.92);
+  margin: 0 0 14px 0;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.6);
+  max-width: 95%;
+}
+
+.hero-slide-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 18px;
+  border-radius: var(--theme-radius, 8px);
+  background: var(--theme-primary, #FFD900);
+  color: var(--theme-text, #111111);
+  font-weight: 700;
+  font-size: 0.82rem;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  outline: none !important;
+}
+
+.hero-slide-cta:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+  filter: brightness(1.06);
+}
+
+.hero-slide-cta:active {
+  transform: translateY(0);
+}
+
+/* Nav Buttons */
+.hero-slider-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 5;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.38);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  color: #FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  outline: none !important;
+}
+
+.hero-slider-prev {
+  left: 10px;
+}
+
+.hero-slider-next {
+  right: 10px;
+}
+
+.hero-slider-nav:hover {
+  background: rgba(0, 0, 0, 0.7);
+  transform: translateY(-50%) scale(1.08);
+}
+
+/* Pagination Dots */
+.hero-slider-pagination {
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 8px;
+  background: rgba(0, 0, 0, 0.32);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.hero-slider-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.45);
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  outline: none !important;
+}
+
+.hero-slider-dot.is-active {
+  width: 20px;
+  background: #FFFFFF;
+  box-shadow: 0 0 8px rgba(255, 255, 255, 0.85);
+}
+
+.hero-slide-empty {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #A1A1AA;
+  font-size: 0.82rem;
+}
+
 
 

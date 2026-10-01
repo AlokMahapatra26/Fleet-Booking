@@ -18,6 +18,7 @@
   "license": "ISC",
   "dependencies": {
     "dotenv": "^18.0.4",
+    "jszip": "^3.10.2",
     "mongodb": "^7.7.0"
   }
 }

@@ -75,6 +75,43 @@ body::before {
   -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,0.1) 85%);
 }
 
+/* Ambient Wallpaper / Logo Backdrop Layer */
+.app-bg-backdrop {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  opacity: var(--theme-bg-opacity, 0);
+  filter: blur(var(--theme-bg-blur, 0px));
+  transform: scale(1.08);
+  transition: opacity 0.25s ease, filter 0.25s ease;
+  display: none;
+  overflow: hidden;
+}
+
+.app-bg-backdrop.is-contain {
+  background-size: 50% auto;
+  background-position: center 25%;
+}
+
+.app-bg-backdrop.tint-primary::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-color: var(--theme-primary, #0284C7);
+  mix-blend-mode: color;
+  opacity: 0.85;
+}
+
+.app-bg-backdrop.tint-monochrome {
+  filter: blur(var(--theme-bg-blur, 0px)) grayscale(100%);
+}
+
 /* Responsive Smartphone Viewport Container */
 .app-container {
   width: 100%;

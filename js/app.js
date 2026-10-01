@@ -143,6 +143,37 @@
       }
     }
 
+    // 2b. Ambient Wallpaper / Logo Backdrop
+    const backdrop = theme.backdrop || {};
+    const bgEl = document.getElementById('appBgBackdrop');
+    if (bgEl) {
+      const bType = backdrop.type || 'none';
+      if (bType === 'logo') {
+        const logoUrl = cfg.brand?.logoUrl || 'assets/logo-taxi.svg';
+        bgEl.style.backgroundImage = `url("${logoUrl}")`;
+        bgEl.style.display = 'block';
+      } else if (bType === 'custom' && backdrop.imageUrl) {
+        bgEl.style.backgroundImage = `url("${backdrop.imageUrl}")`;
+        bgEl.style.display = 'block';
+      } else {
+        bgEl.style.backgroundImage = 'none';
+        bgEl.style.display = 'none';
+      }
+
+      const opacityVal = (backdrop.opacity !== undefined) ? backdrop.opacity : 0.2;
+      const blurVal = (backdrop.blur !== undefined) ? backdrop.blur : 0;
+      root.style.setProperty('--theme-bg-opacity', opacityVal);
+      root.style.setProperty('--theme-bg-blur', `${blurVal}px`);
+
+      bgEl.className = 'app-bg-backdrop';
+      if (backdrop.size === 'contain' || (bType === 'logo' && backdrop.size !== 'cover')) {
+        bgEl.classList.add('is-contain');
+      }
+      if (backdrop.tint && backdrop.tint !== 'none') {
+        bgEl.classList.add(`tint-${backdrop.tint}`);
+      }
+    }
+
     // 3. Document Head & Brand Information
     const fullBrandName = (cfg.brand?.name || '').trim();
     const tagWord = isTravel ? 'Tours & Travel' : 'Taxi Service';
@@ -473,7 +504,10 @@
       if (DOM.agencyPhoneLink) DOM.agencyPhoneLink.style.display = 'none';
     }
 
-    // 9. Photo Gallery Component
+    // 9. Hero Section Image Slider Component
+    renderHeroSlider(cfg.heroSlider);
+
+    // 10. Photo Gallery Component
     renderGallery(cfg.gallery);
 
     // 10. Team & Department Contacts Component
@@ -528,6 +562,269 @@
 
       DOM.socialLinksContainer.appendChild(a);
     });
+  }
+
+  /**
+   * Hero Section Image Slider Component
+   * Left-to-right sliding interactive carousel with text overlays, gestures & auto-advance.
+   */
+  let heroSliderTimer = null;
+  let heroSliderCurrentIndex = 0;
+  let heroSliderTouchStartX = 0;
+  let heroSliderTouchStartY = 0;
+
+  function renderHeroSlider(sliderData) {
+    const section = document.getElementById('heroSliderSection');
+    const container = document.getElementById('heroSliderContainer');
+    const track = document.getElementById('heroSliderTrack');
+    const prevBtn = document.getElementById('heroSliderPrev');
+    const nextBtn = document.getElementById('heroSliderNext');
+    const pagination = document.getElementById('heroSliderPagination');
+    const headerEl = document.getElementById('heroSliderHeader');
+    const titleEl = document.getElementById('heroSliderSectionTitle');
+    const subtitleEl = document.getElementById('heroSliderSectionSubtitle');
+
+    if (!section || !track) return;
+
+    if (heroSliderTimer) {
+      clearInterval(heroSliderTimer);
+      heroSliderTimer = null;
+    }
+
+    const title = (sliderData && sliderData.title) || '';
+    const subtitle = (sliderData && sliderData.subtitle) || '';
+    const settings = (sliderData && sliderData.settings) || {};
+    const slides = (sliderData && Array.isArray(sliderData.slides)) ? sliderData.slides : [];
+
+    // Header visibility
+    if (title || subtitle) {
+      if (headerEl) headerEl.style.display = 'block';
+      if (titleEl) titleEl.textContent = title;
+      if (subtitleEl) {
+        subtitleEl.textContent = subtitle;
+        subtitleEl.style.display = subtitle ? 'block' : 'none';
+      }
+    } else {
+      if (headerEl) headerEl.style.display = 'none';
+    }
+
+    if (slides.length === 0) {
+      track.innerHTML = `
+        <div class="hero-slide-empty">
+          <span>No slides configured yet.</span>
+        </div>
+      `;
+      if (prevBtn) prevBtn.style.display = 'none';
+      if (nextBtn) nextBtn.style.display = 'none';
+      if (pagination) pagination.style.display = 'none';
+      return;
+    }
+
+    // Apply container settings
+    const height = settings.height || 'standard';
+    const effect = settings.effect || 'slide';
+    const overlay = settings.overlayStyle || 'gradient';
+    const borderRadius = settings.borderRadius || 'rounded';
+    const showArrows = settings.arrows !== false && slides.length > 1;
+    const showDots = settings.dots !== false && slides.length > 1;
+
+    container.className = `hero-slider-container height-${height} effect-${effect} overlay-${overlay} radius-${borderRadius}`;
+
+    if (prevBtn) prevBtn.style.display = showArrows ? 'flex' : 'none';
+    if (nextBtn) nextBtn.style.display = showArrows ? 'flex' : 'none';
+    if (pagination) pagination.style.display = showDots ? 'flex' : 'none';
+
+    // Render slides
+    track.innerHTML = '';
+    slides.forEach((slide, idx) => {
+      const slideEl = document.createElement('div');
+      slideEl.className = `hero-slide-item ${idx === 0 ? 'is-active' : ''}`;
+      slideEl.dataset.slideIndex = idx;
+
+      // CTA button markup
+      let ctaHtml = '';
+      if (slide.btnText) {
+        ctaHtml = `
+          <button type="button" class="hero-slide-cta" data-action="${slide.btnAction || 'booking'}" data-custom-url="${slide.customUrl || ''}">
+            <span>${slide.btnText}</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+          </button>
+        `;
+      }
+
+      slideEl.innerHTML = `
+        <div class="hero-slide-media">
+          <img src="${slide.imageUrl}" alt="${slide.title || 'Slide photo'}" loading="${idx === 0 ? 'eager' : 'lazy'}" onerror="this.src='assets/logo-travel.svg'">
+          <div class="hero-slide-backdrop"></div>
+        </div>
+        <div class="hero-slide-content">
+          <div class="hero-slide-inner">
+            ${slide.badge ? `<span class="hero-slide-badge"><span class="badge-dot"></span>${slide.badge}</span>` : ''}
+            ${slide.title ? `<h3 class="hero-slide-title">${slide.title}</h3>` : ''}
+            ${slide.subtitle ? `<p class="hero-slide-sub">${slide.subtitle}</p>` : ''}
+            ${ctaHtml}
+          </div>
+        </div>
+      `;
+
+      // Handle button click action
+      const btn = slideEl.querySelector('.hero-slide-cta');
+      if (btn) {
+        btn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          const action = btn.dataset.action;
+          const customUrl = btn.dataset.customUrl;
+          handleSlideCta(action, customUrl);
+        });
+      }
+
+      track.appendChild(slideEl);
+    });
+
+    // Render pagination dots
+    if (pagination) {
+      pagination.innerHTML = '';
+      slides.forEach((_, idx) => {
+        const dot = document.createElement('button');
+        dot.type = 'button';
+        dot.className = `hero-slider-dot ${idx === 0 ? 'is-active' : ''}`;
+        dot.setAttribute('aria-label', `Go to slide ${idx + 1}`);
+        dot.addEventListener('click', () => {
+          goToSlide(idx);
+          resetAutoPlay();
+        });
+        pagination.appendChild(dot);
+      });
+    }
+
+    heroSliderCurrentIndex = 0;
+    updateSlidePosition();
+
+    function goToSlide(targetIndex) {
+      if (targetIndex < 0) {
+        heroSliderCurrentIndex = slides.length - 1;
+      } else if (targetIndex >= slides.length) {
+        heroSliderCurrentIndex = 0;
+      } else {
+        heroSliderCurrentIndex = targetIndex;
+      }
+      updateSlidePosition();
+    }
+
+    function updateSlidePosition() {
+      const allSlides = track.querySelectorAll('.hero-slide-item');
+      const allDots = pagination ? pagination.querySelectorAll('.hero-slider-dot') : [];
+
+      if (effect === 'fade') {
+        track.style.transform = 'none';
+        allSlides.forEach((s, i) => {
+          s.classList.toggle('is-active', i === heroSliderCurrentIndex);
+        });
+      } else {
+        track.style.transform = `translateX(-${heroSliderCurrentIndex * 100}%)`;
+        allSlides.forEach((s, i) => {
+          s.classList.toggle('is-active', i === heroSliderCurrentIndex);
+        });
+      }
+
+      allDots.forEach((d, i) => {
+        d.classList.toggle('is-active', i === heroSliderCurrentIndex);
+      });
+    }
+
+    // Nav arrows
+    if (prevBtn) {
+      prevBtn.onclick = () => {
+        goToSlide(heroSliderCurrentIndex - 1);
+        resetAutoPlay();
+      };
+    }
+    if (nextBtn) {
+      nextBtn.onclick = () => {
+        goToSlide(heroSliderCurrentIndex + 1);
+        resetAutoPlay();
+      };
+    }
+
+    // Touch swipe support (Mobile left / right gesture)
+    track.ontouchstart = (e) => {
+      if (e.touches && e.touches[0]) {
+        heroSliderTouchStartX = e.touches[0].clientX;
+        heroSliderTouchStartY = e.touches[0].clientY;
+      }
+    };
+    track.ontouchend = (e) => {
+      if (!e.changedTouches || !e.changedTouches[0]) return;
+      const diffX = heroSliderTouchStartX - e.changedTouches[0].clientX;
+      const diffY = heroSliderTouchStartY - e.changedTouches[0].clientY;
+      if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > 35) {
+        if (diffX > 0) {
+          goToSlide(heroSliderCurrentIndex + 1); // Next
+        } else {
+          goToSlide(heroSliderCurrentIndex - 1); // Prev
+        }
+        resetAutoPlay();
+      }
+    };
+
+    // Auto Play timer
+    function startAutoPlay() {
+      if (settings.autoPlay !== false && slides.length > 1) {
+        const intervalMs = (settings.interval || 4) * 1000;
+        heroSliderTimer = setInterval(() => {
+          goToSlide(heroSliderCurrentIndex + 1);
+        }, intervalMs);
+      }
+    }
+
+    function resetAutoPlay() {
+      if (heroSliderTimer) {
+        clearInterval(heroSliderTimer);
+        heroSliderTimer = null;
+      }
+      startAutoPlay();
+    }
+
+    container.onmouseenter = () => {
+      if (heroSliderTimer) clearInterval(heroSliderTimer);
+    };
+    container.onmouseleave = () => {
+      resetAutoPlay();
+    };
+
+    startAutoPlay();
+  }
+
+  function handleSlideCta(action, customUrl) {
+    if (action === 'whatsapp') {
+      const waLink = document.getElementById('whatsappChatLink');
+      if (waLink && waLink.href) {
+        window.open(waLink.href, '_blank');
+      } else {
+        window.open('https://wa.me/', '_blank');
+      }
+    } else if (action === 'call') {
+      const callLink = document.getElementById('callNowLink');
+      if (callLink && callLink.href) {
+        window.location.href = callLink.href;
+      }
+    } else if (action === 'custom' && customUrl) {
+      if (customUrl.startsWith('#')) {
+        const target = document.querySelector(customUrl);
+        if (target) target.scrollIntoView({ behavior: 'smooth' });
+      } else {
+        window.open(customUrl, '_blank');
+      }
+    } else {
+      // Default: scroll to booking form
+      const bookingSec = document.getElementById('taxiBookingSection') || document.getElementById('travelBookingSection');
+      if (bookingSec && bookingSec.style.display !== 'none') {
+        bookingSec.scrollIntoView({ behavior: 'smooth' });
+      } else {
+        const anySec = document.querySelector('.booking-section:not(#heroSliderSection)');
+        if (anySec) anySec.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
   }
 
   /**

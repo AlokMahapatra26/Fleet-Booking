@@ -14,12 +14,13 @@ if (!indexHtml.includes('id="appMain"')) {
   console.log('✅ PASS: index.html has id="appMain"');
 }
 
-// Check that all 10 section IDs exist in index.html
+// Check that all 11 section IDs exist in index.html
 const requiredSections = [
   'hero-header',
   'quick-actions',
   'taxi-booking',
   'travel-booking',
+  'hero-slider',
   'gallery',
   'team-contacts',
   'google-reviews',
@@ -37,7 +38,7 @@ for (const sec of requiredSections) {
 }
 
 if (allFound) {
-  console.log('✅ PASS: All 10 widget section data attributes found in index.html');
+  console.log('✅ PASS: All 11 widget section data attributes found in index.html');
 }
 
 // Check that app.js handles appMain and section toggling

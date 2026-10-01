@@ -141,6 +141,49 @@
     "title": "Digital Solutions Agency",
     "note": "Elite engineering, design & strategy to build high-performance digital infrastructure."
   },
+  "heroSlider": {
+    "title": "Special Highlights",
+    "subtitle": "Featured tours & premium rides",
+    "settings": {
+      "autoPlay": true,
+      "interval": 4,
+      "height": "standard",
+      "effect": "slide",
+      "overlayStyle": "gradient",
+      "arrows": true,
+      "dots": true,
+      "borderRadius": "rounded"
+    },
+    "slides": [
+      {
+        "imageUrl": "https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?w=1200&auto=format&fit=crop&q=80",
+        "badge": "Executive Chauffeur",
+        "title": "Premium Travel & Intercity Rides",
+        "subtitle": "Sanitized luxury cabs, verified professional drivers & on-time pickup guarantee",
+        "btnText": "Book Your Ride",
+        "btnAction": "booking",
+        "customUrl": ""
+      },
+      {
+        "imageUrl": "https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?w=1200&auto=format&fit=crop&q=80",
+        "badge": "Beach Vacations",
+        "title": "Coastal Roads & Scenic Getaways",
+        "subtitle": "Custom holiday packages, local sightseeing and flexible hourly rental cabs",
+        "btnText": "Inquire on WhatsApp",
+        "btnAction": "whatsapp",
+        "customUrl": ""
+      },
+      {
+        "imageUrl": "https://images.unsplash.com/photo-1626621341517-bbf3d9990a23?w=1200&auto=format&fit=crop&q=80",
+        "badge": "Hill Stations",
+        "title": "Mountain Adventures & Expeditions",
+        "subtitle": "Expert hill drivers with 4x4 and spacious 7-seater Innova Crysta fleet",
+        "btnText": "Call Direct Support",
+        "btnAction": "call",
+        "customUrl": ""
+      }
+    ]
+  },
   "agencyBranding": {
     "showPoweredBy": true,
     "agencyName": "DAV Labs",

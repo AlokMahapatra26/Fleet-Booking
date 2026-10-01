@@ -23,6 +23,9 @@
 </head>
 <body>
 
+  <!-- Ambient Wallpaper / Logo Backdrop Layer -->
+  <div class="app-bg-backdrop" id="appBgBackdrop" aria-hidden="true"></div>
+
   <main class="app-container" id="appMain">
     
     <!-- Top Action Bar -->
@@ -425,6 +428,31 @@
           </svg>
         </button>
       </form>
+    </section>
+
+    <!-- Hero Section Image Slider Component -->
+    <section class="booking-section hero-slider-section" id="heroSliderSection" data-section-id="hero-slider" style="display: none;">
+      <div class="section-header hero-slider-header" id="heroSliderHeader" style="display: none;">
+        <h2 class="section-title">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <rect width="18" height="14" x="3" y="5" rx="2"/>
+            <path d="m9 9 3 3-3 3"/>
+            <path d="m15 9-3 3 3 3"/>
+          </svg>
+          <span id="heroSliderSectionTitle">Highlights</span>
+        </h2>
+        <p class="section-subtitle" id="heroSliderSectionSubtitle">Featured fleet &amp; exclusive experiences</p>
+      </div>
+      <div class="hero-slider-container" id="heroSliderContainer">
+        <div class="hero-slider-track" id="heroSliderTrack"></div>
+        <button type="button" class="hero-slider-nav hero-slider-prev" id="heroSliderPrev" aria-label="Previous Slide">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+        </button>
+        <button type="button" class="hero-slider-nav hero-slider-next" id="heroSliderNext" aria-label="Next Slide">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+        </button>
+        <div class="hero-slider-pagination" id="heroSliderPagination"></div>
+      </div>
     </section>
 
     <!-- Photo Gallery Component -->

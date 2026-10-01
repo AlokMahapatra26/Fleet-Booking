@@ -39,8 +39,10 @@
   const btnOpenClient = document.getElementById('btnOpenClient');
   const previewIframe = document.getElementById('previewIframe');
   const tabCreate = document.getElementById('tabCreate');
+  const tabTheme = document.getElementById('tabTheme');
   const tabList = document.getElementById('tabList');
   const createSection = document.getElementById('createSection');
+  const themeSection = document.getElementById('themeSection');
   const listSection = document.getElementById('listSection');
   const clientsTableBody = document.getElementById('clientsTableBody');
   const clientsCount = document.getElementById('clientsCount');
@@ -73,6 +75,241 @@
   const THEMES = window.ADMIN_THEMES || {};
   let currentThemeKey = 'taxi';
 
+  // Global Theme Controls
+  const themePresetsRow = document.getElementById('themePresetsRow');
+  const activeThemeBadge = document.getElementById('activeThemeBadge');
+  const themePrimaryColor = document.getElementById('themePrimaryColor');
+  const themePrimaryHex = document.getElementById('themePrimaryHex');
+  const themePrimaryPreview = document.getElementById('themePrimaryPreview');
+  const themeBgColor = document.getElementById('themeBgColor');
+  const themeBgHex = document.getElementById('themeBgHex');
+  const themeBgPreview = document.getElementById('themeBgPreview');
+  const themeCardBgColor = document.getElementById('themeCardBgColor');
+  const themeCardBgHex = document.getElementById('themeCardBgHex');
+  const themeCardBgPreview = document.getElementById('themeCardBgPreview');
+  const themeTextColor = document.getElementById('themeTextColor');
+  const themeTextHex = document.getElementById('themeTextHex');
+  const themeTextPreview = document.getElementById('themeTextPreview');
+
+  // Background Atmosphere & Backdrop Elements
+  const bgSourceRow = document.getElementById('bgSourceRow');
+  const bgCustomUploadPane = document.getElementById('bgCustomUploadPane');
+  const inputBgImageFile = document.getElementById('inputBgImageFile');
+  const bgCustomPreviewWrap = document.getElementById('bgCustomPreviewWrap');
+  const bgCustomPreviewImg = document.getElementById('bgCustomPreviewImg');
+  const btnRemoveBgImage = document.getElementById('btnRemoveBgImage');
+  const bgSlidersPane = document.getElementById('bgSlidersPane');
+  const inputBgOpacity = document.getElementById('inputBgOpacity');
+  const bgOpacityBadge = document.getElementById('bgOpacityBadge');
+  const inputBgBlur = document.getElementById('inputBgBlur');
+  const bgBlurBadge = document.getElementById('bgBlurBadge');
+  const bgSizeRow = document.getElementById('bgSizeRow');
+  const bgTintRow = document.getElementById('bgTintRow');
+
+  let currentBackdrop = {
+    type: 'none',
+    imageUrl: '',
+    opacity: 20,
+    blur: 12,
+    size: 'contain',
+    tint: 'none'
+  };
+
+  function applyBackdropToIframeDirectly() {
+    if (!previewIframe) return;
+    try {
+      const iDoc = previewIframe.contentDocument || (previewIframe.contentWindow && previewIframe.contentWindow.document);
+      if (iDoc) {
+        const bgEl = iDoc.getElementById('appBgBackdrop');
+        if (bgEl) {
+          const bType = currentBackdrop.type || 'none';
+          if (bType === 'logo') {
+            const logoUrl = customLogoDataUrl || (logoPreviewImg ? logoPreviewImg.src : 'assets/logo-taxi.svg');
+            bgEl.style.backgroundImage = `url("${logoUrl}")`;
+            bgEl.style.display = 'block';
+          } else if (bType === 'custom' && currentBackdrop.imageUrl) {
+            bgEl.style.backgroundImage = `url("${currentBackdrop.imageUrl}")`;
+            bgEl.style.display = 'block';
+          } else {
+            bgEl.style.backgroundImage = 'none';
+            bgEl.style.display = 'none';
+          }
+
+          const op = (currentBackdrop.opacity !== undefined ? currentBackdrop.opacity : 20) / 100;
+          const bl = (currentBackdrop.blur !== undefined ? currentBackdrop.blur : 12);
+          iDoc.documentElement.style.setProperty('--theme-bg-opacity', op);
+          iDoc.documentElement.style.setProperty('--theme-bg-blur', `${bl}px`);
+
+          bgEl.className = 'app-bg-backdrop';
+          if (currentBackdrop.size === 'contain' || (bType === 'logo' && currentBackdrop.size !== 'cover')) {
+            bgEl.classList.add('is-contain');
+          }
+          if (currentBackdrop.tint && currentBackdrop.tint !== 'none') {
+            bgEl.classList.add(`tint-${currentBackdrop.tint}`);
+          }
+        }
+      }
+    } catch (e) {
+      // Handled via IPC fallback
+    }
+  }
+
+  function updateBackdropUI() {
+    const isNone = currentBackdrop.type === 'none';
+    const isCustom = currentBackdrop.type === 'custom';
+
+    if (bgSourceRow) {
+      bgSourceRow.querySelectorAll('.sass-seg-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.bgType === currentBackdrop.type);
+      });
+    }
+
+    if (bgCustomUploadPane) {
+      bgCustomUploadPane.style.display = isCustom ? 'flex' : 'none';
+    }
+
+    if (bgCustomPreviewWrap && bgCustomPreviewImg) {
+      if (currentBackdrop.imageUrl && isCustom) {
+        bgCustomPreviewImg.src = currentBackdrop.imageUrl;
+        bgCustomPreviewWrap.style.display = 'flex';
+      } else {
+        bgCustomPreviewWrap.style.display = 'none';
+      }
+    }
+
+    if (bgSlidersPane) {
+      bgSlidersPane.style.display = isNone ? 'none' : 'flex';
+    }
+
+    if (inputBgOpacity) inputBgOpacity.value = currentBackdrop.opacity !== undefined ? currentBackdrop.opacity : 20;
+    if (bgOpacityBadge) bgOpacityBadge.textContent = `${inputBgOpacity ? inputBgOpacity.value : 20}%`;
+
+    if (inputBgBlur) inputBgBlur.value = currentBackdrop.blur !== undefined ? currentBackdrop.blur : 12;
+    if (bgBlurBadge) bgBlurBadge.textContent = `${inputBgBlur ? inputBgBlur.value : 12}px`;
+
+    if (bgSizeRow) {
+      bgSizeRow.querySelectorAll('.sass-sub-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.bgSize === currentBackdrop.size);
+      });
+    }
+
+    if (bgTintRow) {
+      bgTintRow.querySelectorAll('.sass-sub-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.bgTint === currentBackdrop.tint);
+      });
+    }
+
+    applyBackdropToIframeDirectly();
+  }
+
+  const THEME_NAMES = {
+    taxi: 'Taxi Gold',
+    travel: 'Sky Blue',
+    royal: 'Royal Dark',
+    eco: 'Emerald',
+    blue: 'Ocean Light',
+    red: 'Crimson Dark',
+    custom: 'Custom Theme'
+  };
+
+  function getHoverColor(hex) {
+    if (!hex || hex[0] !== '#') return hex;
+    const num = parseInt(hex.replace('#', ''), 16);
+    if (isNaN(num)) return hex;
+    let r = (num >> 16);
+    let g = (num >> 8 & 0x00FF);
+    let b = (num & 0x0000FF);
+    const factor = (r * 0.299 + g * 0.587 + b * 0.114) > 128 ? 0.88 : 1.15;
+    r = Math.min(255, Math.max(0, Math.round(r * factor)));
+    g = Math.min(255, Math.max(0, Math.round(g * factor)));
+    b = Math.min(255, Math.max(0, Math.round(b * factor)));
+    return `#${((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1).toUpperCase()}`;
+  }
+
+  function getContrastColor(hex) {
+    if (!hex || hex[0] !== '#') return '#FFFFFF';
+    const num = parseInt(hex.replace('#', ''), 16);
+    if (isNaN(num)) return '#FFFFFF';
+    const r = (num >> 16);
+    const g = (num >> 8 & 0x00FF);
+    const b = (num & 0x0000FF);
+    const yiq = ((r * 299) + (g * 587) + (b * 114)) / 1000;
+    return (yiq >= 140) ? '#0A0A0A' : '#FFFFFF';
+  }
+
+  function isDarkColor(hex) {
+    if (!hex || hex[0] !== '#') return false;
+    const num = parseInt(hex.replace('#', ''), 16);
+    if (isNaN(num)) return false;
+    const r = (num >> 16);
+    const g = (num >> 8 & 0x00FF);
+    const b = (num & 0x0000FF);
+    return ((r * 299) + (g * 587) + (b * 114)) / 1000 < 128;
+  }
+
+  function applyThemeToIframeDirectly(themeObj) {
+    if (!previewIframe) return;
+    try {
+      const iDoc = previewIframe.contentDocument || (previewIframe.contentWindow && previewIframe.contentWindow.document);
+      if (iDoc) {
+        const root = iDoc.documentElement;
+        if (themeObj.primary) root.style.setProperty('--theme-primary', themeObj.primary);
+        if (themeObj.primaryHover) root.style.setProperty('--theme-primary-hover', themeObj.primaryHover);
+        if (themeObj.primaryContrast) root.style.setProperty('--theme-primary-contrast', themeObj.primaryContrast);
+        if (themeObj.background) {
+          root.style.setProperty('--theme-bg', themeObj.background);
+          if (iDoc.body) iDoc.body.style.backgroundColor = themeObj.background;
+        }
+        if (themeObj.cardBg) {
+          root.style.setProperty('--theme-card-bg', themeObj.cardBg);
+          root.style.setProperty('--theme-card-bg-subtle', themeObj.cardBg);
+        }
+        if (themeObj.text) root.style.setProperty('--theme-text', themeObj.text);
+        if (themeObj.muted) root.style.setProperty('--theme-muted', themeObj.muted);
+        if (themeObj.border) root.style.setProperty('--theme-border', themeObj.border);
+        if (themeObj.accent) root.style.setProperty('--theme-accent', themeObj.accent);
+      }
+    } catch (e) {
+      // Handled via IPC fallback
+    }
+  }
+
+  function setThemeUI(themeKey, customValues = null) {
+    currentThemeKey = themeKey || 'taxi';
+    const preset = THEMES[currentThemeKey] || THEMES.taxi;
+    const p = (customValues && customValues.primary) ? customValues.primary : (preset.primary || '#FFD900');
+    const bg = (customValues && customValues.background) ? customValues.background : (preset.background || '#F7F4E8');
+    const card = (customValues && customValues.cardBg) ? customValues.cardBg : (preset.cardBg || '#FFFFFF');
+    const text = (customValues && customValues.text) ? customValues.text : (preset.text || '#111111');
+
+    if (themePrimaryColor) themePrimaryColor.value = p;
+    if (themePrimaryHex) themePrimaryHex.textContent = p.toUpperCase();
+    if (themePrimaryPreview) themePrimaryPreview.style.backgroundColor = p;
+    if (themeBgColor) themeBgColor.value = bg;
+    if (themeBgHex) themeBgHex.textContent = bg.toUpperCase();
+    if (themeBgPreview) themeBgPreview.style.backgroundColor = bg;
+    if (themeCardBgColor) themeCardBgColor.value = card;
+    if (themeCardBgHex) themeCardBgHex.textContent = card.toUpperCase();
+    if (themeCardBgPreview) themeCardBgPreview.style.backgroundColor = card;
+    if (themeTextColor) themeTextColor.value = text;
+    if (themeTextHex) themeTextHex.textContent = text.toUpperCase();
+    if (themeTextPreview) themeTextPreview.style.backgroundColor = text;
+
+    if (themePresetsRow) {
+      themePresetsRow.querySelectorAll('.sass-preset-card, .btn-theme-preset').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.theme === themeKey);
+      });
+    }
+
+    if (activeThemeBadge) {
+      activeThemeBadge.textContent = THEME_NAMES[themeKey] || 'Custom Theme';
+    }
+  }
+
+  // Initialize theme on startup
+  setThemeUI('taxi');
+  updateBackdropUI();
+
   // Initialize Modules
   if (window.AdminFleet) {
     window.AdminFleet.init({ onSync: syncLivePreview });
@@ -88,7 +325,7 @@
 
   function handleWidgetsSync(presetKey) {
     if (presetKey === 'travel') {
-      currentThemeKey = 'travel';
+      setThemeUI('travel');
       if (!customLogoDataUrl && logoPreviewImg) {
         logoPreviewImg.src = THEMES.travel?.logo || 'assets/logo-travel.svg';
       }
@@ -100,7 +337,7 @@
         inputPwaDesc.value = 'Add to home screen for 1-tap tour bookings';
       }
     } else if (presetKey === 'taxi') {
-      currentThemeKey = 'taxi';
+      setThemeUI('taxi');
       if (!customLogoDataUrl && logoPreviewImg) {
         logoPreviewImg.src = THEMES.taxi?.logo || 'assets/logo-taxi.svg';
       }
@@ -117,6 +354,10 @@
 
   if (window.AdminWidgets) {
     window.AdminWidgets.init({ onSync: handleWidgetsSync });
+  }
+
+  if (window.AdminHeroSlider) {
+    window.AdminHeroSlider.init({ onSync: syncLivePreview });
   }
 
   if (window.AdminGallery) {
@@ -365,6 +606,133 @@
     });
   }
 
+  // Global Theme Presets Click Listener
+  if (themePresetsRow) {
+    themePresetsRow.addEventListener('click', (e) => {
+      const btn = e.target.closest('.sass-preset-card, .btn-theme-preset');
+      if (!btn) return;
+      const key = btn.dataset.theme;
+      setThemeUI(key);
+      const preset = THEMES[key] || THEMES.taxi;
+      applyThemeToIframeDirectly(preset);
+      syncLivePreview();
+    });
+  }
+
+  // Live Color Pickers Input Listener
+  function onThemeColorInput() {
+    if (activeThemeBadge) activeThemeBadge.textContent = 'Custom Theme';
+    if (themePresetsRow) {
+      themePresetsRow.querySelectorAll('.sass-preset-card, .btn-theme-preset').forEach(btn => btn.classList.remove('active'));
+    }
+    const pVal = themePrimaryColor ? themePrimaryColor.value : '#FFD900';
+    const bgVal = themeBgColor ? themeBgColor.value : '#F7F4E8';
+    const cardVal = themeCardBgColor ? themeCardBgColor.value : '#FFFFFF';
+    const textVal = themeTextColor ? themeTextColor.value : '#111111';
+
+    if (themePrimaryHex) themePrimaryHex.textContent = pVal.toUpperCase();
+    if (themePrimaryPreview) themePrimaryPreview.style.backgroundColor = pVal;
+    if (themeBgHex) themeBgHex.textContent = bgVal.toUpperCase();
+    if (themeBgPreview) themeBgPreview.style.backgroundColor = bgVal;
+    if (themeCardBgHex) themeCardBgHex.textContent = cardVal.toUpperCase();
+    if (themeCardBgPreview) themeCardBgPreview.style.backgroundColor = cardVal;
+    if (themeTextHex) themeTextHex.textContent = textVal.toUpperCase();
+    if (themeTextPreview) themeTextPreview.style.backgroundColor = textVal;
+
+    const isBgDark = isDarkColor(bgVal);
+    const themeObj = {
+      primary: pVal,
+      primaryHover: getHoverColor(pVal),
+      primaryContrast: getContrastColor(pVal),
+      background: bgVal,
+      cardBg: cardVal,
+      text: textVal,
+      muted: isBgDark ? '#94A3B8' : '#64748B',
+      border: isBgDark ? 'rgba(255, 255, 255, 0.12)' : 'rgba(17, 17, 17, 0.08)',
+      accent: pVal
+    };
+    applyThemeToIframeDirectly(themeObj);
+    syncLivePreview();
+  }
+
+  [themePrimaryColor, themeBgColor, themeCardBgColor, themeTextColor].forEach(input => {
+    if (input) {
+      input.addEventListener('input', onThemeColorInput);
+    }
+  });
+
+  // Backdrop Atmosphere Listeners
+  if (bgSourceRow) {
+    bgSourceRow.addEventListener('click', (e) => {
+      const btn = e.target.closest('.sass-seg-btn');
+      if (!btn) return;
+      currentBackdrop.type = btn.dataset.bgType || 'none';
+      updateBackdropUI();
+      syncLivePreview();
+    });
+  }
+
+  if (inputBgImageFile) {
+    inputBgImageFile.addEventListener('change', () => {
+      const file = inputBgImageFile.files && inputBgImageFile.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        currentBackdrop.imageUrl = event.target.result;
+        updateBackdropUI();
+        syncLivePreview();
+      };
+      reader.readAsDataURL(file);
+    });
+  }
+
+  if (btnRemoveBgImage) {
+    btnRemoveBgImage.addEventListener('click', () => {
+      currentBackdrop.imageUrl = '';
+      if (inputBgImageFile) inputBgImageFile.value = '';
+      updateBackdropUI();
+      syncLivePreview();
+    });
+  }
+
+  if (inputBgOpacity) {
+    inputBgOpacity.addEventListener('input', () => {
+      currentBackdrop.opacity = parseInt(inputBgOpacity.value, 10) || 20;
+      if (bgOpacityBadge) bgOpacityBadge.textContent = `${currentBackdrop.opacity}%`;
+      applyBackdropToIframeDirectly();
+      syncLivePreview();
+    });
+  }
+
+  if (inputBgBlur) {
+    inputBgBlur.addEventListener('input', () => {
+      currentBackdrop.blur = parseInt(inputBgBlur.value, 10) || 0;
+      if (bgBlurBadge) bgBlurBadge.textContent = `${currentBackdrop.blur}px`;
+      applyBackdropToIframeDirectly();
+      syncLivePreview();
+    });
+  }
+
+  if (bgSizeRow) {
+    bgSizeRow.addEventListener('click', (e) => {
+      const btn = e.target.closest('.sass-sub-btn');
+      if (!btn) return;
+      currentBackdrop.size = btn.dataset.bgSize || 'contain';
+      updateBackdropUI();
+      syncLivePreview();
+    });
+  }
+
+  if (bgTintRow) {
+    bgTintRow.addEventListener('click', (e) => {
+      const btn = e.target.closest('.sass-sub-btn');
+      if (!btn) return;
+      currentBackdrop.tint = btn.dataset.bgTint || 'none';
+      updateBackdropUI();
+      syncLivePreview();
+    });
+  }
+
   // Build Config Data Object
   function buildConfigObject() {
     const sections = window.AdminWidgets ? window.AdminWidgets.getSections() : [];
@@ -489,16 +857,24 @@
         logoShape: currentLogoShape,
         logoGlow: checkLogoGlow ? checkLogoGlow.checked : true,
         theme: {
-          primary: theme.primary,
-          primaryHover: theme.primaryHover,
-          primaryContrast: theme.primaryContrast,
-          background: theme.background,
-          cardBg: theme.cardBg,
-          text: theme.text,
-          muted: theme.muted,
-          border: theme.border,
-          accent: theme.accent,
-          pattern: (computedTemplate === 'travel') ? 'travel-gradient' : theme.pattern
+          primary: (themePrimaryColor && themePrimaryColor.value) ? themePrimaryColor.value : theme.primary,
+          primaryHover: getHoverColor((themePrimaryColor && themePrimaryColor.value) ? themePrimaryColor.value : theme.primary),
+          primaryContrast: getContrastColor((themePrimaryColor && themePrimaryColor.value) ? themePrimaryColor.value : theme.primary),
+          background: (themeBgColor && themeBgColor.value) ? themeBgColor.value : theme.background,
+          cardBg: (themeCardBgColor && themeCardBgColor.value) ? themeCardBgColor.value : theme.cardBg,
+          text: (themeTextColor && themeTextColor.value) ? themeTextColor.value : theme.text,
+          muted: isDarkColor((themeBgColor && themeBgColor.value) ? themeBgColor.value : theme.background) ? '#94A3B8' : '#64748B',
+          border: isDarkColor((themeBgColor && themeBgColor.value) ? themeBgColor.value : theme.background) ? 'rgba(255, 255, 255, 0.12)' : 'rgba(17, 17, 17, 0.08)',
+          accent: (themePrimaryColor && themePrimaryColor.value) ? themePrimaryColor.value : theme.accent,
+          pattern: (computedTemplate === 'travel') ? 'travel-gradient' : (theme.pattern || 'taxi-stripes'),
+          backdrop: {
+            type: currentBackdrop.type || 'none',
+            imageUrl: currentBackdrop.imageUrl || '',
+            opacity: (currentBackdrop.opacity !== undefined ? currentBackdrop.opacity : 20) / 100,
+            blur: (currentBackdrop.blur !== undefined ? currentBackdrop.blur : 12),
+            size: currentBackdrop.size || 'contain',
+            tint: currentBackdrop.tint || 'none'
+          }
         }
       },
       contact: {
@@ -560,6 +936,12 @@
         { id: "rajasthan", name: "Rajasthan", query: "Rajasthan Heritage Tour" },
         { id: "udaipur", name: "Udaipur", query: "Udaipur & Mount Abu" }
       ],
+      heroSlider: window.AdminHeroSlider ? window.AdminHeroSlider.getData() : {
+        title: '',
+        subtitle: '',
+        settings: { autoPlay: true, interval: 4, height: 'standard', effect: 'slide', overlayStyle: 'gradient', arrows: true, dots: true, borderRadius: 'rounded' },
+        slides: []
+      },
       gallery: window.AdminGallery ? window.AdminGallery.getData() : {
         title: 'Photo Gallery',
         subtitle: 'Moments captured across our journeys',
@@ -587,6 +969,7 @@
       console.warn('Live preview sync warning:', err);
     }
     applyRadiusToIframeDirectly(currentLogoRadius);
+    applyBackdropToIframeDirectly();
   }
 
   if (previewIframe) {
@@ -709,38 +1092,42 @@
         if (clientsCount) clientsCount.textContent = data.clients.length;
         if (clientsTableBody) {
           clientsTableBody.innerHTML = '';
-          data.clients.forEach(c => {
-            const tr = document.createElement('tr');
-            const isTrv = c.template === 'travel';
-            const templateBadge = isTrv
-              ? `<span class="badge-template badge-travel"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" style="vertical-align:-1.5px; margin-right:4px;"><path d="m17.8 19.2-1.8-8.2 3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z"/></svg><span>Tour</span></span>`
-              : `<span class="badge-template badge-taxi"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" style="vertical-align:-1.5px; margin-right:4px;"><path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.5 2.8C2.1 11 2 11.3 2 11.6V16c0 .6.4 1 1 1h2"/><circle cx="7" cy="17" r="2"/><circle cx="17" cy="17" r="2"/></svg><span>Taxi</span></span>`;
+          if (!data.clients || data.clients.length === 0) {
+            clientsTableBody.innerHTML = `<tr><td colspan="5" style="text-align:center; padding:36px; color:#71717A; font-size:0.86rem;">No saved clients found yet. Click <strong>"Create New Client"</strong> to build your first portal.</td></tr>`;
+          } else {
+            data.clients.forEach(c => {
+              const tr = document.createElement('tr');
+              const isTrv = c.template === 'travel';
+              const templateBadge = isTrv
+                ? `<span class="badge-template badge-travel"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" style="vertical-align:-1.5px; margin-right:4px;"><path d="m17.8 19.2-1.8-8.2 3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z"/></svg><span>Tour</span></span>`
+                : `<span class="badge-template badge-taxi"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" style="vertical-align:-1.5px; margin-right:4px;"><path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.5 2.8C2.1 11 2 11.3 2 11.6V16c0 .6.4 1 1 1h2"/><circle cx="7" cy="17" r="2"/><circle cx="17" cy="17" r="2"/></svg><span>Taxi</span></span>`;
 
-            tr.innerHTML = `
-              <td>
-                <strong>${c.name}</strong><br>
-                <span style="font-size:0.74rem; color:#71717A;">${c.slug}</span>
-              </td>
-              <td style="white-space:nowrap;">${templateBadge}</td>
-              <td style="color:#52525B;">${c.city}</td>
-              <td style="color:#52525B;">${c.phone}</td>
-              <td style="white-space:nowrap;">
-                <button type="button" class="btn btn-secondary btn-sm btn-edit-client" data-slug="${c.slug}" style="padding:5px 10px; font-size:0.76rem; margin-right:6px;">
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:4px;"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/><path d="m15 5 4 4"/></svg>
-                  <span>Edit</span>
-                </button>
-                <a href="${c.url}" target="_blank" class="btn btn-secondary btn-sm" style="padding:5px 10px; font-size:0.76rem; margin-right:6px;">
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:4px;"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"></line></svg>
-                  <span>Open</span>
-                </a>
-                <button type="button" class="btn-text-muted btn-delete-client" data-slug="${c.slug}" data-name="${c.name}" style="padding:5px 8px; font-size:0.76rem;">
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:3px; vertical-align:-1px;"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg>
-                  <span>Delete</span>
-                </button>
-              </td>
-            `;
-            clientsTableBody.appendChild(tr);
-          });
+              tr.innerHTML = `
+                <td>
+                  <strong>${c.name}</strong><br>
+                  <span style="font-size:0.74rem; color:#71717A;">${c.slug}</span>
+                </td>
+                <td style="white-space:nowrap;">${templateBadge}</td>
+                <td style="color:#52525B;">${c.city}</td>
+                <td style="color:#52525B;">${c.phone}</td>
+                <td style="white-space:nowrap;">
+                  <button type="button" class="btn btn-secondary btn-sm btn-edit-client" data-slug="${c.slug}" style="padding:5px 10px; font-size:0.76rem; margin-right:6px;">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:4px;"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/><path d="m15 5 4 4"/></svg>
+                    <span>Edit</span>
+                  </button>
+                  <a href="${c.url}" target="_blank" class="btn btn-secondary btn-sm" style="padding:5px 10px; font-size:0.76rem; margin-right:6px;">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:4px;"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+                    <span>Open</span>
+                  </a>
+                  <button type="button" class="btn-text-muted btn-delete-client" data-slug="${c.slug}" data-name="${c.name}" style="padding:5px 8px; font-size:0.76rem;">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:3px; vertical-align:-1px;"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg>
+                    <span>Delete</span>
+                  </button>
+                </td>
+              `;
+              clientsTableBody.appendChild(tr);
+            });
+          }
         }
       }
     } catch {}
@@ -768,15 +1155,39 @@
       inputAltPhone.value = data.contact?.secondaryDisplayPhone || data.contact?.secondaryPhone || '';
       inputMaps.value = data.contact?.googleMapsUrl || '';
 
-      const primaryColor = data.brand?.theme?.primary || '#FFD900';
-      let matchedTheme = 'taxi';
+      const savedTheme = data.brand?.theme || {};
+      let matchedTheme = 'custom';
       for (const key of Object.keys(THEMES)) {
-        if (THEMES[key]?.primary?.toLowerCase() === primaryColor.toLowerCase()) {
+        if (THEMES[key]?.primary?.toLowerCase() === (savedTheme.primary || '').toLowerCase() &&
+            (!savedTheme.background || THEMES[key]?.background?.toLowerCase() === savedTheme.background?.toLowerCase())) {
           matchedTheme = key;
           break;
         }
       }
-      currentThemeKey = matchedTheme;
+      setThemeUI(matchedTheme, savedTheme);
+
+      if (savedTheme.backdrop) {
+        const b = savedTheme.backdrop;
+        currentBackdrop = {
+          type: b.type || 'none',
+          imageUrl: b.imageUrl || '',
+          opacity: b.opacity !== undefined ? Math.round(b.opacity * 100) : 20,
+          blur: b.blur !== undefined ? b.blur : 12,
+          size: b.size || 'contain',
+          tint: b.tint || 'none'
+        };
+        updateBackdropUI();
+      } else {
+        currentBackdrop = {
+          type: 'none',
+          imageUrl: '',
+          opacity: 20,
+          blur: 12,
+          size: 'contain',
+          tint: 'none'
+        };
+        updateBackdropUI();
+      }
 
       if (data.brand?.logoUrl) {
         logoPreviewImg.src = data.brand.logoUrl;
@@ -821,6 +1232,10 @@
 
       if (window.AdminDestinations && data.popularDestinations) {
         window.AdminDestinations.populateDestinations(data.popularDestinations);
+      }
+
+      if (window.AdminHeroSlider) {
+        window.AdminHeroSlider.setData(data.heroSlider || null);
       }
 
       if (window.AdminGallery) {
@@ -892,7 +1307,16 @@
     btnCancelEdit.style.display = 'none';
     clientForm.reset();
     customLogoDataUrl = null;
-    currentThemeKey = 'taxi';
+    setThemeUI('taxi');
+    currentBackdrop = {
+      type: 'none',
+      imageUrl: '',
+      opacity: 20,
+      blur: 12,
+      size: 'contain',
+      tint: 'none'
+    };
+    updateBackdropUI();
     logoPreviewImg.src = THEMES.taxi?.logo || 'assets/logo-taxi.svg';
     btnResetLogo.style.display = 'none';
     updateLogoRadiusUI(50, 'circle');
@@ -915,6 +1339,10 @@
 
     if (window.AdminDestinations) {
       window.AdminDestinations.resetToDefault();
+    }
+
+    if (window.AdminHeroSlider) {
+      window.AdminHeroSlider.reset();
     }
 
     if (window.AdminGallery) {
@@ -996,24 +1424,36 @@
     });
   }
 
-  // Tabs
+  // Tabs Navigation
+  function switchTab(targetTab) {
+    if (tabCreate) tabCreate.classList.toggle('active', targetTab === tabCreate);
+    if (tabTheme) tabTheme.classList.toggle('active', targetTab === tabTheme);
+    if (tabList) tabList.classList.toggle('active', targetTab === tabList);
+
+    if (createSection) createSection.style.display = (targetTab === tabCreate) ? 'block' : 'none';
+    if (themeSection) themeSection.style.display = (targetTab === tabTheme) ? 'block' : 'none';
+    if (listSection) listSection.style.display = (targetTab === tabList) ? 'block' : 'none';
+
+    if (targetTab === tabList) {
+      loadClientsList();
+    }
+  }
+
   if (tabCreate) {
-    tabCreate.addEventListener('click', () => {
-      tabCreate.classList.add('active');
-      tabList.classList.remove('active');
-      createSection.style.display = 'block';
-      listSection.style.display = 'none';
-    });
+    tabCreate.addEventListener('click', () => switchTab(tabCreate));
+  }
+
+  if (tabTheme) {
+    tabTheme.addEventListener('click', () => switchTab(tabTheme));
   }
 
   if (tabList) {
-    tabList.addEventListener('click', () => {
-      tabList.classList.add('active');
-      tabCreate.classList.remove('active');
-      createSection.style.display = 'none';
-      listSection.style.display = 'block';
-      loadClientsList();
-    });
+    tabList.addEventListener('click', () => switchTab(tabList));
+  }
+
+  const btnThemeApplyDone = document.getElementById('btnThemeApplyDone');
+  if (btnThemeApplyDone) {
+    btnThemeApplyDone.addEventListener('click', () => switchTab(tabCreate));
   }
 
   if (btnReloadPreview) {
@@ -1030,8 +1470,9 @@
     });
   }
 
+  // Load saved clients count immediately
+  loadClientsList();
+
   // Check authentication on initial load
-  if (checkAuth()) {
-    loadClientsList();
-  }
+  checkAuth();
 })();

@@ -80,6 +80,16 @@
       iconBoxClass: 'pwa',
       iconSvg: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="20" x="5" y="2" rx="2" ry="2"/><path d="M12 18h.01"/></svg>`
     },
+    'hero-slider': {
+      type: 'hero-slider',
+      title: 'Hero Image Slider',
+      badge: 'Media',
+      category: 'media',
+      keywords: 'hero slider image banner carousel slides promotion showcase presentation swipe slideshow photo photos left right',
+      desc: 'Interactive sliding hero carousel with left-to-right animations, text overlays, badges & CTA buttons',
+      iconBoxClass: 'slider',
+      iconSvg: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="14" x="3" y="5" rx="2"/><path d="m9 9 3 3-3 3"/><path d="m15 9-3 3 3 3"/></svg>`
+    },
     'gallery': {
       type: 'gallery',
       title: 'Gallery',
