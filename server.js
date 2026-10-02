@@ -10,9 +10,55 @@ const fs = require('fs');
 const path = require('path');
 const url = require('url');
 const db = require('./db');
+const generator = require('./generator');
+const exporter = require('./exporter');
 
 const PORT = process.env.PORT || 4000;
 const ROOT_DIR = __dirname;
+
+/**
+ * Serve HTML file with live-reload snippet on localhost
+ */
+function serveHtmlResponse(res, filePath) {
+  fs.readFile(filePath, (err, data) => {
+    if (err) {
+      res.writeHead(404, { 'Content-Type': 'text/html; charset=utf-8' });
+      res.end('<h1>404 Not Found</h1>');
+      return;
+    }
+
+    let htmlStr = data.toString('utf8');
+    const lrSnippet = `
+<script id="__lrScript">
+(() => {
+  if (location.hostname === 'localhost' || location.hostname === '127.0.0.1') {
+    try {
+      const es = new EventSource('/__livereload');
+      es.onmessage = (e) => {
+        if (e.data === 'reload') {
+          console.log('[LiveReload] File modified, auto-refreshing...');
+          location.reload();
+        }
+      };
+    } catch {}
+  }
+})();
+</script>`;
+    if (htmlStr.includes('</body>')) {
+      htmlStr = htmlStr.replace('</body>', `${lrSnippet}\n</body>`);
+    } else {
+      htmlStr += lrSnippet;
+    }
+
+    res.writeHead(200, {
+      'Content-Type': 'text/html; charset=utf-8',
+      'Cache-Control': 'no-cache, no-store, must-revalidate',
+      'Pragma': 'no-cache',
+      'Expires': '0'
+    });
+    res.end(Buffer.from(htmlStr, 'utf8'));
+  });
+}
 
 // MIME types dictionary
 const MIME_TYPES = {
@@ -163,15 +209,23 @@ const server = http.createServer(async (req, res) => {
         // Save directly to MongoDB Atlas
         await db.saveClientConfig(slug, payload.data, !!payload.setAsDefault);
 
-        console.log(`[SAVED TO MONGODB] Client config: ${slug}`);
+        // Pre-render static HTML file for instant static serving (SSG)
+        generator.buildStaticSite(slug, payload.data);
+        if (payload.setAsDefault) {
+          generator.buildStaticSite('default', payload.data);
+        }
+
+        console.log(`[SAVED TO MONGODB + STATIC HTML] Client: ${slug}`);
 
         res.writeHead(200, { 'Content-Type': 'application/json' });
         res.end(JSON.stringify({
           success: true,
           slug,
-          storage: 'mongodb',
-          clientUrl: `/?client=${slug}`,
-          fullUrl: `http://${req.headers.host}/?client=${slug}`
+          storage: 'mongodb+static',
+          filePath: `sites/${slug}.html`,
+          staticFile: `sites/${slug}.html`,
+          clientUrl: `/${slug}`,
+          fullUrl: `http://${req.headers.host}/${slug}`
         }));
       } catch (err) {
         console.error('Error saving client to MongoDB:', err);
@@ -180,6 +234,68 @@ const server = http.createServer(async (req, res) => {
       }
     });
     return;
+  }
+
+  // --- API: Export Website as Standalone ZIP ---
+  if (pathname === '/api/export-zip') {
+    if (req.method === 'POST') {
+      let body = '';
+      req.on('data', chunk => { body += chunk; });
+      req.on('end', async () => {
+        try {
+          const payload = JSON.parse(body || '{}');
+          let slug = (payload.slug || '').trim().toLowerCase().replace(/[^a-z0-9_-]/g, '-').replace(/-+/g, '-');
+          let configData = payload.data;
+
+          if (!configData && slug) {
+            configData = await db.getClientConfig(slug);
+          }
+          if (!configData) {
+            configData = await db.getClientConfig('default') || JSON.parse(fs.readFileSync(path.join(ROOT_DIR, 'config.json'), 'utf8'));
+          }
+          if (!slug) {
+            slug = (configData?.brand?.name || 'website').trim().toLowerCase().replace(/[^a-z0-9_-]/g, '-');
+          }
+
+          if (payload.logoBase64 && payload.logoBase64.startsWith('data:image/')) {
+            if (configData.brand) configData.brand.logoUrl = payload.logoBase64;
+          }
+
+          const zipBuffer = await exporter.buildWebsiteZip(slug, configData);
+          res.writeHead(200, {
+            'Content-Type': 'application/zip',
+            'Content-Disposition': `attachment; filename="${slug}-website.zip"`,
+            'Content-Length': zipBuffer.length
+          });
+          res.end(zipBuffer);
+        } catch (err) {
+          console.error('Error exporting website ZIP:', err);
+          res.writeHead(500, { 'Content-Type': 'application/json' });
+          res.end(JSON.stringify({ success: false, error: err.message }));
+        }
+      });
+      return;
+    } else if (req.method === 'GET') {
+      const slug = (parsedUrl.query.slug || 'website').trim().toLowerCase().replace(/[^a-z0-9_-]/g, '-');
+      try {
+        let configData = await db.getClientConfig(slug);
+        if (!configData) {
+          configData = await db.getClientConfig('default') || JSON.parse(fs.readFileSync(path.join(ROOT_DIR, 'config.json'), 'utf8'));
+        }
+        const zipBuffer = await exporter.buildWebsiteZip(slug, configData);
+        res.writeHead(200, {
+          'Content-Type': 'application/zip',
+          'Content-Disposition': `attachment; filename="${slug}-website.zip"`,
+          'Content-Length': zipBuffer.length
+        });
+        res.end(zipBuffer);
+      } catch (err) {
+        console.error('Error exporting website ZIP:', err);
+        res.writeHead(500, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ success: false, error: err.message }));
+      }
+      return;
+    }
   }
 
   // --- API: Delete Client (Directly from MongoDB) ---
@@ -200,8 +316,9 @@ const server = http.createServer(async (req, res) => {
     try {
       const deleted = await db.deleteClientConfig(slug);
       if (deleted) {
+        generator.removeStaticSite(slug);
         res.writeHead(200, { 'Content-Type': 'application/json' });
-        res.end(JSON.stringify({ success: true, message: `Deleted ${slug} from MongoDB` }));
+        res.end(JSON.stringify({ success: true, message: `Deleted ${slug} from MongoDB and static cache` }));
       } else {
         res.writeHead(404, { 'Content-Type': 'application/json' });
         res.end(JSON.stringify({ success: false, error: 'Client not found in MongoDB' }));
@@ -245,6 +362,53 @@ const server = http.createServer(async (req, res) => {
       }
     } catch (err) {
       console.warn('Error checking default in MongoDB:', err.message);
+    }
+  }
+
+  // --- SSG: Direct Static Site Serving (0ms TTFB, 0 DB queries on customer visit) ---
+  if (req.method === 'GET') {
+    let clientSlug = null;
+
+    if (pathname === '/' && parsedUrl.query.client) {
+      clientSlug = String(parsedUrl.query.client).trim().toLowerCase();
+    } else if (pathname === '/' && !parsedUrl.query.client) {
+      // Root visit: check for MongoDB default client or default pre-rendered site
+      try {
+        const defaultCfg = await db.getDefaultConfig();
+        if (defaultCfg) {
+          clientSlug = (defaultCfg.slug || 'default').toLowerCase();
+        } else if (generator.hasStaticSite('default')) {
+          clientSlug = 'default';
+        }
+      } catch (err) {
+        console.warn('[SSG] Error checking default config for root visit:', err.message);
+      }
+    } else if (
+      pathname !== '/' &&
+      !pathname.includes('.') &&
+      !pathname.startsWith('/api/') &&
+      pathname !== '/__livereload'
+    ) {
+      clientSlug = pathname.replace(/^\/+|\/+$/g, '').toLowerCase();
+    }
+
+    if (clientSlug) {
+      if (generator.hasStaticSite(clientSlug)) {
+        serveHtmlResponse(res, generator.getStaticSitePath(clientSlug));
+        return;
+      }
+
+      // If not yet generated on disk, build from MongoDB on-demand
+      try {
+        const clientCfg = await db.getClientConfig(clientSlug);
+        if (clientCfg) {
+          const generatedPath = generator.buildStaticSite(clientSlug, clientCfg);
+          serveHtmlResponse(res, generatedPath);
+          return;
+        }
+      } catch (err) {
+        console.warn(`[SSG] Error checking database for client "${clientSlug}":`, err.message);
+      }
     }
   }
 
@@ -332,7 +496,27 @@ server.listen(PORT, async () => {
   console.log(`👉 Admin Panel:     http://localhost:${PORT}/admin.html`);
 
   // Initialize MongoDB Atlas connection
-  await db.initDatabase();
+  const dbConnected = await db.initDatabase();
+
+  // Pre-generate static HTML files for all clients in MongoDB (SSG)
+  if (dbConnected) {
+    try {
+      const allClients = await db.getAllClients();
+      console.log(`⚡ Pre-generating static HTML files for ${allClients.length} clients...`);
+      for (const c of allClients) {
+        const fullConfig = await db.getClientConfig(c.slug);
+        if (fullConfig) {
+          generator.buildStaticSite(c.slug, fullConfig);
+        }
+      }
+      const defaultConfig = await db.getDefaultConfig();
+      if (defaultConfig) {
+        generator.buildStaticSite('default', defaultConfig);
+      }
+    } catch (err) {
+      console.warn('Note: Could not batch pre-generate all static sites on startup:', err.message);
+    }
+  }
 
   console.log(`======================================================\n`);
 });

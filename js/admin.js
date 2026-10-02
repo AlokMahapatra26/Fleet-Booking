@@ -31,12 +31,15 @@
   const inputTelegram = document.getElementById('inputTelegram');
   const inputEmail = document.getElementById('inputEmail');
   const btnSaveClient = document.getElementById('btnSaveClient');
+  const btnExportZip = document.getElementById('btnExportZip');
+  const btnExportZipPreview = document.getElementById('btnExportZipPreview');
   const btnDownloadJson = document.getElementById('btnDownloadJson');
   const resultBox = document.getElementById('resultBox');
   const createdFilePath = document.getElementById('createdFilePath');
   const createdClientUrl = document.getElementById('createdClientUrl');
   const btnCopyLink = document.getElementById('btnCopyLink');
   const btnOpenClient = document.getElementById('btnOpenClient');
+  const btnPreviewPortal = document.getElementById('btnPreviewPortal');
   const previewIframe = document.getElementById('previewIframe');
   const tabCreate = document.getElementById('tabCreate');
   const tabTheme = document.getElementById('tabTheme');
@@ -1004,7 +1007,10 @@
       const configData = buildConfigObject();
 
       btnSaveClient.disabled = true;
-      btnSaveClient.innerHTML = '<span>Saving JSON...</span>';
+      btnSaveClient.innerHTML = `
+        <svg class="spin-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg>
+        <span>Saving...</span>
+      `;
 
       try {
         const res = await fetch('/api/save-client', {
@@ -1027,18 +1033,19 @@
           if (btnOpenClient) btnOpenClient.href = result.clientUrl;
           if (resultBox) resultBox.classList.add('show');
 
-          previewIframe.src = result.clientUrl;
+          if (btnPreviewPortal && result.clientUrl) btnPreviewPortal.href = result.clientUrl;
+          syncLivePreview();
           loadClientsList();
 
           const isEditMode = btnCancelEdit && btnCancelEdit.style.display !== 'none';
           btnSaveClient.innerHTML = `
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
-            <span style="color:#10B981; font-weight:700;">${isEditMode ? 'Updated Successfully!' : 'Saved Successfully!'}</span>
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            <span style="color:#10B981; font-weight:600;">${isEditMode ? 'Updated!' : 'Saved!'}</span>
           `;
           setTimeout(() => {
             btnSaveClient.innerHTML = `
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
-              <span>${isEditMode ? `Update Client (${slug})` : 'Save & Generate Client JSON'}</span>
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
+              <span>${isEditMode ? `Update (${slug})` : 'Save Client'}</span>
             `;
           }, 2000);
         } else {
@@ -1051,6 +1058,115 @@
         btnSaveClient.disabled = false;
       }
     });
+  }
+
+  // Standalone Website ZIP Export
+  if (btnExportZip) {
+    btnExportZip.addEventListener('click', () => {
+      const slug = inputSlug.value.trim() || 'website';
+      exportWebsiteZip(slug, buildConfigObject());
+    });
+  }
+
+  if (btnExportZipPreview) {
+    btnExportZipPreview.addEventListener('click', () => {
+      const slug = inputSlug.value.trim() || 'website';
+      exportWebsiteZip(slug, buildConfigObject());
+    });
+  }
+
+  async function exportWebsiteZip(slug, configData) {
+    const finalSlug = slug || 'website';
+    const originalHtml = btnExportZip ? btnExportZip.innerHTML : '';
+    
+    if (btnExportZip) {
+      btnExportZip.disabled = true;
+      btnExportZip.classList.add('is-exporting');
+      btnExportZip.innerHTML = `
+        <svg class="spin-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg>
+        <span>Exporting...</span>
+      `;
+    }
+
+    try {
+      const response = await fetch('/api/export-zip', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-admin-key': sessionStorage.getItem(AUTH_KEY) || MASTER_PASSWORD
+        },
+        body: JSON.stringify({
+          slug: finalSlug,
+          data: configData || buildConfigObject(),
+          logoBase64: customLogoDataUrl
+        })
+      });
+
+      if (!response.ok) {
+        const errData = await response.json().catch(() => ({}));
+        throw new Error(errData.error || 'Server error ' + response.status);
+      }
+
+      const blob = await response.blob();
+      const downloadUrl = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = downloadUrl;
+      a.download = `${finalSlug}-website.zip`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      setTimeout(() => URL.revokeObjectURL(downloadUrl), 2000);
+
+      if (btnExportZip) {
+        btnExportZip.innerHTML = `
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          <span style="color:#10B981; font-weight:600;">Downloaded!</span>
+        `;
+        setTimeout(() => {
+          btnExportZip.innerHTML = originalHtml;
+          btnExportZip.disabled = false;
+          btnExportZip.classList.remove('is-exporting');
+        }, 2200);
+      }
+    } catch (err) {
+      console.error('Failed to export ZIP:', err);
+      alert('Could not export ZIP: ' + err.message);
+      if (btnExportZip) {
+        btnExportZip.innerHTML = originalHtml;
+        btnExportZip.disabled = false;
+        btnExportZip.classList.remove('is-exporting');
+      }
+    }
+  }
+
+  async function exportSavedClientZip(slug, name, btn) {
+    const origHtml = btn.innerHTML;
+    btn.disabled = true;
+    btn.innerHTML = `<svg class="spin-icon" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg>`;
+    try {
+      const response = await fetch(`/api/export-zip?slug=${encodeURIComponent(slug)}`, {
+        headers: { 'x-admin-key': sessionStorage.getItem(AUTH_KEY) || MASTER_PASSWORD }
+      });
+      if (!response.ok) throw new Error('Export failed');
+      const blob = await response.blob();
+      const downloadUrl = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = downloadUrl;
+      a.download = `${slug}-website.zip`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      setTimeout(() => URL.revokeObjectURL(downloadUrl), 2000);
+      btn.innerHTML = `<span style="color:#10B981; font-weight:700;">✓ ZIP</span>`;
+      setTimeout(() => {
+        btn.innerHTML = origHtml;
+        btn.disabled = false;
+      }, 2000);
+    } catch (err) {
+      alert('Failed to export ZIP: ' + err.message);
+      btn.innerHTML = origHtml;
+      btn.disabled = false;
+    }
   }
 
   // Direct download
@@ -1119,6 +1235,10 @@
                     <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:4px;"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"></line></svg>
                     <span>Open</span>
                   </a>
+                  <button type="button" class="btn btn-secondary btn-sm btn-export-client" data-slug="${c.slug}" data-name="${c.name}" style="padding:5px 9px; font-size:0.76rem; margin-right:6px;" title="Export and download complete website as ZIP">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:3px; vertical-align:-1px;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                    <span>ZIP</span>
+                  </button>
                   <button type="button" class="btn-text-muted btn-delete-client" data-slug="${c.slug}" data-name="${c.name}" style="padding:5px 8px; font-size:0.76rem;">
                     <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right:3px; vertical-align:-1px;"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg>
                     <span>Delete</span>
@@ -1295,7 +1415,8 @@
       `;
 
       tabCreate.click();
-      if (previewIframe) previewIframe.src = `/?client=${slug}`;
+      if (btnPreviewPortal) btnPreviewPortal.href = `/?client=${slug}`;
+      syncLivePreview();
     } catch (err) {
       alert('Failed to load client details for editing: ' + err.message);
     }
@@ -1304,6 +1425,7 @@
   // Reset Form
   function resetFormToNew() {
     tabCreate.textContent = 'Create New Client';
+    if (btnPreviewPortal) btnPreviewPortal.href = 'index.html';
     btnCancelEdit.style.display = 'none';
     clientForm.reset();
     customLogoDataUrl = null;
@@ -1406,6 +1528,12 @@
       const editBtn = e.target.closest('.btn-edit-client');
       if (editBtn) {
         editClient(editBtn.dataset.slug);
+        return;
+      }
+
+      const exportBtn = e.target.closest('.btn-export-client');
+      if (exportBtn) {
+        exportSavedClientZip(exportBtn.dataset.slug, exportBtn.dataset.name, exportBtn);
         return;
       }
 

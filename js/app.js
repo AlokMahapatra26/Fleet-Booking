@@ -13,6 +13,8 @@
 
   // Cache DOM Elements
   const DOM = {
+    appMain: document.getElementById('appMain'),
+    locationBadge: document.getElementById('locationBadge'),
     pageTitle: document.getElementById('pageTitle'),
     metaThemeColor: document.getElementById('metaThemeColor'),
     metaDescription: document.getElementById('metaDescription'),
@@ -68,13 +70,212 @@
   }
 
   /**
+   * Attach Interactive Runtime to Pre-Rendered Static Page (SSG)
+   * Zero DOM wiping, zero data fetching, instant interactive attachment.
+   */
+  function initPreRenderedRuntime(cfg) {
+    if (!cfg) return;
+    config = cfg;
+
+    if (DOM.appMain) DOM.appMain.classList.add('is-ready');
+
+    const isTravel = cfg.template === 'travel';
+
+    // 1. Initialize Active Booking Modules (WhatsApp dispatch & stepper listeners)
+    const isTaxiEnabled = Array.isArray(cfg.sections)
+      ? cfg.sections.some(s => (s.type === 'taxi-booking' || s.id === 'taxi-booking') && s.enabled !== false)
+      : !isTravel;
+    const isTravelEnabled = Array.isArray(cfg.sections)
+      ? cfg.sections.some(s => (s.type === 'travel-booking' || s.id === 'travel-booking') && s.enabled !== false)
+      : isTravel;
+
+    if (isTaxiEnabled && window.TaxiPortal) {
+      window.TaxiPortal.init(cfg, showToast);
+    }
+    if (isTravelEnabled && window.TravelPortal) {
+      window.TravelPortal.init(cfg, showToast);
+    }
+
+    // 2. Attach Hero Slider Touch & Autoplay Listeners without wiping DOM
+    initHeroSliderRuntime(cfg.heroSlider);
+
+    // 3. Attach Lightbox Click Handlers to Pre-Rendered Gallery Cards
+    initGalleryRuntime();
+
+    // 4. Populate active team contacts list for modal search
+    if (cfg.teamContacts && Array.isArray(cfg.teamContacts.contacts)) {
+      activeTeamContactsList = cfg.teamContacts.contacts;
+    }
+  }
+
+  function initHeroSliderRuntime(sliderData) {
+    const section = document.getElementById('heroSliderSection');
+    const container = document.getElementById('heroSliderContainer');
+    const track = document.getElementById('heroSliderTrack');
+    const prevBtn = document.getElementById('heroSliderPrev');
+    const nextBtn = document.getElementById('heroSliderNext');
+    const pagination = document.getElementById('heroSliderPagination');
+
+    if (!section || !track || !container) return;
+
+    if (heroSliderTimer) {
+      clearInterval(heroSliderTimer);
+      heroSliderTimer = null;
+    }
+
+    const settings = (sliderData && sliderData.settings) || {};
+    const slides = (sliderData && Array.isArray(sliderData.slides)) ? sliderData.slides : [];
+    if (slides.length <= 1) return;
+
+    function goToSlide(targetIndex) {
+      if (targetIndex < 0) {
+        heroSliderCurrentIndex = slides.length - 1;
+      } else if (targetIndex >= slides.length) {
+        heroSliderCurrentIndex = 0;
+      } else {
+        heroSliderCurrentIndex = targetIndex;
+      }
+      updateSlidePosition();
+    }
+
+    function updateSlidePosition() {
+      const allSlides = track.querySelectorAll('.hero-slide-item');
+      const allDots = pagination ? pagination.querySelectorAll('.hero-slider-dot') : [];
+      const effect = settings.effect || 'slide';
+
+      if (effect === 'fade') {
+        track.style.transform = 'none';
+        allSlides.forEach((s, i) => {
+          s.classList.toggle('is-active', i === heroSliderCurrentIndex);
+        });
+      } else {
+        track.style.transform = `translateX(-${heroSliderCurrentIndex * 100}%)`;
+        allSlides.forEach((s, i) => {
+          s.classList.toggle('is-active', i === heroSliderCurrentIndex);
+        });
+      }
+
+      allDots.forEach((d, i) => {
+        d.classList.toggle('is-active', i === heroSliderCurrentIndex);
+      });
+    }
+
+    if (prevBtn) {
+      prevBtn.onclick = () => {
+        goToSlide(heroSliderCurrentIndex - 1);
+        resetAutoPlay();
+      };
+    }
+    if (nextBtn) {
+      nextBtn.onclick = () => {
+        goToSlide(heroSliderCurrentIndex + 1);
+        resetAutoPlay();
+      };
+    }
+
+    if (pagination) {
+      const dots = pagination.querySelectorAll('.hero-slider-dot');
+      dots.forEach((dot, idx) => {
+        dot.onclick = () => {
+          goToSlide(idx);
+          resetAutoPlay();
+        };
+      });
+    }
+
+    track.ontouchstart = (e) => {
+      if (e.touches && e.touches[0]) {
+        heroSliderTouchStartX = e.touches[0].clientX;
+        heroSliderTouchStartY = e.touches[0].clientY;
+      }
+    };
+    track.ontouchend = (e) => {
+      if (!e.changedTouches || !e.changedTouches[0]) return;
+      const diffX = heroSliderTouchStartX - e.changedTouches[0].clientX;
+      const diffY = heroSliderTouchStartY - e.changedTouches[0].clientY;
+      if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > 35) {
+        if (diffX > 0) {
+          goToSlide(heroSliderCurrentIndex + 1);
+        } else {
+          goToSlide(heroSliderCurrentIndex - 1);
+        }
+        resetAutoPlay();
+      }
+    };
+
+    track.querySelectorAll('.hero-slide-cta').forEach(btn => {
+      btn.onclick = (e) => {
+        e.stopPropagation();
+        handleSlideCta(btn.dataset.action, btn.dataset.customUrl);
+      };
+    });
+
+    function startAutoPlay() {
+      if (settings.autoPlay !== false && slides.length > 1) {
+        const intervalMs = (settings.interval || 4) * 1000;
+        heroSliderTimer = setInterval(() => {
+          goToSlide(heroSliderCurrentIndex + 1);
+        }, intervalMs);
+      }
+    }
+
+    function resetAutoPlay() {
+      if (heroSliderTimer) {
+        clearInterval(heroSliderTimer);
+        heroSliderTimer = null;
+      }
+      startAutoPlay();
+    }
+
+    container.onmouseenter = () => {
+      if (heroSliderTimer) clearInterval(heroSliderTimer);
+    };
+    container.onmouseleave = () => {
+      resetAutoPlay();
+    };
+
+    startAutoPlay();
+  }
+
+  function initGalleryRuntime() {
+    const grid = document.getElementById('galleryGrid');
+    if (!grid) return;
+    grid.querySelectorAll('.gallery-card').forEach(card => {
+      const url = card.dataset.url;
+      const caption = card.dataset.caption;
+      if (url) {
+        const openModal = () => openGalleryLightbox(url, caption);
+        card.onclick = openModal;
+        card.onkeydown = (e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            openModal();
+          }
+        };
+      }
+    });
+  }
+
+  /**
    * Load Client Configuration
    */
   async function loadConfiguration(clientName) {
+    // Check if client configuration is embedded in head
+    if (window.__CLIENT_CONFIG__) {
+      applyConfig(window.__CLIENT_CONFIG__);
+      return;
+    }
+
     let configUrl = './config.json';
     
     const urlParams = new URLSearchParams(window.location.search);
-    const clientParam = clientName || urlParams.get('client');
+    let clientParam = clientName || urlParams.get('client');
+    if (!clientParam) {
+      const cleanPath = window.location.pathname.replace(/^\/+|\/+$/g, '').toLowerCase();
+      if (cleanPath && !cleanPath.includes('.') && cleanPath !== 'admin') {
+        clientParam = cleanPath;
+      }
+    }
     const isPreviewMode = window.self !== window.top || urlParams.has('preview');
 
     if (isPreviewMode && !clientParam) {
@@ -101,9 +302,16 @@
     } catch (err) {
       console.warn('Failed to load specific config, falling back to default config.json:', err);
       if (configUrl !== './config.json') {
-        const fallbackRes = await fetch('./config.json');
-        config = await fallbackRes.json();
-        applyConfig(config);
+        try {
+          const fallbackRes = await fetch('./config.json');
+          config = await fallbackRes.json();
+          applyConfig(config);
+        } catch (fallbackErr) {
+          console.error('Failed to load default config:', fallbackErr);
+          if (DOM.appMain) DOM.appMain.classList.add('is-ready');
+        }
+      } else {
+        if (DOM.appMain) DOM.appMain.classList.add('is-ready');
       }
     }
   }
@@ -512,6 +720,11 @@
 
     // 10. Team & Department Contacts Component
     renderTeamContacts(cfg.teamContacts);
+
+    // 11. Reveal App Shell Smoothly (Eliminates FOUC)
+    if (DOM.appMain) {
+      DOM.appMain.classList.add('is-ready');
+    }
   }
 
   /**

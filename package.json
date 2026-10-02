@@ -7,7 +7,9 @@
     "start": "node server.js",
     "dev": "node --watch server.js",
     "validate": "node scripts/validate-configs.js",
-    "test": "node scripts/test-widget-toggle.js"
+    "test": "node scripts/test-widget-toggle.js && node scripts/test-export-zip.js && node scripts/test-no-flash.js",
+    "test:export": "node scripts/test-export-zip.js",
+    "test:flash": "node scripts/test-no-flash.js"
   },
   "keywords": [
     "taxi",
